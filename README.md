@@ -3,10 +3,13 @@ GroovyFO
 
 GroovyFO ist der Versuch das gute aus JFOP und Standard FO des abas-ERP zu kombinieren.
 
+Es können nun ohne zusätzliches kompilieren JFOP's in Form von GroovyScripts ausgeführt werden. Außerdem sind
+nun while, for, if ..., Funktionen sowie Klassen möglich.
 
 Installation
 ===
 Die GroovyFO.jar aus dem Release Verzeichnis in das homedir_java\java\lib kopieren.
+
 JFOP Server redeployen und wie in der Bespiel Sektion beschrieben testen.
 
 
