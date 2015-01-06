@@ -26,10 +26,7 @@ Text ow1/GROOVYTEST wie folgt anlegen.
 * ow1/GROOVYTEST
 */
 
-for(i in 0..99){
-        // wenn keine Teile mehr geholte werden können abbruch
-        if(!hole("Teil"))
-                break
+for(def i=0; i<100 && hole("Teil"); i++){
         // Ausgabe auf Konsole
         println ( h("such") )
 }
