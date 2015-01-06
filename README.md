@@ -43,7 +43,7 @@ Zum testen Kommando aufrufen mit
 
 Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. 
 Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. 
-Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script bewaren zukönnen.
+Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script sparen zukönnen.
 
 Beispiele:
 
