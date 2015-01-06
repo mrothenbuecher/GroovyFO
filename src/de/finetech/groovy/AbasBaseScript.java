@@ -55,6 +55,10 @@ public abstract class AbasBaseScript extends Script {
 		EKS.bringe(cmd);
 	}
 	
+	public void ein(String fopName){
+		EKS.eingabe(fopName);
+	}
+	
 	public boolean mehr(){
 		String mehr = EKS.Gvar("mehr");
 		//FIXME Sprachunterstützung
