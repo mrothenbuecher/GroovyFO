@@ -46,7 +46,8 @@ Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript i
 Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script bewaren zukönnen.
 
 Beispiele:
-JFOP            | GroovyFO
---------------- | -------------
-EKS.Hvar(...)   | h(...)
-EKS.hole(...)   | hole(...)
+
+| JFOP            | GroovyFO |
+| --------------- | ------------- |
+| EKS.Hvar(...)   | h(...) |
+| EKS.hole(...)   | hole(...) |
