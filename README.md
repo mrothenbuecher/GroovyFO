@@ -7,7 +7,7 @@ Es können nun ohne zusätzliches kompilieren JFOP's in Form von Groovyscripten 
 nun while, for, if ..., Funktionen sowie Klassen möglich.
 
 ## Installation
-Die GroovyFO.zip im release Ordner herunterladen und öffnen. Denn de - Ordner in das Verzeichnis manddir_java\java\classes kopieren.
+Die [GroovyFO.zip](release/GroovyFO.zip) aus dem release Ordner herunterladen und öffnen. Den enthaltenen de - Ordner in das Verzeichnis manddir_java\java\classes kopieren.
 
 JFOP Server redeployen und wie in der Bespiel Sektion beschrieben testen.
 
