@@ -3,24 +3,21 @@ GroovyFO
 
 GroovyFO ist der Versuch das gute aus JFOP und Standard FO des abas-ERP zu kombinieren.
 
-Es können nun ohne zusätzliches kompilieren JFOP's in Form von GroovyScripts ausgeführt werden. Außerdem sind
+Es können nun ohne zusätzliches kompilieren JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte
 nun while, for, if ..., Funktionen sowie Klassen möglich.
 
-Installation
-===
+## Installation
 Die GroovyFO.jar aus dem Release Verzeichnis in das homedir_java\java\lib kopieren.
 
 JFOP Server redeployen und wie in der Bespiel Sektion beschrieben testen.
 
 
-Verwendung
-===
+## Verwendung
 ```
 <Text>de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL<zeigen>
 ```
 
-Beispiel GroovyFO
-===
+## Beispiel GroovyFO
 
 Text ow1/GROOVYTEST wie folgt anlegen.
 ```groovy
@@ -41,3 +38,15 @@ Zum testen Kommando aufrufen mit
 ```
 <Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYTEST<zeigen>
 ```
+
+## Funktionsweise
+
+Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. 
+Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. 
+Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script bewaren zukönnen.
+
+Beispiele:
+JFOP            | GroovyFO
+--------------- | -------------
+EKS.Hvar(...)   | h(...)
+EKS.hole(...)   | hole(...)
