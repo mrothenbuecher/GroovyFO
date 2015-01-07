@@ -41,6 +41,7 @@ public class ScriptExcecuter implements FOPRunnable {
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
 						ic.addStarImports("de.finetech.groovy");
+						ic.addStaticImport("de.finetech.groovy.SelectBuilder", "SelectBuilder");
 						cc.addCompilationCustomizers(ic);
 						// Basisklasse festlegen
 						cc.setScriptBaseClass("de.finetech.groovy.AbasBaseScript");
