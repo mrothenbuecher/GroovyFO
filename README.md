@@ -42,9 +42,29 @@ Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Pa
 Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. 
 Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script sparen zukönnen.
 
-Beispiele:
 
+### Beispiele:
+
+#### SelectBuilder
+Der SelectBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
+```groovy
+// Artikel von a bis b
+def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
+// im Matchcode auf den Namen in Bediensprache
+def selection2 = new SelectionBuilder().matchcode("namebspr","Schif*fahrt")
+...
+```
+
+
+#### Übersicht
 | JFOP            | GroovyFO |
 | --------------- | ------------- |
 | EKS.Hvar(...)   | h(...) |
-| EKS.hole(...)   | hole(...) |
+| EKS.Mvar(...)   | m(...) |
+| EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)|
+| EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)|
+| EKS.formel(...) | fo(String variable, wert)|
+| EKS.getValue(puffer, varName)| l1(...) <br> l2(...)|
+| EKS.println(...)| println(...)|
+
+Die Implementierung ist bei weitem nicht Vollständig!
