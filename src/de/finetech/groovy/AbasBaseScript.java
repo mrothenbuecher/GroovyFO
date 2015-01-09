@@ -39,7 +39,7 @@ public abstract class AbasBaseScript extends Script {
 		}
 		// Integer
 		if ((abasType.startsWith("I") && !abasType.startsWith("ID"))
-				|| abasType.startsWith("K")) {
+				|| abasType.startsWith("K") || abasType.startsWith("GRN")) {
 			return Integer.parseInt(value);
 		}
 		// Real
