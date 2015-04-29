@@ -13,6 +13,7 @@ import de.abas.eks.jfop.remote.FO;
  */
 public abstract class AbasBaseScript extends Script {
 
+	// Temp variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
 
@@ -29,6 +30,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	private Object getValue(String varname, String value) {
+		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
 		// Strings
 		if (abasType.startsWith("PS") || abasType.startsWith("GL")
@@ -110,7 +112,7 @@ public abstract class AbasBaseScript extends Script {
 		return EKS.hole(cmd);
 	}
 
-	public boolean hole(String db, SelectBuilder builder) {
+	public boolean hole(String db, SelectionBuilder builder) {
 		return this.hole(db, builder.toString());
 	}
 
@@ -131,7 +133,7 @@ public abstract class AbasBaseScript extends Script {
 		return EKS.lade(puffer + " " + cmd);
 	}
 
-	public boolean lade(int puffer, String db, SelectBuilder builder) {
+	public boolean lade(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
 
@@ -182,6 +184,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public void fo(String var, boolean value) {
+		//FIXME Sprach unabhängigkeit
 		EKS.formel(var + "=" + (value ? "ja" : "nein"));
 	}
 	
