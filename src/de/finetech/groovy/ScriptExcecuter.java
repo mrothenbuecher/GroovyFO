@@ -5,6 +5,8 @@ import groovy.lang.GroovyShell;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -51,11 +53,12 @@ public class ScriptExcecuter implements FOPRunnable {
 						shell.evaluate(groovyScript);
 						
 						return 0;
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (Exception e) {
+						StringWriter sw = new StringWriter();
+						PrintWriter pw = new PrintWriter(sw);
+						e.printStackTrace(pw);
+						FO.box("Unbehandelte Ausnahme in "+arg0[1], sw.toString());
 					}
-					FO.box("Fehler", "Beim Ausführen des Scripts ist ein Fehler aufgetretten");
 				}else{
 					FO.box("Unzureichende Argumente", "Groovy Script ist keine Datei!");
 				}

@@ -184,6 +184,10 @@ public abstract class AbasBaseScript extends Script {
 	public void fo(String var, boolean value) {
 		EKS.formel(var + "=" + (value ? "ja" : "nein"));
 	}
+	
+	public void box(String title, String content){
+		FO.box(title,content);
+	}
 
 	public boolean mehr() {
 		String mehr = EKS.Gvar("mehr").toLowerCase();
