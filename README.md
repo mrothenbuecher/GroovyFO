@@ -23,6 +23,7 @@ Text ow1/GROOVYTEST wie folgt anlegen.
 ```groovy
 /*
 * Beispiel GroovyFO holt die ersten 100 Teile aus der DB
+* und gibt deren suchwort aus
 * ow1/GROOVYTEST
 */
 
@@ -45,8 +46,8 @@ Diese Script-Klasse kapselt einige Funktionen um so schreibarbeit im eigentliche
 
 ### Beispiele:
 
-#### SelectBuilder
-Der SelectBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
+#### SelectionBuilder
+Der SelectionBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
 ```groovy
 // Artikel von a bis b
 def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
@@ -57,14 +58,23 @@ def selection2 = new SelectionBuilder().matchcode("namebspr","Schif*fahrt")
 
 
 #### Übersicht
-| JFOP            | GroovyFO |
-| --------------- | ------------- |
-| EKS.Hvar(...)   | h(...) |
-| EKS.Mvar(...)   | m(...) |
-| EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)|
-| EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)|
-| EKS.formel(...) | fo(String variable, wert)|
-| EKS.getValue(puffer, varName)| l1(...) <br> l2(...)|
-| EKS.println(...)| println(...)|
+| JFOP            | GroovyFO | Funktion |
+| --------------- | ------------- | --------|
+| EKS.Hvar(...)   | h(...) | |
+| EKS.Mvar(...)   | m(...) | |
+| EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| |
+| EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| |
+| EKS.formel(...) | fo(String variable, wert)| |
+| EKS.getValue(puffer, varName)| l1(...) <br/> l2(...) <br/> usw...| |
+| EKS.println(...)| println(...)| |
+| EKS.box(...,...)| box(...,...)| |
+| EKS.eingabe(...)| ein(...)| |
+| EKS.bringe(...) | bringe(...)| |
+| EKS.mache(...) | mache(...)| |
+| EKS.mache("maske zeile +O") | addZeile()| |
+| EKS.bringe("maske zeile -O") | removeZeile()| |
+| EKS.dazu(...) | dazu(...)| |
+| | mehr()| liefert den Status der Variablen (G Puffer) mehr |
+
 
 Die Implementierung ist bei weitem nicht Vollständig!
