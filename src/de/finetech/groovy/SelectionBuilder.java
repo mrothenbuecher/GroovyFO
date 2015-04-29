@@ -1,6 +1,6 @@
 package de.finetech.groovy;
 
-public class SelectBuilder {
+public class SelectionBuilder {
 
 	private boolean isDe = true;
 
@@ -9,15 +9,15 @@ public class SelectBuilder {
 	private String selectionOption = "";
 
 	
-	public static SelectBuilder SelectBuilder(){
-		return new SelectBuilder();
+	public static SelectionBuilder SelectionBuilder(){
+		return new SelectionBuilder();
 	}
 	
 	
 	/**
 	 * Standard ist die dialoglose Selektion
 	 */
-	public SelectBuilder() {
+	public SelectionBuilder() {
 		this.selectionType = "$,";
 	}
 
@@ -26,7 +26,7 @@ public class SelectBuilder {
 	 * @param lang
 	 *            - sprache "de" ansonsten wird englisch angenommen
 	 */
-	public SelectBuilder(String lang) {
+	public SelectionBuilder(String lang) {
 		this.selectionType = "$,";
 		isDe = lang.toLowerCase().equals("de");
 	}
@@ -36,7 +36,7 @@ public class SelectBuilder {
 	 * @param hidden
 	 *            - true für dialoglose Selektion, false für Dialog
 	 */
-	public SelectBuilder(boolean hidden) {
+	public SelectionBuilder(boolean hidden) {
 		if (hidden) {
 			this.selectionType = "$,";
 		} else {
@@ -51,7 +51,7 @@ public class SelectBuilder {
 	 * @param selection
 	 *            - Nummer der Selektion
 	 */
-	public SelectBuilder(boolean hidden, int selection) {
+	public SelectionBuilder(boolean hidden, int selection) {
 		if (hidden) {
 			this.selectionType = "$" + selection + ",";
 		} else {
@@ -66,7 +66,7 @@ public class SelectBuilder {
 	 * @param selection
 	 *            - Suchwort oder Nummer der Selektion
 	 */
-	public SelectBuilder(boolean hidden, String selection) {
+	public SelectionBuilder(boolean hidden, String selection) {
 		if (hidden) {
 			this.selectionType = "$" + selection + ",";
 		} else {
@@ -74,12 +74,12 @@ public class SelectBuilder {
 		}
 	}
 
-	public SelectBuilder setLanguage(String lang) {
+	public SelectionBuilder setLanguage(String lang) {
 		isDe = lang.toLowerCase().equals("de");
 		return this;
 	}
 
-	public SelectBuilder normal(String var, String from, String to) {
+	public SelectionBuilder normal(String var, String from, String to) {
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -94,7 +94,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder normalEx(String var, String from, String to) {
+	public SelectionBuilder normalEx(String var, String from, String to) {
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -109,7 +109,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder normalExG(String var, String from, String to) {
+	public SelectionBuilder normalExG(String var, String from, String to) {
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "~=!!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -124,107 +124,107 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder startWith(String var, String value) {
+	public SelectionBuilder startWith(String var, String value) {
 		this.variables += var + "=" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder startWithG(String var, String value) {
+	public SelectionBuilder startWithG(String var, String value) {
 		this.variables += var + "~=" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder empty(String var) {
+	public SelectionBuilder empty(String var) {
 		this.variables += var + "=`;";
 		return this;
 	}
 
-	public SelectBuilder filled(String var) {
+	public SelectionBuilder filled(String var) {
 		this.variables += var + "<>`;";
 		return this;
 	}
 
-	public SelectBuilder similar(String var, String value) {
+	public SelectionBuilder similar(String var, String value) {
 		this.variables += var + "==" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder unsimilar(String var, String value) {
+	public SelectionBuilder unsimilar(String var, String value) {
 		this.variables += var + "<>" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder similarG(String var, String value) {
+	public SelectionBuilder similarG(String var, String value) {
 		this.variables += var + "~" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder unsimilarG(String var, String value) {
+	public SelectionBuilder unsimilarG(String var, String value) {
 		this.variables += var + "~<>" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder contains(String var, String value) {
+	public SelectionBuilder contains(String var, String value) {
 		this.variables += var + "/" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder containsG(String var, String value) {
+	public SelectionBuilder containsG(String var, String value) {
 		this.variables += var + "~/" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder containsW(String var, String value) {
+	public SelectionBuilder containsW(String var, String value) {
 		this.variables += var + "//" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder containsGW(String var, String value) {
+	public SelectionBuilder containsGW(String var, String value) {
 		this.variables += var + "~//" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder matchcode(String var, String value) {
+	public SelectionBuilder matchcode(String var, String value) {
 		this.variables += var + "=`" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder matchcodeN(String var, String value) {
+	public SelectionBuilder matchcodeN(String var, String value) {
 		this.variables += var + "<>`" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder matchcodeG(String var, String value) {
+	public SelectionBuilder matchcodeG(String var, String value) {
 		this.variables += var + "~=`" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder matchcodeGN(String var, String value) {
+	public SelectionBuilder matchcodeGN(String var, String value) {
 		this.variables += var + "~<>`" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder expression(String var, String value) {
+	public SelectionBuilder expression(String var, String value) {
 		this.variables += var + "/==" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder expressionN(String var, String value) {
+	public SelectionBuilder expressionN(String var, String value) {
 		this.variables += var + "/<>" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder expressionG(String var, String value) {
+	public SelectionBuilder expressionG(String var, String value) {
 		this.variables += var + "~/==" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder expressionGN(String var, String value) {
+	public SelectionBuilder expressionGN(String var, String value) {
 		this.variables += var + "~/<>" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder group(int value) {
+	public SelectionBuilder group(int value) {
 		if (isDe)
 			this.selectionOption += "@gruppe=" + value + ";";
 		else
@@ -232,12 +232,12 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder sort(String value) {
+	public SelectionBuilder sort(String value) {
 		this.selectionOption += "@sort=" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder order(String value) {
+	public SelectionBuilder order(String value) {
 		if (isDe)
 			this.selectionOption += "@ordnung=" + value + ";";
 		else
@@ -245,7 +245,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder optimalkey(boolean value) {
+	public SelectionBuilder optimalkey(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@optschl="
@@ -256,7 +256,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder link(boolean AND) {
+	public SelectionBuilder link(boolean AND) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@verknuepfung="
@@ -267,7 +267,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder range(boolean value) {
+	public SelectionBuilder range(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@bereich="
@@ -278,7 +278,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder direction(boolean forward) {
+	public SelectionBuilder direction(boolean forward) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@richtung="
@@ -289,7 +289,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder objectselection(String value) {
+	public SelectionBuilder objectselection(String value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@objektwahl=" + value + ";";
@@ -298,7 +298,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder read(boolean value) {
+	public SelectionBuilder read(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@lesen=" + (value == true ? "yes" : "no")
@@ -309,7 +309,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder autostart(boolean value) {
+	public SelectionBuilder autostart(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@autostart="
@@ -320,7 +320,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder database(int value) {
+	public SelectionBuilder database(int value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@datenbank=" + value + ";";
@@ -329,7 +329,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder rows(boolean value) {
+	public SelectionBuilder rows(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@zeilen="
@@ -340,7 +340,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder fprotection(boolean value) {
+	public SelectionBuilder fprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@fschutz="
@@ -351,7 +351,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder gprotection(boolean value) {
+	public SelectionBuilder gprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@gschutz="
@@ -362,7 +362,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder bprotection(boolean value) {
+	public SelectionBuilder bprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@bschutz="
@@ -373,7 +373,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder note(boolean value) {
+	public SelectionBuilder note(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@merken="
@@ -384,7 +384,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder filingmode(String value) {
+	public SelectionBuilder filingmode(String value) {
 		if (isDe)
 			this.selectionOption += "@ablageart=" + value + ";";
 		else
@@ -392,7 +392,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder enterscreen(String value) {
+	public SelectionBuilder enterscreen(String value) {
 		if (isDe)
 			this.selectionOption += "@maskein=" + value + ";";
 		else
@@ -400,7 +400,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder screenvalidation(String value) {
+	public SelectionBuilder screenvalidation(String value) {
 		if (isDe)
 			this.selectionOption += "@maskpruef=" + value + ";";
 		else
@@ -408,7 +408,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder fieldfilled(String value) {
+	public SelectionBuilder fieldfilled(String value) {
 		if (isDe)
 			this.selectionOption += "@feldfuell=" + value + ";";
 		else
@@ -416,7 +416,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder hitvalidation(String value) {
+	public SelectionBuilder hitvalidation(String value) {
 		if (isDe)
 			this.selectionOption += "@trefferpruef=" + value + ";";
 		else
@@ -424,7 +424,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder title(String value) {
+	public SelectionBuilder title(String value) {
 		if (isDe)
 			this.selectionOption += "@titel=" + value + ";";
 		else
@@ -432,7 +432,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder dynprotection(boolean value) {
+	public SelectionBuilder dynprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@dynschutz="
@@ -443,7 +443,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder stdsel(boolean value) {
+	public SelectionBuilder stdsel(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@stdsel="
@@ -454,7 +454,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder templsel(boolean value) {
+	public SelectionBuilder templsel(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@rohlsel="
@@ -465,7 +465,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder initialvalues(boolean value) {
+	public SelectionBuilder initialvalues(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@initialwerte="
@@ -476,7 +476,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder lastname(boolean value) {
+	public SelectionBuilder lastname(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@letztername="
@@ -487,7 +487,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder noswd(String value) {
+	public SelectionBuilder noswd(String value) {
 		if (isDe)
 			this.selectionOption += "@numsuch=" + value + ";";
 		else
@@ -495,7 +495,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder opprotection(boolean value) {
+	public SelectionBuilder opprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@opschutz="
@@ -506,7 +506,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder maxhit(int value) {
+	public SelectionBuilder maxhit(int value) {
 		if (isDe)
 			this.selectionOption += "@maxtreffer=" + value + ";";
 		else
@@ -514,7 +514,7 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder maxordhit(int value) {
+	public SelectionBuilder maxordhit(int value) {
 		if (isDe)
 			this.selectionOption += "@maxordtreffer=" + value + ";";
 		else
@@ -522,12 +522,12 @@ public class SelectBuilder {
 		return this;
 	}
 
-	public SelectBuilder language(String value) {
+	public SelectionBuilder language(String value) {
 		this.selectionOption += "@language=" + value + ";";
 		return this;
 	}
 
-	public SelectBuilder englvar(boolean value) {
+	public SelectionBuilder englvar(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@englvar="
