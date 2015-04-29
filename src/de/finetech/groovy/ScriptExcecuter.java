@@ -4,7 +4,6 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -43,7 +42,7 @@ public class ScriptExcecuter implements FOPRunnable {
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
 						ic.addStarImports("de.finetech.groovy");
-						ic.addStaticImport("de.finetech.groovy.SelectBuilder", "SelectBuilder");
+						//ic.addStaticImport("de.finetech.groovy.SelectionBuilder", "SelectionBuilder");
 						cc.addCompilationCustomizers(ic);
 						// Basisklasse festlegen
 						cc.setScriptBaseClass("de.finetech.groovy.AbasBaseScript");
