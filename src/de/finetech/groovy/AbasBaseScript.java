@@ -1,6 +1,7 @@
 package de.finetech.groovy;
 
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 import groovy.lang.Script;
 import de.abas.eks.jfop.remote.EKS;
@@ -13,6 +14,8 @@ import de.abas.eks.jfop.remote.FO;
  */
 public abstract class AbasBaseScript extends Script {
 
+	private final static String pipe = Pattern.quote("|");
+	
 	// Temp variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
@@ -42,10 +45,14 @@ public abstract class AbasBaseScript extends Script {
 		// Integer
 		if ((abasType.startsWith("I") && !abasType.startsWith("ID"))
 				|| abasType.startsWith("K") || abasType.startsWith("GRN")) {
+			if(value == null || value.isEmpty())
+				return 0;
 			return Integer.parseInt(value);
 		}
 		// Real
 		if (abasType.startsWith("R") || abasType.startsWith("M")) {
+			if(value == null || value.isEmpty())
+				return 0.0d;
 			return Double.parseDouble(value);
 		}
 		// bool
@@ -112,10 +119,27 @@ public abstract class AbasBaseScript extends Script {
 		return EKS.hole(cmd);
 	}
 
+	/**
+	 * Nutzt die Methode {@link #hole(String, String)}
+	 * 
+	 * @param db
+	 * @param builder
+	 * @return
+	 */
 	public boolean hole(String db, SelectionBuilder builder) {
 		return this.hole(db, builder.toString());
 	}
 
+	/**
+	 * sollte der Selektionstring Identisch mit einer vorher
+	 * gehenden Abfragen sein so wird nur der nächste Datensatz geholt
+	 * 
+	 * @param db
+	 *            - Datenbank von der Selektiert werden soll
+	 * @param selection
+	 *            - abas Selektionstring, 
+	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
+	 */
 	public boolean hole(String db, String selection) {
 		if (this.hselection != null && this.hselection.equals(selection)) {
 			return EKS.hole(db);
@@ -133,10 +157,28 @@ public abstract class AbasBaseScript extends Script {
 		return EKS.lade(puffer + " " + cmd);
 	}
 
+	/**
+	 * Nutzt die Methode {@link #lade(int, String, String)}
+	 * 
+	 * @param puffer
+	 * @param db
+	 * @param builder
+	 * @return
+	 */
 	public boolean lade(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
 
+	/**
+	 * 
+	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
+	 * gehenden Abfragen sein so wird nur der nächste Datensatz geholt
+	 * 
+	 * @param puffer - lade puffer 1-9
+	 * @param db - Datenbank von der abgefragt werden soll
+	 * @param selection - abas Selektionsstring
+	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
+	 */
 	public boolean lade(int puffer, String db, String selection) {
 		if (this.lselection[puffer] != null
 				&& this.lselection[puffer].equals(selection)) {
@@ -171,25 +213,59 @@ public abstract class AbasBaseScript extends Script {
 		EKS.eingabe(fopName);
 	}
 
-	public void fo(String var, String value) {
-		EKS.formel(var + "=\"" + value + "\"");
+	/**
+	 * 
+	 * @param var
+	 *            - Muss die form haben M|asd od. G|asd usw
+	 * @return Wert der Variablen
+	 */
+	public Object getValue(String var) {
+		String[] foo = var.split(pipe);
+		String buffer = foo[0];
+		String varname = foo[1];
+		return this.getValue(var, EKS.getValue(buffer, varname));
 	}
 
-	public void fo(String var, int value) {
-		EKS.formel(var + "=" + value);
-	}
-
-	public void fo(String var, double value) {
-		EKS.formel(var + "=" + new DecimalFormat("0.0000").format(value));
-	}
-
-	public void fo(String var, boolean value) {
-		//FIXME Sprach unabhängigkeit
-		EKS.formel(var + "=" + (value ? "ja" : "nein"));
+	/**
+	 * 
+	 * @param var = variable der ein wert zugewiesen werden soll (Format Puffer|varname)
+	 * @param value = Formel welche abas seitig interpretiert werden soll
+	 * @return
+	 */
+	public Object formel(String var, String value) {
+		EKS.formel(var + "=" + value );
+		return this.getValue(var);
 	}
 	
-	public void box(String title, String content){
-		FO.box(title,content);
+	/**
+	 * 
+	 * @param var = variable der ein wert zugewiesen werden soll (Format Puffer|varname)
+	 * @param value = Zeichenkette welche der variablen zugewiesen werden soll
+	 * @return
+	 */
+	public Object fo(String var, String value) {
+		EKS.formel(var + "=\"" + value + "\"");
+		return this.getValue(var);
+	}
+
+	public Object fo(String var, int value) {
+		EKS.formel(var + "=" + value);
+		return this.getValue(var);
+	}
+
+	public Object fo(String var, double value) {
+		EKS.formel(var + "=" + new DecimalFormat("0.0000").format(value));
+		return this.getValue(var);
+	}
+
+	public Object fo(String var, boolean value) {
+		// FIXME Sprach unabhängigkeit
+		EKS.formel(var + "=" + (value ? "TRUE" : "FALSE"));
+		return this.getValue(var);
+	}
+
+	public void box(String title, String content) {
+		FO.box(title, content);
 	}
 
 	public boolean mehr() {
@@ -199,9 +275,97 @@ public abstract class AbasBaseScript extends Script {
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
 						.equals("yes"));
 	}
+	
+	public void kom(String kommando){
+		EKS.kommando(kommando);
+	}
+	
+	public void komSofort(String kommando){
+		EKS.kommando("-SOFORT "+kommando);
+	}
+	
+	public void komWarten(String kommando){
+		EKS.kommando("-WARTEN "+kommando);
+	}
 
+	/**
+	 * Definition genau einer Nutzervariablen
+	 * 
+	 * @param def
+	 *            bsp.: "GD2 xvon"
+	 * @return liefert die variablen bezeichnung zurück mit puffer bsp.: U|xvon
+	 */
+	public String art(String def) {
+		EKS.art(def);
+		return "U|" + def.trim().split(" ")[1];
+	}
+
+	/**
+	 * Definition genau einer Nutzervariablen
+	 * 
+	 * @param type
+	 *            Variablen art
+	 * @param def
+	 *            bsp.: "xvon"
+	 * @return liefert die variablen bezeichnung zurück mit puffer bsp.: U|xvon
+	 */
+	public String art(String type, String def) {
+		EKS.art(type + " " + def);
+		return "U|" + def;
+	}
+
+	/**
+	 * Definition von n Nutzervariablen eines Types
+	 * 
+	 * @param type
+	 *            Variablen art
+	 * @param def
+	 *            die variablen bezeichnungen als array
+	 * @return liefert die variablen bezeichnung zurück mit puffer bsp.: U|xvon
+	 */
+	public String[] art(String type, String[] def) {
+		String[] ba = new String[def.length];
+		int i = 0;
+		for (String foo : def) {
+			EKS.art(type + " " + foo);
+			ba[i++] = "U|" + foo;
+		}
+
+		return ba;
+	}
+
+	
+	
 	public void println(String cmd) {
 		EKS.println(cmd);
 	}
-
+	
+	public void farbe(String cmd){
+		EKS.farbe(cmd);
+	}
+	
+	public void hfarbe(String color, String field){
+		EKS.farbe("-HINTERGRUND "+color+ " "+field);
+	}
+	
+	public void hfarbe(String color, String field, int row){
+		EKS.farbe("-HINTERGRUND "+color+ " "+field+" "+row);
+	}
+	
+	public void hfarbe(String color, int row){
+		EKS.farbe("-HINTERGRUND "+color+ " "+row);
+	}
+	
+	public void vfarbe(String color, String field){
+		EKS.farbe("-VORDERGRUND "+color+ " "+field);
+	}
+	
+	public void vfarbe(String color, String field, int row){
+		EKS.farbe("-VORDERGRUND "+color+ " "+field+" "+row);
+	}
+	
+	public void vfarbe(String color, int row){
+		EKS.farbe("-VORDERGRUND "+color+ " "+row);
+	}
+	
 }
