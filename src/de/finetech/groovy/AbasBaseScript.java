@@ -1,6 +1,8 @@
 package de.finetech.groovy;
 
+import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import groovy.lang.Script;
@@ -15,11 +17,18 @@ import de.abas.eks.jfop.remote.FO;
 public abstract class AbasBaseScript extends Script {
 
 	private final static String pipe = Pattern.quote("|");
-	
+
 	// Temp variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
 
+	private HashMap<String, String> variableTypes = new HashMap<String, String>();
+
+	//private Pattern stringPattern = Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
+	private Pattern integerPattern = Pattern.compile("(I.*)|(GRN.*)|(K.*)");
+	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
+	
+	
 	public Object h(String varName) {
 		return this.getValue("H|" + varName, EKS.Hvar(varName));
 	}
@@ -35,32 +44,26 @@ public abstract class AbasBaseScript extends Script {
 	private Object getValue(String varname, String value) {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
-		// Strings
-		if (abasType.startsWith("PS") || abasType.startsWith("GL")
-				|| abasType.startsWith("T") || abasType.startsWith("N")
-				|| abasType.startsWith("BT") || abasType.startsWith("BG")
-				|| abasType.startsWith("ST") || abasType.startsWith("SW")) {
-			return value;
-		}
 		// Integer
-		if ((abasType.startsWith("I") && !abasType.startsWith("ID"))
-				|| abasType.startsWith("K") || abasType.startsWith("GRN")) {
-			if(value == null || value.isEmpty())
+		if (!abasType.startsWith("ID") && integerPattern.matcher(abasType).find()) {
+			if (value == null || value.isEmpty())
 				return 0;
 			return Integer.parseInt(value);
 		}
 		// Real
-		if (abasType.startsWith("R") || abasType.startsWith("M")) {
-			if(value == null || value.isEmpty())
+		if (realPattern.matcher(abasType).find()) {
+			if (value == null || value.isEmpty())
 				return 0.0d;
 			return Double.parseDouble(value);
 		}
 		// bool
 		if (abasType.matches("B")) {
-			return value.toLowerCase().matches("ja")
-					|| value.toLowerCase().matches("yes")
-					|| value.toLowerCase().matches("true");
+			value = value.toLowerCase();
+			return value.matches("ja")
+					|| value.matches("yes")
+					|| value.matches("true");
 		}
+		// Strings
 		// TODO Datum
 		return value;
 	}
@@ -112,7 +115,13 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	private String getType(String variable) {
-		return EKS.getValue("F", "typeof(" + variable + ")");
+		if (this.variableTypes.containsKey(variable)) {
+			return this.variableTypes.get(variable);
+		} else {
+			String type = EKS.getValue("F", "typeof(" + variable + ")");
+			this.variableTypes.put(variable, type);
+			return type;
+		}
 	}
 
 	public boolean hole(String cmd) {
@@ -131,13 +140,13 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * sollte der Selektionstring Identisch mit einer vorher
-	 * gehenden Abfragen sein so wird nur der nächste Datensatz geholt
+	 * sollte der Selektionstring Identisch mit einer vorher gehenden Abfragen
+	 * sein so wird nur der nächste Datensatz geholt
 	 * 
 	 * @param db
 	 *            - Datenbank von der Selektiert werden soll
 	 * @param selection
-	 *            - abas Selektionstring, 
+	 *            - abas Selektionstring,
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
 	public boolean hole(String db, String selection) {
@@ -174,9 +183,12 @@ public abstract class AbasBaseScript extends Script {
 	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
 	 * gehenden Abfragen sein so wird nur der nächste Datensatz geholt
 	 * 
-	 * @param puffer - lade puffer 1-9
-	 * @param db - Datenbank von der abgefragt werden soll
-	 * @param selection - abas Selektionsstring
+	 * @param puffer
+	 *            - lade puffer 1-9
+	 * @param db
+	 *            - Datenbank von der abgefragt werden soll
+	 * @param selection
+	 *            - abas Selektionsstring
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
 	public boolean lade(int puffer, String db, String selection) {
@@ -228,19 +240,25 @@ public abstract class AbasBaseScript extends Script {
 
 	/**
 	 * 
-	 * @param var = variable der ein wert zugewiesen werden soll (Format Puffer|varname)
-	 * @param value = Formel welche abas seitig interpretiert werden soll
+	 * @param var
+	 *            = variable der ein wert zugewiesen werden soll (Format
+	 *            Puffer|varname)
+	 * @param value
+	 *            = Formel welche abas seitig interpretiert werden soll
 	 * @return
 	 */
 	public Object formel(String var, String value) {
-		EKS.formel(var + "=" + value );
+		EKS.formel(var + "=" + value);
 		return this.getValue(var);
 	}
-	
+
 	/**
 	 * 
-	 * @param var = variable der ein wert zugewiesen werden soll (Format Puffer|varname)
-	 * @param value = Zeichenkette welche der variablen zugewiesen werden soll
+	 * @param var
+	 *            = variable der ein wert zugewiesen werden soll (Format
+	 *            Puffer|varname)
+	 * @param value
+	 *            = Zeichenkette welche der variablen zugewiesen werden soll
 	 * @return
 	 */
 	public Object fo(String var, String value) {
@@ -275,17 +293,17 @@ public abstract class AbasBaseScript extends Script {
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
 						.equals("yes"));
 	}
-	
-	public void kom(String kommando){
+
+	public void kom(String kommando) {
 		EKS.kommando(kommando);
 	}
-	
-	public void komSofort(String kommando){
-		EKS.kommando("-SOFORT "+kommando);
+
+	public void komSofort(String kommando) {
+		EKS.kommando("-SOFORT " + kommando);
 	}
-	
-	public void komWarten(String kommando){
-		EKS.kommando("-WARTEN "+kommando);
+
+	public void komWarten(String kommando) {
+		EKS.kommando("-WARTEN " + kommando);
 	}
 
 	/**
@@ -304,7 +322,7 @@ public abstract class AbasBaseScript extends Script {
 	 * Definition genau einer Nutzervariablen
 	 * 
 	 * @param type
-	 *            Variablen art
+	 *            Variablenart "GD", "TEXT" usw.
 	 * @param def
 	 *            bsp.: "xvon"
 	 * @return liefert die variablen bezeichnung zurück mit puffer bsp.: U|xvon
@@ -318,7 +336,7 @@ public abstract class AbasBaseScript extends Script {
 	 * Definition von n Nutzervariablen eines Types
 	 * 
 	 * @param type
-	 *            Variablen art
+	 *            Variablenart "GD", "TEXT" usw.
 	 * @param def
 	 *            die variablen bezeichnungen als array
 	 * @return liefert die variablen bezeichnung zurück mit puffer bsp.: U|xvon
@@ -334,38 +352,97 @@ public abstract class AbasBaseScript extends Script {
 		return ba;
 	}
 
-	
-	
 	public void println(String cmd) {
 		EKS.println(cmd);
 	}
-	
-	public void farbe(String cmd){
+
+	public void println(int cmd) {
+		EKS.println(Integer.toString(cmd));
+	}
+
+	public void println(double cmd) {
+		EKS.println(Double.toString(cmd));
+	}
+
+	public void println(boolean cmd) {
+		EKS.println(Boolean.toString(cmd));
+	}
+
+	public void farbe(String cmd) {
 		EKS.farbe(cmd);
 	}
-	
-	public void hfarbe(String color, String field){
-		EKS.farbe("-HINTERGRUND "+color+ " "+field);
+
+	public void hfarbe(String color, String field) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-HINTERGRUND " + color + " " + field);
 	}
-	
-	public void hfarbe(String color, String field, int row){
-		EKS.farbe("-HINTERGRUND "+color+ " "+field+" "+row);
+
+	public void hfarbe(String color, String field, int row) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-HINTERGRUND " + color + " " + field + " " + row);
 	}
-	
-	public void hfarbe(String color, int row){
-		EKS.farbe("-HINTERGRUND "+color+ " "+row);
+
+	public void hfarbe(String color, int row) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-HINTERGRUND " + color + " " + row);
 	}
-	
-	public void vfarbe(String color, String field){
-		EKS.farbe("-VORDERGRUND "+color+ " "+field);
+
+	public void vfarbe(String color, String field) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-VORDERGRUND " + color + " " + field);
 	}
-	
-	public void vfarbe(String color, String field, int row){
-		EKS.farbe("-VORDERGRUND "+color+ " "+field+" "+row);
+
+	public void vfarbe(String color, String field, int row) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-VORDERGRUND " + color + " " + field + " " + row);
 	}
-	
-	public void vfarbe(String color, int row){
-		EKS.farbe("-VORDERGRUND "+color+ " "+row);
+
+	public void vfarbe(String color, int row) {
+		if(color == null || color.isEmpty()){
+			color = "-1 -1 -1";
+		}
+		EKS.farbe("-VORDERGRUND " + color + " " + row);
 	}
-	
+
+	protected String colorToString(Color c) {
+		if (c == null)
+			return "-1 -1 -1";
+		else
+			return c.getRed() + " " + c.getGreen() + " " + c.getBlue();
+	}
+
+	public void vfarbe(Color c, int row) {
+		this.vfarbe(this.colorToString(c), row);
+	}
+
+	public void vfarbe(Color c, String field) {
+		this.vfarbe(this.colorToString(c), field);
+	}
+
+	public void vfarbe(Color c, String field, int row) {
+		this.vfarbe(this.colorToString(c), field, row);
+	}
+
+	public void hfarbe(Color c, int row) {
+		this.hfarbe(this.colorToString(c), row);
+	}
+
+	public void hfarbe(Color c, String field) {
+		this.hfarbe(this.colorToString(c), field);
+	}
+
+	public void hfarbe(Color c, String field, int row) {
+		this.hfarbe(this.colorToString(c), field, row);
+	}
+
 }
