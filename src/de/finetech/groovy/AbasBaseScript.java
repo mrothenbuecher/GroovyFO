@@ -45,13 +45,13 @@ public abstract class AbasBaseScript extends Script {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
 		// Integer
-		if (!abasType.startsWith("ID") && integerPattern.matcher(abasType).find()) {
+		if (!abasType.startsWith("ID") && integerPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
 				return 0;
 			return Integer.parseInt(value);
 		}
 		// Real
-		if (realPattern.matcher(abasType).find()) {
+		if (realPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
 				return 0.0d;
 			return Double.parseDouble(value);
