@@ -5,6 +5,8 @@ GroovyFO ist der Versuch das gute aus JFOP und Standard FO des abas-ERP zu kombi
 
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
+ [![Fragen? Anregungen?](https://powerful-waters-31137.herokuapp.com/badge.svg)](https://powerful-waters-31137.herokuapp.com/)
+
 ## Installation
 Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei den eigenen JFOP einfügen (abas Tools).
 
