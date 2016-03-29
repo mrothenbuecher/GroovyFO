@@ -3,18 +3,22 @@ GroovyFO
 
 GroovyFO ist der Versuch das gute aus JFOP und Standard FO des abas-ERP zu kombinieren.
 
-Es können nun ohne zusätzliches kompilieren JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte
-nun while, for, if ..., Funktionen sowie Klassen möglich.
+Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
 ## Installation
-Die [GroovyFO.zip](release/GroovyFO.zip) aus dem release Ordner herunterladen und öffnen. Den enthaltenen de - Ordner in das Verzeichnis manddir_java\java\classes kopieren.
+Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei den eigenen JFOP einfügen (abas Tools).
 
 JFOP Server redeployen und wie in der Beispiel Sektion beschrieben testen.
 
 
 ## Verwendung
+Aufruf eines GroovyFO aus der Kommandoübersicht
 ```
 <Text>de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL<zeigen>
+```
+oder in einem Infosystemen hinterlegen
+```
+de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL
 ```
 
 ## Beispiel GroovyFO
@@ -46,17 +50,6 @@ Diese Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Scrip
 
 ### Beispiele:
 
-#### SelectionBuilder
-Der SelectionBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
-```groovy
-// Artikel von a bis b
-def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
-// im Matchcode auf den Namen in Bediensprache
-def selection2 = new SelectionBuilder().matchcode("namebspr","Schif*fahrt")
-...
-```
-
-
 #### Übersicht
 | JFOP            | GroovyFO | Funktion |
 | --------------- | ------------- | --------|
@@ -75,6 +68,47 @@ def selection2 = new SelectionBuilder().matchcode("namebspr","Schif*fahrt")
 | EKS.bringe("maske zeile -O") | removeZeile()| |
 | EKS.dazu(...) | dazu(...)| |
 | | mehr()| liefert den Status der Variablen (G Puffer) mehr |
+
+### Helferlein
+
+#### SelectionBuilder
+Der SelectionBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
+```groovy
+// Artikel von a bis b
+def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
+// im Matchcode auf den Namen in Bediensprache
+def selection2 = new SelectionBuilder().matchcode("namebspr","Schif*fahrt")
+...
+```
+
+#### Infosystemcall
+Die Klasse Infosystemcall ruft mittels edpinfosys.sh Infosystem auf und stellt das Ergebnis des Aufrufes
+in Variablen bereit
+```groovy
+def result = Infosystemcall.build("VKZENTRALE")
+        .addTableOutputField("ttrans")
+        .addTableOutputField("tdate")
+        .addTableOutputField("tkuli")
+        .addTableOutputField("tklname")
+        .addTableOutputField("teprice")
+        .setHeadParameter("vktyp", "Rechnung")
+        .setHeadParameter("ablageart", "abgelegt")
+        .setHeadParameter("ynurger", "ja")
+        .setHeadParameter("datef", m("von"))
+        .setHeadParameter("datet", m("bis"))
+        .setHeadParameter("bstart", "1")
+        .execute()
+for(def row: result.table){
+        addZeile();
+        fo("M|kalk", true)
+        fo("M|aettrans", row["ttrans"])
+        fo("M|aetdate", row["tdate"])
+        fo("M|aetkuli", row["tkuli"])
+        fo("M|aetklname", row["tklname"])
+        fo("M|aeteprice", row["teprice"])
+        fo("M|kalkttrans", row["ttrans^id"])
+}
+```
 
 
 Die Implementierung ist bei weitem nicht Vollständig!
