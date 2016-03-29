@@ -9,7 +9,7 @@ public class SelectionBuilder {
 	private String selectionOption = "";
 
 	
-	public static SelectionBuilder SelectionBuilder(){
+	public static SelectionBuilder build(){
 		return new SelectionBuilder();
 	}
 	
@@ -34,7 +34,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true für dialoglose Selektion, false für Dialog
+	 *            - true fÃ¼r dialoglose Selektion, false fÃ¼r Dialog
 	 */
 	public SelectionBuilder(boolean hidden) {
 		if (hidden) {
@@ -47,7 +47,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true für die Dialoglose Selektion, false für Dialog
+	 *            - true fÃ¼r die Dialoglose Selektion, false fÃ¼r Dialog
 	 * @param selection
 	 *            - Nummer der Selektion
 	 */
@@ -62,7 +62,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true für die Dialoglose Selektion, false für Dialog
+	 *            - true fÃ¼r die Dialoglose Selektion, false fÃ¼r Dialog
 	 * @param selection
 	 *            - Suchwort oder Nummer der Selektion
 	 */
@@ -246,7 +246,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder optimalkey(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@optschl="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -257,7 +257,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder link(boolean AND) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@verknuepfung="
 					+ (AND == true ? "und" : "oder") + ";";
@@ -268,7 +268,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder range(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@bereich="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -279,10 +279,10 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder direction(boolean forward) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@richtung="
-					+ (forward == true ? "vorwärts" : "rückwärts") + ";";
+					+ (forward == true ? "vorwÃ¤rts" : "rÃ¼ckwÃ¤rts") + ";";
 		else
 			this.selectionOption += "@direction="
 					+ (forward == true ? "forward" : "backward") + ";";
@@ -290,7 +290,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder objectselection(String value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@objektwahl=" + value + ";";
 		else
@@ -299,7 +299,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder read(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@lesen=" + (value == true ? "yes" : "no")
 					+ ";";
@@ -310,7 +310,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder autostart(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@autostart="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -321,7 +321,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder database(int value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@datenbank=" + value + ";";
 		else
@@ -330,7 +330,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder rows(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@zeilen="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -341,7 +341,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder fprotection(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@fschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -352,7 +352,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder gprotection(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@gschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -363,7 +363,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder bprotection(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@bschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -374,7 +374,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder note(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@merken="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -433,7 +433,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder dynprotection(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@dynschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -444,7 +444,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder stdsel(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@stdsel="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -455,7 +455,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder templsel(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@rohlsel="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -466,7 +466,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder initialvalues(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@initialwerte="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -477,7 +477,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder lastname(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@letztername="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -496,7 +496,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder opprotection(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@opschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -528,7 +528,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder englvar(boolean value) {
-		// FIXME Sprachunabhänigkeit
+		// FIXME SprachunabhÃ¤nigkeit
 		if (isDe)
 			this.selectionOption += "@englvar="
 					+ (value == true ? "ja" : "nein") + ";";
