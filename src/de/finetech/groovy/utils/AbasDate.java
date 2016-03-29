@@ -14,7 +14,7 @@ public class AbasDate extends GregorianCalendar {
 		// Montag ist der erste Tag der Woche
 		this.setFirstDayOfWeek(Calendar.MONDAY);
 
-		// Java 1.6 kompatbilität
+		// Java 1.6 kompatbilitÃ¤t
 		if (type.equals("GD") || type.equals("GD0")) {
 			this.setTime(this.getValue("dd.MM.yyyy", value));
 		} else if (type.equals("GD2")) {
@@ -71,7 +71,7 @@ public class AbasDate extends GregorianCalendar {
 	public Object mod(int i) {
 		int day = this.get(Calendar.DAY_OF_WEEK);
 		switch(i) {
-			//TODO Sprach unabhängigkeit
+			//TODO Sprach unabhÃ¤ngigkeit
 			case 1:
 				if(day == 0){
 					return "Montag";
