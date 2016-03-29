@@ -51,23 +51,24 @@ Diese Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Scrip
 ### Beispiele:
 
 #### Übersicht
-| JFOP            | GroovyFO | Funktion |
+| JFOP            | dt | engl |
 | --------------- | ------------- | --------|
 | EKS.Hvar(...)   | h(...) | |
 | EKS.Mvar(...)   | m(...) | |
-| EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| |
-| EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| |
+| EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| select(...) <br/> select(String db, SelectBuilder builder) <br/> select(String db, String selektion)|
+| EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| load(...) <br/> load(int puffer, String db, SelectBuilder builder) <br/> load(int puffer, String db, String selektion)|
 | EKS.formel(...) | fo(String variable, wert)| |
 | EKS.getValue(puffer, varName)| l1(...) <br/> l2(...) <br/> usw...| |
 | EKS.println(...)| println(...)| |
 | EKS.box(...,...)| box(...,...)| |
-| EKS.eingabe(...)| ein(...)| |
-| EKS.bringe(...) | bringe(...)| |
-| EKS.mache(...) | mache(...)| |
-| EKS.mache("maske zeile +O") | addZeile()| |
-| EKS.bringe("maske zeile -O") | removeZeile()| |
-| EKS.dazu(...) | dazu(...)| |
-| | mehr()| liefert den Status der Variablen (G Puffer) mehr |
+| EKS.eingabe(...)| ein(...)| in(...)|
+| EKS.bringe(...) | bringe(...)| rewrite(...)|
+| EKS.mache(...) | mache(...)| make()|
+| EKS.mache("maske zeile +O") | plusZeile()| addRow()|
+| EKS.bringe("maske zeile -O") | entfZeile()| removeRow()|
+| EKS.dazu(...) | dazu(...)| add(...)|
+| | mehr() | more()|
+|... | ... | ... |
 
 ### Helferlein
 
