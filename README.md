@@ -106,7 +106,6 @@ for(def row: result.table){
         println(row["tkuli"])
         println(row["tklname"])
         println(row["teprice"])
-        println(row["ttrans^id"])
 }
 ```
 
