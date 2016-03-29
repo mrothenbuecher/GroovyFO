@@ -99,15 +99,14 @@ def result = Infosystemcall.build("VKZENTRALE")
         .setHeadParameter("datet", ".")
         .setHeadParameter("bstart", "1")
         .execute()
+        
 for(def row: result.table){
-        addZeile();
-        fo("M|kalk", true)
-        fo("M|aettrans", row["ttrans"])
-        fo("M|aetdate", row["tdate"])
-        fo("M|aetkuli", row["tkuli"])
-        fo("M|aetklname", row["tklname"])
-        fo("M|aeteprice", row["teprice"])
-        fo("M|kalkttrans", row["ttrans^id"])
+        println(row["ttrans"])
+        println(row["tdate"])
+        println(row["tkuli"])
+        println(row["tklname"])
+        println(row["teprice"])
+        println(row["ttrans^id"])
 }
 ```
 
