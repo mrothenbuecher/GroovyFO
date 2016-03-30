@@ -32,6 +32,8 @@ public class Infosystemcall {
 	protected boolean showAllTableFields = false;
 	protected boolean showAllHeadFields = false;
 
+	protected final static String fieldSeperator = "[";
+	
 	public static Infosystemcall build(String infosystem,
 			String outputFile) {
 		return new Infosystemcall(infosystem, outputFile);
@@ -90,12 +92,12 @@ public class Infosystemcall {
 	}
 
 	private String buildCommand() {
-		String cmd = "edpinfosys.sh -P -F -N " + this.infosystem;
+		String cmd = "edpinfosys.sh -t "+fieldSeperator+" -P -F -N " + this.infosystem;
 		String foo = "";
 		if (this.headParameter.size() > 0) {
 			cmd += " -s ";
 			for (String key : this.headParameter.keySet()) {
-				foo += (key + "=" + this.headParameter.get(key) + ",");
+				foo += (key + "=" + this.headParameter.get(key) + fieldSeperator);
 			}
 			foo = foo.substring(0, foo.length() - 1);
 			cmd += foo;
@@ -155,6 +157,7 @@ public class Infosystemcall {
 		}
 		hinweis("-SOFORT Datenbeschaffung von Infosystem " + this.infosystem
 				+ " fehlgeschlagen");
+		println(this.buildCommand());
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(
 					this.outputFile));
