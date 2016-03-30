@@ -42,10 +42,13 @@ public class ScriptExcecuter implements FOPRunnable {
 						ImportCustomizer ic = new ImportCustomizer();
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
-						// ic.addStaticStars("de.abas.eks.jfop.remote.FO");
 						ic.addStarImports("de.finetech.groovy");
-						ic.addImports("java.awt.Color");
-						ic.addImports("de.finetech.utils.Infosystemcall", "de.finetech.utils.InfosystemcallResult");
+						// 
+						ic.addImports("java.awt.Color", "java.util.Calendar",
+								"java.text.SimpleDateFormat",
+								"java.text.DateFormat", "java.util.Date");
+						ic.addImports("de.finetech.utils.Infosystemcall",
+								"de.finetech.utils.InfosystemcallResult");
 						// ic.addStaticImport("de.finetech.groovy.SelectionBuilder",
 						// "SelectionBuilder");
 						cc.addCompilationCustomizers(ic);
