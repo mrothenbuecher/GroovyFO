@@ -28,7 +28,7 @@ public class InfosystemcallResult {
 		if (file != null) {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			for (String line; (line = br.readLine()) != null;) {
-				lines.add(line.split(";"));
+				lines.add(line.split("\\["));
 			}
 			br.close();
 		}
