@@ -1,11 +1,12 @@
 package de.finetech.groovy;
 
+import groovy.lang.Script;
+
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import groovy.lang.Script;
 import de.abas.eks.jfop.remote.EKS;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.utils.GroovyFOException;
@@ -29,9 +30,10 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
-	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas Typ
+	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
+	// Typ
 	private HashMap<String, String> variableTypes = new HashMap<String, String>();
-
+	
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
@@ -39,17 +41,30 @@ public abstract class AbasBaseScript extends Script {
 		FO.setCommandLanguage(FO.CMDLANG_GERMAN);
 	}
 
+	public void absatz(String cmd) {
+		EKS.absatz(cmd);
+	}
+	
+	// TODO startTransaction commitTransaction abortTransaction
+	public void action(String cmd) {
+		aktion(cmd);
+	}
+
 	public boolean add(String cmd) {
-		return dazu(cmd);
+		return EKS.dazu(cmd);
 	}
 
 	public void addRow() {
-		FO.mache("maske zeile +O");
+		plusZeile();
 	}
 
 	@Deprecated
 	public void addZeile() {
 		plusZeile();
+	}
+
+	public void aktion(String cmd) {
+		EKS.aktion(cmd);
 	}
 
 	/**
@@ -80,7 +95,7 @@ public abstract class AbasBaseScript extends Script {
 	public String art(String type, String def) {
 		// FIXME vorher prüfen ob die Variable schon existiert
 		// FIXME in Type Map aufnehmen
-		EKS.art(type + " " + def);
+		FO.art(type + " " + def);
 		return "U|" + def;
 	}
 
@@ -97,13 +112,30 @@ public abstract class AbasBaseScript extends Script {
 		String[] ba = new String[def.length];
 		int i = 0;
 		for (String foo : def) {
-			EKS.art(type + " " + foo);
+			FO.art(type + " " + foo);
 			// FIXME vorher prüfen ob die Variable schon existiert
 			// FIXME in Type Map aufnehmen
 			ba[i++] = "U|" + foo;
 		}
 
 		return ba;
+	}
+	
+	public void assign(String cmd) {
+		zuweisen(cmd);
+	}
+
+	/**
+	 * @deprecated laut abas hilfe hier .uebersetzen nutzen
+	 * @param cmd
+	 */
+	@Deprecated
+	public void atext(String cmd) {
+		FO.atext(cmd);
+	}
+
+	public void ausgabe(String cmd) {
+		EKS.ausgabe(cmd);
 	}
 
 	public void bcolor(Color c, int row) {
@@ -154,12 +186,24 @@ public abstract class AbasBaseScript extends Script {
 		this.hfarbe(color, field, row);
 	}
 
+	public void belegen(String cmd) {
+		EKS.belegen(cmd);
+	}
+
+	public void blocksatz() {
+		FO.blocksatz("");
+	}
+	
 	public void box(String title, String content) {
 		FO.box(title, content);
 	}
 
 	public void bringe(String cmd) {
 		EKS.bringe(cmd);
+	}
+	
+	public void bringe() {
+		bringe("");
 	}
 
 	public void color(String cmd) {
@@ -188,9 +232,13 @@ public abstract class AbasBaseScript extends Script {
 	public void commandoWait(String kommando) {
 		this.comWait(kommando);
 	}
-
+	
 	public void comWait(String kommando) {
 		this.komWarten(kommando);
+	}
+
+	public void copy(String cmd) {
+		this.kopieren(cmd);
 	}
 
 	/**
@@ -202,11 +250,23 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object d(String varname) {
-		return this.getValue("D|" + varname, EKS.Dvar(varname));
+		return this.getValue("D|" + varname, FO.Dvar(varname));
+	}
+	
+	public void datei(String cmd) {
+		EKS.datei(cmd);
 	}
 
-	public boolean dazu(String cmd) {
-		return EKS.dazu(cmd);
+	public void delete(String cmd) {
+		loesche(cmd);
+	}
+	
+	public void down(String cmd) {
+		unten(cmd);
+	}
+
+	public void drucke(String cmd) {
+		EKS.drucke(cmd);
 	}
 
 	/**
@@ -218,7 +278,15 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object e(String varname) {
-		return this.getValue("E|" + varname, EKS.Evar(varname));
+		return this.getValue("E|" + varname, FO.Evar(varname));
+	}
+	
+	public void edit(String cmd) {
+		editiere(cmd);
+	}
+
+	public void editiere(String cmd) {
+		EKS.editiere(cmd);
 	}
 
 	public void ein(String fopName) {
@@ -232,9 +300,13 @@ public abstract class AbasBaseScript extends Script {
 	public void entfAlleZeilen() {
 		FO.mache("maske zeile --");
 	}
-
+	
 	public void entfZeile() {
 		FO.mache("maske zeile -O");
+	}
+
+	public void error(String cmd) {
+		fehler(cmd);
 	}
 
 	public void farbe(String cmd) {
@@ -265,7 +337,6 @@ public abstract class AbasBaseScript extends Script {
 		this.vfarbe(color, field, row);
 	}
 
-	// grrr
 	public void fcolour(Color c, int row) {
 		this.vfarbe(this.colorToString(c), row);
 	}
@@ -285,24 +356,40 @@ public abstract class AbasBaseScript extends Script {
 	public void fcolour(String color, String field) {
 		this.vfarbe(color, field);
 	}
-
+	
 	public void fcolour(String color, String field, int row) {
 		this.vfarbe(color, field, row);
 	}
 
+	public void fehler(String cmd) {
+		EKS.fehler(cmd);
+	}
+
+	public void fenster(String cmd) {
+		EKS.fenster(cmd);
+	}
+
+	public void file(String cmd) {
+		datei(cmd);
+	}
+
+	public void flattersatz() {
+		FO.flattersatz("");
+	}
+
 	public Object fo(String var, boolean value) {
 		// FIXME Sprach unabhÃ¤ngigkeit
-		EKS.formel(var + "=" + (value ? "TRUE" : "FALSE"));
+		FO.formel(var + "=" + (value ? "TRUE" : "FALSE"));
 		return this.getValue(var);
 	}
 
 	public Object fo(String var, double value) {
-		EKS.formel(var + "=" + new DecimalFormat("0.0000").format(value));
+		FO.formel(var + "=" + new DecimalFormat("0.0000").format(value));
 		return this.getValue(var);
 	}
 
 	public Object fo(String var, int value) {
-		EKS.formel(var + "=" + value);
+		FO.formel(var + "=" + value);
 		return this.getValue(var);
 	}
 
@@ -316,7 +403,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object fo(String var, String value) {
-		EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"")
+		FO.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"")
 				+ "\"");
 		return this.getValue(var);
 	}
@@ -331,8 +418,12 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object formel(String var, String value) {
-		EKS.formel(var + "=" + value);
+		FO.formel(var + "=" + value);
 		return this.getValue(var);
+	}
+
+	public Object formula(String var, String value) {
+		return this.formel(var, value);
 	}
 
 	/**
@@ -344,7 +435,11 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object g(String varname) {
-		return this.getValue("G|" + varname, EKS.Gvar(varname));
+		return this.getValue("G|" + varname, FO.Gvar(varname));
+	}
+
+	public void gedruckt(String cmd) {
+		EKS.gedruckt(cmd);
 	}
 
 	/**
@@ -360,12 +455,12 @@ public abstract class AbasBaseScript extends Script {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			String type = EKS.getValue("F", "typeof(" + variable + ")");
+			String type = FO.getValue("F", "typeof(" + variable + ")");
 			this.variableTypes.put(variable, type);
 			return type;
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param var
@@ -376,7 +471,7 @@ public abstract class AbasBaseScript extends Script {
 		String[] foo = var.split(pipe);
 		String buffer = foo[0];
 		String varname = foo[1];
-		return this.getValue(var, EKS.getValue(buffer, varname));
+		return this.getValue(var, FO.getValue(buffer, varname));
 	}
 
 	/**
@@ -429,7 +524,11 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object h(String varname) {
-		return this.getValue("H|" + varname, EKS.Hvar(varname));
+		return this.getValue("H|" + varname, FO.Hvar(varname));
+	}
+
+	public void help(String cmd) {
+		hilfe(cmd);
 	}
 
 	/**
@@ -467,29 +566,33 @@ public abstract class AbasBaseScript extends Script {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-HINTERGRUND " + color + " " + row);
+		FO.farbe("-HINTERGRUND " + color + " " + row);
 	}
 
 	public void hfarbe(String color, String field) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-HINTERGRUND " + color + " " + field);
+		FO.farbe("-HINTERGRUND " + color + " " + field);
 	}
 
 	public void hfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-HINTERGRUND " + color + " " + field + " " + row);
+		FO.farbe("-HINTERGRUND " + color + " " + field + " " + row);
 	}
 
+	public void hilfe(String cmd) {
+		EKS.hilfe(cmd);
+	}
+	
 	public void hinweis(String hinweis) {
 		EKS.hinweis(hinweis);
 	}
 
 	public boolean hole(String cmd) {
-		return EKS.hole(cmd);
+		return FO.hole(cmd);
 	}
 
 	/**
@@ -515,27 +618,47 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public boolean hole(String db, String selection) {
 		if (this.hselection != null && this.hselection.equals(selection)) {
-			return EKS.hole(db);
+			return FO.hole(db);
 		} else {
 			this.hselection = selection;
-			return EKS.hole(db + " \"" + selection + "\"");
+			return FO.hole(db + " \"" + selection + "\"");
 		}
 	}
 
 	public void in(String fopName) {
-		EKS.eingabe(fopName);
+		eingabe(fopName);
+	}
+	
+	public void input(String fopName) {
+		eingabe(fopName);
 	}
 
-	public void input(String fopName) {
-		EKS.eingabe(fopName);
+	public void justified() {
+		FO.blocksatz("");
+	}
+
+	public void justified(String cmd) {
+		FO.blocksatz(cmd);
 	}
 
 	public void kom(String kommando) {
+		kommando(kommando);
+	}
+
+	public void kommando(String kommando) {
 		EKS.kommando(kommando);
 	}
 
+	public void kommandoWarten(String kommando) {
+		kom("-WARTEN " + kommando);
+	}
+
 	public void komWarten(String kommando) {
-		EKS.kommando("-WARTEN " + kommando);
+		kom("-WARTEN " + kommando);
+	}
+
+	public void kopieren(String cmd) {
+		EKS.kopieren(cmd);
 	}
 
 	/**
@@ -547,7 +670,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l1(String varname) {
-		return this.getValue("1|" + varname, EKS.getValue("1", varname));
+		return this.getValue("1|" + varname, FO.getValue("1", varname));
 	}
 
 	/**
@@ -559,7 +682,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l2(String varname) {
-		return this.getValue("2|" + varname, EKS.getValue("2", varname));
+		return this.getValue("2|" + varname, FO.getValue("2", varname));
 	}
 
 	/**
@@ -571,7 +694,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l3(String varname) {
-		return this.getValue("3|" + varname, EKS.getValue("3", varname));
+		return this.getValue("3|" + varname, FO.getValue("3", varname));
 	}
 
 	/**
@@ -583,7 +706,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l4(String varname) {
-		return this.getValue("4|" + varname, EKS.getValue("4", varname));
+		return this.getValue("4|" + varname, FO.getValue("4", varname));
 	}
 
 	/**
@@ -595,7 +718,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l5(String varname) {
-		return this.getValue("5|" + varname, EKS.getValue("5", varname));
+		return this.getValue("5|" + varname, FO.getValue("5", varname));
 	}
 
 	/**
@@ -607,7 +730,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l6(String varname) {
-		return this.getValue("6|" + varname, EKS.getValue("6", varname));
+		return this.getValue("6|" + varname, FO.getValue("6", varname));
 	}
 
 	/**
@@ -619,7 +742,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l7(String varname) {
-		return this.getValue("7|" + varname, EKS.getValue("7", varname));
+		return this.getValue("7|" + varname, FO.getValue("7", varname));
 	}
 
 	/**
@@ -631,7 +754,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l8(String varname) {
-		return this.getValue("8|" + varname, EKS.getValue("8", varname));
+		return this.getValue("8|" + varname, FO.getValue("8", varname));
 	}
 
 	/**
@@ -643,9 +766,9 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object l9(String varname) {
-		return this.getValue("9|" + varname, EKS.getValue("9", varname));
+		return this.getValue("9|" + varname, FO.getValue("9", varname));
 	}
-
+	
 	/**
 	 * 
 	 * @param puffer
@@ -656,7 +779,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public boolean lade(int puffer, String cmd) {
-		return EKS.lade(puffer + " " + cmd);
+		return FO.lade(puffer + " " + cmd);
 	}
 
 	/**
@@ -670,7 +793,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean lade(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
-
+	
 	/**
 	 * 
 	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
@@ -687,21 +810,45 @@ public abstract class AbasBaseScript extends Script {
 	public boolean lade(int puffer, String db, String selection) {
 		if (this.lselection[puffer] != null
 				&& this.lselection[puffer].equals(selection)) {
-			return EKS.lade(puffer + " " + db);
+			return FO.lade(puffer + " " + db);
 		} else {
 			this.lselection[puffer] = selection;
-			return EKS.lade(puffer + " " + db + " \"" + selection + "\"");
+			return FO.lade(puffer + " " + db + " \"" + selection + "\"");
 		}
 	}
 
 	public boolean lade(String cmd) {
-		return EKS.lade(cmd);
+		return FO.lade(cmd);
+	}
+	
+	public void laenge(String cmd) {
+		EKS.laenge(cmd);
+	}
+
+	public void left(String cmd) {
+		links(cmd);
+	}
+
+	public void length(String cmd) {
+		laenge(cmd);
+	}
+
+	public void lesen(String cmd) {
+		EKS.lesen(cmd);
+	}
+
+	public void line(String cmd) {
+		zeile(cmd);
+	}
+
+	public void links(String cmd) {
+		EKS.links(cmd);
 	}
 
 	public boolean load(int puffer, String cmd) {
 		return lade(puffer + " " + cmd);
 	}
-
+	
 	public boolean load(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
@@ -714,6 +861,10 @@ public abstract class AbasBaseScript extends Script {
 		return lade(cmd);
 	}
 
+	public void loesche(String cmd) {
+		EKS.loesche(cmd);
+	}
+
 	/**
 	 * liefert den Variablenwert aus dem Masken Puffer
 	 * 
@@ -723,11 +874,11 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public Object m(String varname) {
-		return this.getValue("M|" + varname, EKS.Mvar(varname));
+		return this.getValue("M|" + varname, FO.Mvar(varname));
 	}
 
 	public void mache(String cmd) {
-		FO.mache(cmd);
+		EKS.mache(cmd);
 	}
 
 	public void make(String cmd) {
@@ -735,7 +886,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public boolean mehr() {
-		String mehr = EKS.Gvar("mehr").toLowerCase();
+		String mehr = FO.Gvar("mehr").toLowerCase();
 		// FIXME SprachunterstÃ¼tzung
 		return mehr != null
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
@@ -749,21 +900,27 @@ public abstract class AbasBaseScript extends Script {
 	public int menu(String title, String[] options, int highlight) {
 		return this.menue(title, options, highlight);
 	}
-
-	public int menu(String title, String[] options, int highlight, boolean noReplace) {
+	
+	public int menu(String title, String[] options, int highlight,
+			boolean noReplace) {
 		return this.menue(title, options, highlight, noReplace);
 	}
-	
+
 	public int menue(String title, String[] options) {
 		return FO.menue(title, options);
 	}
-
+	
 	public int menue(String title, String[] options, int highlight) {
 		return FO.menue(title, options, 0, 0, highlight);
 	}
-	
-	public int menue(String title, String[] options, int highlight, boolean noReplace) {
+
+	public int menue(String title, String[] options, int highlight,
+			boolean noReplace) {
 		return FO.menue(title, options, 0, 0, highlight, noReplace);
+	}
+	
+	public void merke(String cmd) {
+		EKS.merke(cmd);
 	}
 
 	public boolean more() {
@@ -771,47 +928,71 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public void note(String hinweis) {
-		this.hinweis(hinweis);
+		hinweis(hinweis);
+	}
+	
+	public void oben(String cmd) {
+		EKS.oben(cmd);
+	}
+
+	public void occupy(String cmd) {
+		belegen(cmd);
+	}
+	
+	public void output(String cmd) {
+		ausgabe(cmd);
 	}
 
 	public Object p(String varname) {
-		return this.getValue("P|" + varname, EKS.Pvar(varname));
+		return this.getValue("P|" + varname, FO.Pvar(varname));
+	}
+
+	public void page(String cmd) {
+		seite(cmd);
+	}
+	
+	public void para(String cmd) {
+		absatz(cmd);
 	}
 
 	public void plusZeile() {
 		FO.mache("maske zeile +O");
 	}
-
-	public void print(boolean cmd) {
-		EKS.println("-lfsuppress " + Boolean.toString(cmd));
-	}
-
-	public void print(double cmd) {
-		EKS.println("-lfsuppress " + Double.toString(cmd));
-	}
-
-	public void print(int cmd) {
-		EKS.println("-lfsuppress " + Integer.toString(cmd));
-	}
-
+	
 	public void print(String cmd) {
-		EKS.println("-lfsuppress " + cmd.replaceAll("\"", "'DBLQUOTE'"));
+		drucke(cmd);
+	}
+
+	public void printed(String cmd) {
+		gedruckt(cmd);
 	}
 
 	public void println(boolean cmd) {
-		EKS.println(Boolean.toString(cmd));
+		FO.println(Boolean.toString(cmd));
 	}
 
 	public void println(double cmd) {
-		EKS.println(Double.toString(cmd));
+		FO.println(Double.toString(cmd));
 	}
 
 	public void println(int cmd) {
-		EKS.println(Integer.toString(cmd));
+		FO.println(Integer.toString(cmd));
 	}
 
 	public void println(String cmd) {
-		EKS.println(cmd.replaceAll("\"", "'DBLQUOTE'"));
+		FO.println(cmd.replaceAll("\"", "'DBLQUOTE'"));
+	}
+	
+	public void protection(String cmd) {
+		schutz(cmd);
+	}
+
+	public void read(String cmd) {
+		lesen(cmd);
+	}
+	
+	public void rechts(String cmd) {
+		EKS.rechts(cmd);
 	}
 
 	public void removeAllRows() {
@@ -827,12 +1008,32 @@ public abstract class AbasBaseScript extends Script {
 		this.entfZeile();
 	}
 
+	public void reserve(String cmd) {
+		merke(cmd);
+	}
+	
 	public void rewrite(String cmd) {
 		bringe(cmd);
 	}
+	
+	public void rewrite() {
+		bringe("");
+	}
 
+	public void right(String cmd) {
+		rechts(cmd);
+	}
+	
 	public Object s(String varname) {
-		return this.getValue("S|" + varname, EKS.Svar(varname));
+		return this.getValue("S|" + varname, FO.Svar(varname));
+	}
+
+	public void schutz(String cmd) {
+		EKS.schutz(cmd);
+	}
+	
+	public void seite(String cmd) {
+		EKS.seite(cmd);
 	}
 
 	public boolean select(String cmd) {
@@ -847,14 +1048,50 @@ public abstract class AbasBaseScript extends Script {
 		return hole(db, selection);
 	}
 
+	public void seperator(String cmd) {
+		trenner(cmd);
+	}
+
+	public void set(String cmd) {
+		setze(cmd);
+	}
+	
+	public void setze(String cmd) {
+		EKS.setze(cmd);
+	}
+
+	public void sort(String cmd) {
+		sortiere(cmd);
+	}
+	
+	public void sortiere(String cmd) {
+		EKS.sortiere(cmd);
+	}
+
 	public Object t(String varname) {
-		return this.getValue("T|" + varname, EKS.Tvar(varname));
+		return this.getValue("T|" + varname, FO.Tvar(varname));
+	}
+	
+	public void tabellensatz(String cmd) {
+		EKS.tabellensatz(cmd);
+	}
+
+	public void tablerecord(String cmd) {
+		tabellensatz(cmd);
+	}
+
+	public void translate(String cmd) {
+		uebersetzen(cmd);
+	}
+	
+	public void trenner(String cmd) {
+		EKS.trenner(cmd);
 	}
 
 	public String type(String def) throws GroovyFOException {
 		return art(def);
 	}
-
+	
 	public String type(String type, String def) {
 		return art(type, def);
 	}
@@ -864,9 +1101,29 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public Object u(String varname) {
-		return this.getValue("U|" + varname, EKS.Uvar(varname));
+		return this.getValue("U|" + varname, FO.Uvar(varname));
 	}
 
+	public void uebersetzen(String cmd) {
+		EKS.uebersetzen(cmd);
+	}
+
+	public void unjustified() {
+		FO.flattersatz("");
+	}
+
+	public void unjustified(String cmd) {
+		FO.flattersatz(cmd);
+	}
+
+	public void unten(String cmd) {
+		EKS.unten(cmd);
+	}
+
+	public void up(String cmd) {
+		oben(cmd);
+	}
+	
 	public void vfarbe(Color c, int row) {
 		this.vfarbe(this.colorToString(c), row);
 	}
@@ -883,21 +1140,41 @@ public abstract class AbasBaseScript extends Script {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-VORDERGRUND " + color + " " + row);
+		FO.farbe("-VORDERGRUND " + color + " " + row);
 	}
 
 	public void vfarbe(String color, String field) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-VORDERGRUND " + color + " " + field);
+		FO.farbe("-VORDERGRUND " + color + " " + field);
 	}
 
 	public void vfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		EKS.farbe("-VORDERGRUND " + color + " " + field + " " + row);
+		FO.farbe("-VORDERGRUND " + color + " " + field + " " + row);
+	}
+
+	public void view(String cmd) {
+		zeige(cmd);
+	}
+
+	public void window(String cmd) {
+		fenster(cmd);
+	}
+	
+	public void zeige(String cmd) {
+		EKS.zeige(cmd);
+	}
+
+	public void zeile(String cmd) {
+		EKS.zeile(cmd);
+	}
+	
+	public void zuweisen(String cmd) {
+		EKS.zuweisen(cmd);
 	}
 
 }
