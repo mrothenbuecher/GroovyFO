@@ -47,7 +47,7 @@ public class ScriptExcecuter implements FOPRunnable {
 						ic.addImports("java.awt.Color", "java.util.Calendar",
 								"java.text.SimpleDateFormat",
 								"java.text.DateFormat", "java.util.Date");
-						ic.addImports("de.finetech.utils.Infosystemcall",
+						ic.addImports("de.finetech.utils.SelectionBuilder","de.finetech.utils.Infosystemcall",
 								"de.finetech.utils.InfosystemcallResult");
 						// ic.addStaticImport("de.finetech.groovy.SelectionBuilder",
 						// "SelectionBuilder");
