@@ -29,13 +29,14 @@ Text ow1/GROOVYTEST wie folgt anlegen.
 ```groovy
 /*
 * Beispiel GroovyFO holt die ersten 100 Teile aus der DB
-* und gibt deren suchwort aus
+* und gibt deren Suchwort aus
 * ow1/GROOVYTEST
 */
 
 for(def i=0; i<100 && hole("Teil"); i++){
         // Ausgabe auf Konsole
-        println ( h("such") )
+        println ( h.such )
+        //alternativ auch println ( h("such") )
 }
 ```
 Zum testen Kommando aufrufen mit
