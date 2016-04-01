@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import de.abas.eks.jfop.remote.EKS;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.utils.GroovyFOException;
+import de.finetech.groovy.utils.GroovyFOMap;
+import de.finetech.utils.SelectionBuilder;
 
 /**
  * 
@@ -23,17 +25,38 @@ public abstract class AbasBaseScript extends Script {
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
-
+	
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
 	private Pattern integerPattern = Pattern.compile("(I.*)|(GRN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
-
+	
+	// maps für den einfachen zugriff auf die Felder bsp. m.von
+	protected GroovyFOMap d = new GroovyFOMap("d", this);
+	protected GroovyFOMap e = new GroovyFOMap("e", this);
+	protected GroovyFOMap f = new GroovyFOMap("f", this);
+	protected GroovyFOMap g = new GroovyFOMap("g", this);
+	protected GroovyFOMap h = new GroovyFOMap("h", this);
+	protected GroovyFOMap l1 = new GroovyFOMap("l1", this);
+	protected GroovyFOMap l2 = new GroovyFOMap("l2", this);
+	protected GroovyFOMap l3 = new GroovyFOMap("l3", this);
+	protected GroovyFOMap l4 = new GroovyFOMap("l4", this);
+	protected GroovyFOMap l5 = new GroovyFOMap("l5", this);
+	protected GroovyFOMap l6 = new GroovyFOMap("l6", this);
+	protected GroovyFOMap l7 = new GroovyFOMap("l7", this);
+	protected GroovyFOMap l8 = new GroovyFOMap("l8", this);
+	protected GroovyFOMap l9 = new GroovyFOMap("l9", this);
+	protected GroovyFOMap m = new GroovyFOMap("m", this);
+	protected GroovyFOMap p = new GroovyFOMap("p", this);
+	protected GroovyFOMap s = new GroovyFOMap("p", this);
+	protected GroovyFOMap t = new GroovyFOMap("t", this);
+	protected GroovyFOMap u = new GroovyFOMap("u", this);
+	
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
-	private HashMap<String, String> variableTypes = new HashMap<String, String>();
-	
+	protected HashMap<String, String> variableTypes = new HashMap<String, String>();
+
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
@@ -44,7 +67,7 @@ public abstract class AbasBaseScript extends Script {
 	public void absatz(String cmd) {
 		EKS.absatz(cmd);
 	}
-	
+
 	// TODO startTransaction commitTransaction abortTransaction
 	public void action(String cmd) {
 		aktion(cmd);
@@ -120,7 +143,7 @@ public abstract class AbasBaseScript extends Script {
 
 		return ba;
 	}
-	
+
 	public void assign(String cmd) {
 		zuweisen(cmd);
 	}
@@ -193,17 +216,17 @@ public abstract class AbasBaseScript extends Script {
 	public void blocksatz() {
 		FO.blocksatz("");
 	}
-	
+
 	public void box(String title, String content) {
 		FO.box(title, content);
 	}
 
-	public void bringe(String cmd) {
-		EKS.bringe(cmd);
-	}
-	
 	public void bringe() {
 		bringe("");
+	}
+
+	public void bringe(String cmd) {
+		EKS.bringe(cmd);
 	}
 
 	public void color(String cmd) {
@@ -232,7 +255,7 @@ public abstract class AbasBaseScript extends Script {
 	public void commandoWait(String kommando) {
 		this.comWait(kommando);
 	}
-	
+
 	public void comWait(String kommando) {
 		this.komWarten(kommando);
 	}
@@ -252,7 +275,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object d(String varname) {
 		return this.getValue("D|" + varname, FO.Dvar(varname));
 	}
-	
+
 	public void datei(String cmd) {
 		EKS.datei(cmd);
 	}
@@ -260,7 +283,7 @@ public abstract class AbasBaseScript extends Script {
 	public void delete(String cmd) {
 		loesche(cmd);
 	}
-	
+
 	public void down(String cmd) {
 		unten(cmd);
 	}
@@ -280,7 +303,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object e(String varname) {
 		return this.getValue("E|" + varname, FO.Evar(varname));
 	}
-	
+
 	public void edit(String cmd) {
 		editiere(cmd);
 	}
@@ -300,13 +323,25 @@ public abstract class AbasBaseScript extends Script {
 	public void entfAlleZeilen() {
 		FO.mache("maske zeile --");
 	}
-	
+
 	public void entfZeile() {
 		FO.mache("maske zeile -O");
 	}
 
 	public void error(String cmd) {
 		fehler(cmd);
+	}
+
+	/**
+	 * liefert den Variablenwert aus dem F Puffer
+	 * 
+	 * @param varname
+	 *            Variablenname ohne vorangestelltes F
+	 * 
+	 * @return
+	 */
+	public Object f(String varname) {
+		return this.getValue("F|" + varname, FO.Gvar(varname));
 	}
 
 	public void farbe(String cmd) {
@@ -356,7 +391,7 @@ public abstract class AbasBaseScript extends Script {
 	public void fcolour(String color, String field) {
 		this.vfarbe(color, field);
 	}
-	
+
 	public void fcolour(String color, String field, int row) {
 		this.vfarbe(color, field, row);
 	}
@@ -425,7 +460,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object formula(String var, String value) {
 		return this.formel(var, value);
 	}
-
+	
 	/**
 	 * liefert den Variablenwert aus dem G Puffer
 	 * 
@@ -449,7 +484,7 @@ public abstract class AbasBaseScript extends Script {
 	 *            mit vorangestellten Puffer buchstaben bsp.: H|id
 	 * @return
 	 */
-	private String getType(String variable) {
+	protected String getType(String variable) {
 		variable = variable.toLowerCase();
 		if (this.variableTypes.containsKey(variable)) {
 			return this.variableTypes.get(variable);
@@ -460,7 +495,7 @@ public abstract class AbasBaseScript extends Script {
 			return type;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param var
@@ -488,7 +523,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	private Object getValue(String varname, String value) {
+	protected Object getValue(String varname, String value) {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
 		// Integer
@@ -586,12 +621,13 @@ public abstract class AbasBaseScript extends Script {
 	public void hilfe(String cmd) {
 		EKS.hilfe(cmd);
 	}
-	
+
 	public void hinweis(String hinweis) {
 		EKS.hinweis(hinweis);
 	}
 
 	public boolean hole(String cmd) {
+		this.resetMap("h");
 		return FO.hole(cmd);
 	}
 
@@ -621,6 +657,7 @@ public abstract class AbasBaseScript extends Script {
 			return FO.hole(db);
 		} else {
 			this.hselection = selection;
+			this.resetMap("h");
 			return FO.hole(db + " \"" + selection + "\"");
 		}
 	}
@@ -628,7 +665,7 @@ public abstract class AbasBaseScript extends Script {
 	public void in(String fopName) {
 		eingabe(fopName);
 	}
-	
+
 	public void input(String fopName) {
 		eingabe(fopName);
 	}
@@ -768,7 +805,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object l9(String varname) {
 		return this.getValue("9|" + varname, FO.getValue("9", varname));
 	}
-	
+
 	/**
 	 * 
 	 * @param puffer
@@ -779,6 +816,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 */
 	public boolean lade(int puffer, String cmd) {
+		this.resetMap(Integer.toString(puffer));
 		return FO.lade(puffer + " " + cmd);
 	}
 
@@ -793,7 +831,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean lade(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
-	
+
 	/**
 	 * 
 	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
@@ -812,15 +850,18 @@ public abstract class AbasBaseScript extends Script {
 				&& this.lselection[puffer].equals(selection)) {
 			return FO.lade(puffer + " " + db);
 		} else {
+			this.resetMap(Integer.toString(puffer));
 			this.lselection[puffer] = selection;
 			return FO.lade(puffer + " " + db + " \"" + selection + "\"");
 		}
 	}
 
 	public boolean lade(String cmd) {
+		// .lade X ....
+		this.resetMap(cmd.split(" ")[0]);
 		return FO.lade(cmd);
 	}
-	
+
 	public void laenge(String cmd) {
 		EKS.laenge(cmd);
 	}
@@ -848,7 +889,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean load(int puffer, String cmd) {
 		return lade(puffer + " " + cmd);
 	}
-	
+
 	public boolean load(int puffer, String db, SelectionBuilder builder) {
 		return this.lade(puffer, db, builder.toString());
 	}
@@ -892,7 +933,7 @@ public abstract class AbasBaseScript extends Script {
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
 						.equals("yes"));
 	}
-
+	
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
 	}
@@ -900,7 +941,7 @@ public abstract class AbasBaseScript extends Script {
 	public int menu(String title, String[] options, int highlight) {
 		return this.menue(title, options, highlight);
 	}
-	
+
 	public int menu(String title, String[] options, int highlight,
 			boolean noReplace) {
 		return this.menue(title, options, highlight, noReplace);
@@ -909,7 +950,7 @@ public abstract class AbasBaseScript extends Script {
 	public int menue(String title, String[] options) {
 		return FO.menue(title, options);
 	}
-	
+
 	public int menue(String title, String[] options, int highlight) {
 		return FO.menue(title, options, 0, 0, highlight);
 	}
@@ -918,7 +959,7 @@ public abstract class AbasBaseScript extends Script {
 			boolean noReplace) {
 		return FO.menue(title, options, 0, 0, highlight, noReplace);
 	}
-	
+
 	public void merke(String cmd) {
 		EKS.merke(cmd);
 	}
@@ -930,7 +971,7 @@ public abstract class AbasBaseScript extends Script {
 	public void note(String hinweis) {
 		hinweis(hinweis);
 	}
-	
+
 	public void oben(String cmd) {
 		EKS.oben(cmd);
 	}
@@ -938,7 +979,7 @@ public abstract class AbasBaseScript extends Script {
 	public void occupy(String cmd) {
 		belegen(cmd);
 	}
-	
+
 	public void output(String cmd) {
 		ausgabe(cmd);
 	}
@@ -950,7 +991,7 @@ public abstract class AbasBaseScript extends Script {
 	public void page(String cmd) {
 		seite(cmd);
 	}
-	
+
 	public void para(String cmd) {
 		absatz(cmd);
 	}
@@ -958,7 +999,7 @@ public abstract class AbasBaseScript extends Script {
 	public void plusZeile() {
 		FO.mache("maske zeile +O");
 	}
-	
+
 	public void print(String cmd) {
 		drucke(cmd);
 	}
@@ -968,21 +1009,25 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public void println(boolean cmd) {
-		FO.println(Boolean.toString(cmd));
+		println(Boolean.toString(cmd));
 	}
 
 	public void println(double cmd) {
-		FO.println(Double.toString(cmd));
+		println(Double.toString(cmd));
 	}
 
 	public void println(int cmd) {
-		FO.println(Integer.toString(cmd));
+		println(Integer.toString(cmd));
 	}
 
 	public void println(String cmd) {
-		FO.println(cmd.replaceAll("\"", "'DBLQUOTE'"));
+		cmd = cmd.replaceAll("\"", "'DBLQUOTE'");
+		if (cmd.length() > 2999)
+			FO.println(cmd.substring(0, 2999));
+		else
+			FO.println(cmd);
 	}
-	
+
 	public void protection(String cmd) {
 		schutz(cmd);
 	}
@@ -990,7 +1035,7 @@ public abstract class AbasBaseScript extends Script {
 	public void read(String cmd) {
 		lesen(cmd);
 	}
-	
+
 	public void rechts(String cmd) {
 		EKS.rechts(cmd);
 	}
@@ -1011,19 +1056,36 @@ public abstract class AbasBaseScript extends Script {
 	public void reserve(String cmd) {
 		merke(cmd);
 	}
-	
-	public void rewrite(String cmd) {
-		bringe(cmd);
+
+	/**
+	 * wenn sich der Bezug eines Laden/Holen/dazu buffers ändert müssen alle
+	 * Felder aus der Map zum merken des Datentypes entfernt werden
+	 * 
+	 * @param buffer
+	 */
+	private void resetMap(String buffer) {
+		if (buffer != null && !buffer.isEmpty()) {
+			buffer = buffer.toLowerCase();
+			for (String key : this.variableTypes.keySet()) {
+				if (key.toLowerCase().startsWith(buffer)) {
+					this.variableTypes.remove(key);
+				}
+			}
+		}
 	}
-	
+
 	public void rewrite() {
 		bringe("");
+	}
+
+	public void rewrite(String cmd) {
+		bringe(cmd);
 	}
 
 	public void right(String cmd) {
 		rechts(cmd);
 	}
-	
+
 	public Object s(String varname) {
 		return this.getValue("S|" + varname, FO.Svar(varname));
 	}
@@ -1031,7 +1093,7 @@ public abstract class AbasBaseScript extends Script {
 	public void schutz(String cmd) {
 		EKS.schutz(cmd);
 	}
-	
+
 	public void seite(String cmd) {
 		EKS.seite(cmd);
 	}
@@ -1055,7 +1117,7 @@ public abstract class AbasBaseScript extends Script {
 	public void set(String cmd) {
 		setze(cmd);
 	}
-	
+
 	public void setze(String cmd) {
 		EKS.setze(cmd);
 	}
@@ -1063,15 +1125,19 @@ public abstract class AbasBaseScript extends Script {
 	public void sort(String cmd) {
 		sortiere(cmd);
 	}
-	
+
 	public void sortiere(String cmd) {
 		EKS.sortiere(cmd);
+	}
+
+	public boolean success() {
+		return mehr();
 	}
 
 	public Object t(String varname) {
 		return this.getValue("T|" + varname, FO.Tvar(varname));
 	}
-	
+
 	public void tabellensatz(String cmd) {
 		EKS.tabellensatz(cmd);
 	}
@@ -1083,7 +1149,7 @@ public abstract class AbasBaseScript extends Script {
 	public void translate(String cmd) {
 		uebersetzen(cmd);
 	}
-	
+
 	public void trenner(String cmd) {
 		EKS.trenner(cmd);
 	}
@@ -1091,7 +1157,7 @@ public abstract class AbasBaseScript extends Script {
 	public String type(String def) throws GroovyFOException {
 		return art(def);
 	}
-	
+
 	public String type(String type, String def) {
 		return art(type, def);
 	}
@@ -1123,7 +1189,7 @@ public abstract class AbasBaseScript extends Script {
 	public void up(String cmd) {
 		oben(cmd);
 	}
-	
+
 	public void vfarbe(Color c, int row) {
 		this.vfarbe(this.colorToString(c), row);
 	}
@@ -1164,7 +1230,7 @@ public abstract class AbasBaseScript extends Script {
 	public void window(String cmd) {
 		fenster(cmd);
 	}
-	
+
 	public void zeige(String cmd) {
 		EKS.zeige(cmd);
 	}
@@ -1172,7 +1238,7 @@ public abstract class AbasBaseScript extends Script {
 	public void zeile(String cmd) {
 		EKS.zeile(cmd);
 	}
-	
+
 	public void zuweisen(String cmd) {
 		EKS.zuweisen(cmd);
 	}
