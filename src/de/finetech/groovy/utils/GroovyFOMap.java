@@ -52,7 +52,9 @@ public class GroovyFOMap implements Map<String,Object>, Cloneable, Serializable 
 	public Object put(String key, Object value) {
 		if(this.containsKey(key)){
 			String val = value.toString();
-			if(val.contains("'")){
+			// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der wert so übergeben das abas ihn interpretiert 
+			if(val.startsWith("'")){
+				val = val.substring(1);
 				script.formula(buffer+"|"+key, val);
 			}else{
 				script.fo(buffer+"|"+key, val);
