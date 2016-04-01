@@ -4,7 +4,11 @@ import groovy.lang.Script;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import de.abas.eks.jfop.remote.EKS;
@@ -55,7 +59,7 @@ public abstract class AbasBaseScript extends Script {
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
-	protected HashMap<String, String> variableTypes = new HashMap<String, String>();
+	protected ConcurrentHashMap<String, String> variableTypes = new ConcurrentHashMap<String, String>();
 
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
@@ -1066,9 +1070,9 @@ public abstract class AbasBaseScript extends Script {
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {
 			buffer = buffer.toLowerCase();
-			for (String key : this.variableTypes.keySet()) {
-				if (key.toLowerCase().startsWith(buffer)) {
-					this.variableTypes.remove(key);
+			for (Entry<String,String> entry: this.variableTypes.entrySet()) {
+				if (entry.getKey().toLowerCase().startsWith(buffer)) {
+					this.variableTypes.remove(entry.getKey());
 				}
 			}
 		}
