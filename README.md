@@ -55,12 +55,12 @@ Diese Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Scrip
 #### Übersicht
 | JFOP            | dt | engl |
 | --------------- | ------------- | --------|
-| EKS.Hvar(...)   | h(...) | |
-| EKS.Mvar(...)   | m(...) | |
+| EKS.Hvar(...)   | h("von") oder h.von | |
+| EKS.Mvar(...)   | m("von") oder m.von | |
 | EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| select(...) <br/> select(String db, SelectBuilder builder) <br/> select(String db, String selektion)|
 | EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| load(...) <br/> load(int puffer, String db, SelectBuilder builder) <br/> load(int puffer, String db, String selektion)|
 | EKS.formel(...) | fo(String variable, wert)| |
-| EKS.getValue(puffer, varName)| l1(...) <br/> l2(...) <br/> usw...| |
+| EKS.getValue(puffer, varName)| l1("von") oder l1.von <br/> l2("von") oder l2.von <br/> usw...| |
 | EKS.println(...)| println(...)| |
 | EKS.box(...,...)| box(...,...)| |
 | EKS.eingabe(...)| ein(...)| in(...)|
@@ -68,8 +68,8 @@ Diese Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Scrip
 | EKS.mache(...) | mache(...)| make()|
 | EKS.mache("maske zeile +O") | plusZeile()| addRow()|
 | EKS.bringe("maske zeile -O") | entfZeile()| removeRow()|
-| EKS.dazu(...) | dazu(...)| add(...)|
-| | mehr() | more()|
+| EKS.Dvar(...) | dazu("von") oder d.von| add("von") or d.von|
+| | mehr() | success() or more()|
 |... | ... | ... |
 
 ### Helferlein
