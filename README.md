@@ -106,11 +106,11 @@ def result = Infosystemcall.build("VKZENTRALE")
         .execute()
         
 for(def row: result.table){
-        println(row["ttrans"])
-        println(row["tdate"])
-        println(row["tkuli"])
-        println(row["tklname"])
-        println(row["teprice"])
+        println row.ttrans
+        println row.tdate
+        println row.tkuli
+        println row.tklname
+        println row.teprice
 }
 ```
 
