@@ -116,5 +116,3 @@ for(def row: result.table){
 
 
 Die Implementierung ist bei weitem nicht Vollständig!
-
-[![Analytics](https://ga-beacon.appspot.com/UA-75822386-1/groovyfo/readme)](https://github.com/mkuerbis/GroovyFO)
