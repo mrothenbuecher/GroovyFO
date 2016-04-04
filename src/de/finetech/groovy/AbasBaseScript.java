@@ -4,10 +4,7 @@ import groovy.lang.Script;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -72,7 +69,7 @@ public abstract class AbasBaseScript extends Script {
 		EKS.absatz(cmd);
 	}
 
-	// TODO startTransaction commitTransaction abortTransaction
+	// TODO Methoden startTransaction, commitTransaction, abortTransaction,
 	public void action(String cmd) {
 		aktion(cmd);
 	}
@@ -219,6 +216,10 @@ public abstract class AbasBaseScript extends Script {
 
 	public void blocksatz() {
 		FO.blocksatz("");
+	}
+	
+	public void blocksatz(String cmd) {
+		FO.blocksatz(cmd);
 	}
 
 	public void box(String title, String content) {
@@ -675,11 +676,11 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public void justified() {
-		FO.blocksatz("");
+		blocksatz("");
 	}
 
 	public void justified(String cmd) {
-		FO.blocksatz(cmd);
+		blocksatz(cmd);
 	}
 
 	public void kom(String kommando) {
