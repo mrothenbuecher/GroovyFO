@@ -16,7 +16,7 @@ import de.finetech.utils.SelectionBuilder;
 
 /**
  * 
- * @author Michael Kürbis, Finetech GmbH & Co. KG
+ * @author Michael K�rbis, Finetech GmbH & Co. KG
  * 
  */
 public abstract class AbasBaseScript extends Script {
@@ -32,7 +32,7 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern integerPattern = Pattern.compile("(I.*)|(GRN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	
-	// maps für den einfachen zugriff auf die Felder bsp. m.von
+	// maps f�r den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOMap d = new GroovyFOMap("d", this);
 	protected GroovyFOMap e = new GroovyFOMap("e", this);
 	protected GroovyFOMap f = new GroovyFOMap("f", this);
@@ -53,7 +53,7 @@ public abstract class AbasBaseScript extends Script {
 	protected GroovyFOMap t = new GroovyFOMap("t", this);
 	protected GroovyFOMap u = new GroovyFOMap("u", this);
 	
-	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
+	// zwischenspeicher um nicht immer F|typeof aufrufen zum�ssen, schl�ssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
 	protected ConcurrentHashMap<String, String> variableTypes = new ConcurrentHashMap<String, String>();
@@ -96,14 +96,14 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @param def
 	 *            bsp.: "GD2 xvon"
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablen bezeichnung zurück mit puffer bsp.: U|xvon
 	 * @throws Exception
 	 */
 	public String art(String def) throws GroovyFOException {
 		String[] split = def.trim().split(" ");
 		if (split.length != 2)
 			throw new GroovyFOException(
-					"ungültige Parameteranzahl / invalid parameter number");
+					"ung�ltige Parameteranzahl / invalid parameter number");
 		return art(split[0], split[1]);
 	}
 
@@ -112,14 +112,23 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @param type
 	 *            Variablenart "GD", "TEXT" usw.
-	 * @param def
+	 * @param def Bezeichnung der Variablen
 	 *            bsp.: "xvon"
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablen bezeichnung zurück mit puffer bsp.: U|xvon
+	 * @throws GroovyFOException 
 	 */
-	public String art(String type, String def) {
-		// FIXME vorher prüfen ob die Variable schon existiert
-		// FIXME in Type Map aufnehmen
-		FO.art(type + " " + def);
+	public String art(String type, String def) throws GroovyFOException {
+		String defined = FO.getValue("F", "defined(" + def + ")").toLowerCase();
+		if(!(defined.equals("ja") || defined.equals("true") || defined
+				.equals("yes"))){
+			FO.art(type + " " + def);
+			this.variableTypes.put("U|" + def, type);
+		}else{
+			//pr�fen ob die Typen �bereinstimmen
+			if(!this.variableTypes.get("U|" + def).equals(type)){
+				throw new GroovyFOException("different types same name");
+			}
+		}
 		return "U|" + def;
 	}
 
@@ -130,16 +139,14 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenart "GD", "TEXT" usw.
 	 * @param def
 	 *            die Variablen bezeichnungen als array
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablen bezeichnung zurück mit puffer bsp.: U|xvon
+	 * @throws GroovyFOException 
 	 */
-	public String[] art(String type, String... def) {
+	public String[] art(String type, String... def) throws GroovyFOException {
 		String[] ba = new String[def.length];
 		int i = 0;
 		for (String foo : def) {
-			FO.art(type + " " + foo);
-			// FIXME vorher prüfen ob die Variable schon existiert
-			// FIXME in Type Map aufnehmen
-			ba[i++] = "U|" + foo;
+			ba[i++] = art(type,foo);
 		}
 
 		return ba;
@@ -418,7 +425,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public Object fo(String var, boolean value) {
-		// FIXME Sprach unabhÃ¤ngigkeit
+		// FIXME Sprach unabhängigkeit
 		FO.formel(var + "=" + (value ? "TRUE" : "FALSE"));
 		return this.getValue(var);
 	}
@@ -494,7 +501,7 @@ public abstract class AbasBaseScript extends Script {
 		if (this.variableTypes.containsKey(variable)) {
 			return this.variableTypes.get(variable);
 		} else {
-			// FIXME vorher prüfen ob die Variable existiert!
+			// FIXME vorher pr�fen ob die Variable existiert!
 			String type = FO.getValue("F", "typeof(" + variable + ")");
 			this.variableTypes.put(variable, type);
 			return type;
@@ -572,7 +579,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * setzt die Hintergrund farbe für eine ganze zeile
+	 * setzt die Hintergrund farbe f�r eine ganze zeile
 	 * 
 	 * @param c
 	 * @param row
@@ -582,7 +589,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * setzt die Hintergrundfarbe für ein Feld im Kopfbereich
+	 * setzt die Hintergrundfarbe f�r ein Feld im Kopfbereich
 	 * 
 	 * @param c
 	 * @param field
@@ -592,7 +599,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * setzt die Hintergrundfarbe für ein Feld in einer Zeile
+	 * setzt die Hintergrundfarbe f�r ein Feld in einer Zeile
 	 * 
 	 * @param c
 	 * @param field
@@ -649,7 +656,7 @@ public abstract class AbasBaseScript extends Script {
 
 	/**
 	 * sollte der Selektionstring Identisch mit einer vorher gehenden Abfragen
-	 * sein so wird nur der nächste Datensatz geholt
+	 * sein so wird nur der n�chste Datensatz geholt
 	 * 
 	 * @param db
 	 *            - Datenbank von der Selektiert werden soll
@@ -814,10 +821,10 @@ public abstract class AbasBaseScript extends Script {
 	/**
 	 * 
 	 * @param puffer
-	 *            - Nummer des lade Puffers für den das Kommando ausgeführt
+	 *            - Nummer des lade Puffers f�r den das Kommando ausgef�hrt
 	 *            werden soll
 	 * @param cmd
-	 *            - Kommando das ausgeführt werden soll
+	 *            - Kommando das ausgef�hrt werden soll
 	 * @return
 	 */
 	public boolean lade(int puffer, String cmd) {
@@ -840,7 +847,7 @@ public abstract class AbasBaseScript extends Script {
 	/**
 	 * 
 	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
-	 * gehenden Abfragen sein so wird nur der nÃ¤chste Datensatz geholt
+	 * gehenden Abfragen sein so wird nur der nächste Datensatz geholt
 	 * 
 	 * @param puffer
 	 *            - lade puffer 1-9
@@ -933,7 +940,7 @@ public abstract class AbasBaseScript extends Script {
 
 	public boolean mehr() {
 		String mehr = FO.Gvar("mehr").toLowerCase();
-		// FIXME SprachunterstÃ¼tzung
+		// FIXME Sprachunterstützung
 		return mehr != null
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
 						.equals("yes"));
@@ -1063,7 +1070,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * wenn sich der Bezug eines Laden/Holen/dazu buffers ändert müssen alle
+	 * wenn sich der Bezug eines Laden/Holen/dazu buffers �ndert m�ssen alle
 	 * Felder aus der Map zum merken des Datentypes entfernt werden
 	 * 
 	 * @param buffer
@@ -1163,11 +1170,11 @@ public abstract class AbasBaseScript extends Script {
 		return art(def);
 	}
 
-	public String type(String type, String def) {
+	public String type(String type, String def) throws GroovyFOException {
 		return art(type, def);
 	}
 
-	public String[] type(String type, String... def) {
+	public String[] type(String type, String... def) throws GroovyFOException {
 		return art(type, def);
 	}
 
