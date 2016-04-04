@@ -91,6 +91,7 @@ public class Infosystemcall {
 		return this;
 	}
 
+	//FIXME umgang mit umlauten und sonderzeichen ....
 	private String buildCommand() {
 		String cmd = "edpinfosys.sh -t "+fieldSeperator+" -P -F -N " + this.infosystem;
 		String foo = "";
