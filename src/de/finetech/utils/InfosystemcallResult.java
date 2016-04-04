@@ -51,15 +51,17 @@ public class InfosystemcallResult {
 		if (call.showAllTableFields || call.tableOutputFields.size() > 0) {
 			// index der Variablennamen zeile in der Outputdatei festlegen
 			int row = (headFields) ? 2 : 0;
-			// zeile mit den Variablennamen speichern
-			String[] keys = lines.get(row);
-			// für jede Datenzeile
-			for (int j = row + 1; j < lines.size(); j++) {
-				TreeMap<String, String> foo = new TreeMap<String, String>();
-				for (int i = 0; i < keys.length; i++) {
-					foo.put(keys[i], lines.get(j)[i]);
+			if (!lines.isEmpty()) {
+				// zeile mit den Variablennamen speichern
+				String[] keys = lines.get(row);
+				// für jede Datenzeile
+				for (int j = row + 1; j < lines.size(); j++) {
+					TreeMap<String, String> foo = new TreeMap<String, String>();
+					for (int i = 0; i < keys.length; i++) {
+						foo.put(keys[i], lines.get(j)[i]);
+					}
+					table.add(foo);
 				}
-				table.add(foo);
 			}
 		}
 	}
@@ -79,8 +81,8 @@ public class InfosystemcallResult {
 	public String getInfosystem() {
 		return call.infosystem;
 	}
-	
-	public String getCommando(){
+
+	public String getCommando() {
 		return call.getCommand();
 	}
 
