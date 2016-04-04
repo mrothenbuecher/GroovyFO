@@ -8,8 +8,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.EKS;
 import de.abas.eks.jfop.remote.FO;
+import de.finetech.groovy.utils.AbasDate;
 import de.finetech.groovy.utils.GroovyFOException;
 import de.finetech.groovy.utils.GroovyFOMap;
 import de.finetech.utils.SelectionBuilder;
@@ -21,38 +23,58 @@ import de.finetech.utils.SelectionBuilder;
  */
 public abstract class AbasBaseScript extends Script {
 
-	private final static String pipe = Pattern.quote("|");
+	public final static String PIPE_PATTERN = Pattern.quote("|");
 
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
-	
+
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
 	private Pattern integerPattern = Pattern.compile("(I.*)|(GRN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
-	
+	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
+
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOMap d = new GroovyFOMap("d", this);
+	protected GroovyFOMap D = d;
 	protected GroovyFOMap e = new GroovyFOMap("e", this);
+	protected GroovyFOMap E = e;
 	protected GroovyFOMap f = new GroovyFOMap("f", this);
+	protected GroovyFOMap F = f;
 	protected GroovyFOMap g = new GroovyFOMap("g", this);
+	protected GroovyFOMap G = g;
 	protected GroovyFOMap h = new GroovyFOMap("h", this);
-	protected GroovyFOMap l1 = new GroovyFOMap("l1", this);
-	protected GroovyFOMap l2 = new GroovyFOMap("l2", this);
-	protected GroovyFOMap l3 = new GroovyFOMap("l3", this);
-	protected GroovyFOMap l4 = new GroovyFOMap("l4", this);
-	protected GroovyFOMap l5 = new GroovyFOMap("l5", this);
-	protected GroovyFOMap l6 = new GroovyFOMap("l6", this);
-	protected GroovyFOMap l7 = new GroovyFOMap("l7", this);
-	protected GroovyFOMap l8 = new GroovyFOMap("l8", this);
-	protected GroovyFOMap l9 = new GroovyFOMap("l9", this);
+	protected GroovyFOMap H = h;
+	protected GroovyFOMap l1 = new GroovyFOMap("1", this);
+	protected GroovyFOMap L1 = l1;
+	protected GroovyFOMap l2 = new GroovyFOMap("2", this);
+	protected GroovyFOMap L2 = l2;
+	protected GroovyFOMap l3 = new GroovyFOMap("3", this);
+	protected GroovyFOMap L3 = l3;
+	protected GroovyFOMap l4 = new GroovyFOMap("4", this);
+	protected GroovyFOMap L4 = l4;
+	protected GroovyFOMap l5 = new GroovyFOMap("5", this);
+	protected GroovyFOMap L5 = l5;
+	protected GroovyFOMap l6 = new GroovyFOMap("6", this);
+	protected GroovyFOMap L6 = l6;
+	protected GroovyFOMap l7 = new GroovyFOMap("7", this);
+	protected GroovyFOMap L7 = l7;
+	protected GroovyFOMap l8 = new GroovyFOMap("8", this);
+	protected GroovyFOMap L8 = l8;
+	protected GroovyFOMap l9 = new GroovyFOMap("9", this);
+	protected GroovyFOMap L9 = l9;
 	protected GroovyFOMap m = new GroovyFOMap("m", this);
+	protected GroovyFOMap M = m;
 	protected GroovyFOMap p = new GroovyFOMap("p", this);
+	protected GroovyFOMap P = p;
 	protected GroovyFOMap s = new GroovyFOMap("p", this);
+	protected GroovyFOMap S = s;
 	protected GroovyFOMap t = new GroovyFOMap("t", this);
+	protected GroovyFOMap T = t;
 	protected GroovyFOMap u = new GroovyFOMap("u", this);
-	
+	protected GroovyFOMap U = u;
+
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
@@ -112,20 +134,20 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @param type
 	 *            Variablenart "GD", "TEXT" usw.
-	 * @param def Bezeichnung der Variablen
-	 *            bsp.: "xvon"
+	 * @param def
+	 *            Bezeichnung der Variablen bsp.: "xvon"
 	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
-	 * @throws GroovyFOException 
+	 * @throws GroovyFOException
 	 */
 	public String art(String type, String def) throws GroovyFOException {
 		String defined = FO.getValue("F", "defined(" + def + ")").toLowerCase();
-		if(!(defined.equals("ja") || defined.equals("true") || defined
-				.equals("yes"))){
+		if (!(defined.equals("ja") || defined.equals("true") || defined
+				.equals("yes"))) {
 			FO.art(type + " " + def);
 			this.variableTypes.put("U|" + def, type);
-		}else{
-			//prüfen ob die Typen übereinstimmen
-			if(!this.variableTypes.get("U|" + def).equals(type)){
+		} else {
+			// prüfen ob die Typen übereinstimmen
+			if (!this.variableTypes.get("U|" + def).equals(type)) {
 				throw new GroovyFOException("different types same name");
 			}
 		}
@@ -140,13 +162,13 @@ public abstract class AbasBaseScript extends Script {
 	 * @param def
 	 *            die Variablen bezeichnungen als array
 	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
-	 * @throws GroovyFOException 
+	 * @throws GroovyFOException
 	 */
 	public String[] art(String type, String... def) throws GroovyFOException {
 		String[] ba = new String[def.length];
 		int i = 0;
 		for (String foo : def) {
-			ba[i++] = art(type,foo);
+			ba[i++] = art(type, foo);
 		}
 
 		return ba;
@@ -224,7 +246,7 @@ public abstract class AbasBaseScript extends Script {
 	public void blocksatz() {
 		FO.blocksatz("");
 	}
-	
+
 	public void blocksatz(String cmd) {
 		FO.blocksatz(cmd);
 	}
@@ -283,8 +305,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestelltes D
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object d(String varname) {
+	public Object d(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("D|" + varname, FO.Dvar(varname));
 	}
 
@@ -311,8 +335,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestelltes E
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object e(String varname) {
+	public Object e(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("E|" + varname, FO.Evar(varname));
 	}
 
@@ -351,8 +377,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestelltes F
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object f(String varname) {
+	public Object f(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("F|" + varname, FO.Gvar(varname));
 	}
 
@@ -424,19 +452,27 @@ public abstract class AbasBaseScript extends Script {
 		FO.flattersatz("");
 	}
 
-	public Object fo(String var, boolean value) {
-		// FIXME Sprach unabhÃ¤ngigkeit
-		FO.formel(var + "=" + (value ? "TRUE" : "FALSE"));
+	public Object fo(String var, boolean value) throws FOPException,
+			GroovyFOException {
+		FO.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
 		return this.getValue(var);
 	}
 
-	public Object fo(String var, double value) {
+	public Object fo(String var, double value) throws FOPException,
+			GroovyFOException {
 		FO.formel(var + "=" + new DecimalFormat("0.0000").format(value));
 		return this.getValue(var);
 	}
 
-	public Object fo(String var, int value) {
+	public Object fo(String var, int value) throws FOPException,
+			GroovyFOException {
 		FO.formel(var + "=" + value);
+		return this.getValue(var);
+	}
+
+	public Object fo(String var, AbasDate value) throws FOPException,
+			GroovyFOException {
+		FO.formel(var + "=\"" + value.toString() + "\"");
 		return this.getValue(var);
 	}
 
@@ -448,8 +484,11 @@ public abstract class AbasBaseScript extends Script {
 	 * @param value
 	 *            = Zeichenkette welche der Variablen zugewiesen werden soll
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object fo(String var, String value) {
+	public Object fo(String var, String value) throws FOPException,
+			GroovyFOException {
 		FO.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"")
 				+ "\"");
 		return this.getValue(var);
@@ -463,16 +502,20 @@ public abstract class AbasBaseScript extends Script {
 	 * @param value
 	 *            = Formel welche abas seitig interpretiert werden soll
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object formel(String var, String value) {
+	public Object formel(String var, String value) throws FOPException,
+			GroovyFOException {
 		FO.formel(var + "=" + value);
 		return this.getValue(var);
 	}
 
-	public Object formula(String var, String value) {
+	public Object formula(String var, String value) throws FOPException,
+			GroovyFOException {
 		return this.formel(var, value);
 	}
-	
+
 	/**
 	 * liefert den Variablenwert aus dem G Puffer
 	 * 
@@ -480,8 +523,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestelltes G
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object g(String varname) {
+	public Object g(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("G|" + varname, FO.Gvar(varname));
 	}
 
@@ -513,9 +558,11 @@ public abstract class AbasBaseScript extends Script {
 	 * @param var
 	 *            - Muss die form haben M|asd od. G|asd usw
 	 * @return Wert der Variablen
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object getValue(String var) {
-		String[] foo = var.split(pipe);
+	public Object getValue(String var) throws FOPException, GroovyFOException {
+		String[] foo = var.split(PIPE_PATTERN);
 		String buffer = foo[0];
 		String varname = foo[1];
 		return this.getValue(var, FO.getValue(buffer, varname));
@@ -534,8 +581,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            wert dieser Variable als String
 	 * 
 	 * @return
+	 * @throws GroovyFOException
 	 */
-	protected Object getValue(String varname, String value) {
+	protected Object getValue(String varname, String value)
+			throws GroovyFOException {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
 		// Integer
@@ -552,13 +601,15 @@ public abstract class AbasBaseScript extends Script {
 			return Double.parseDouble(value);
 		}
 		// bool
-		if (abasType.matches("B")) {
+		if (boolPattern.matcher(abasType).matches()) {
 			value = value.toLowerCase();
 			return value.matches("ja") || value.matches("yes")
 					|| value.matches("true");
 		}
+		if (AbasDate.isDate(abasType)) {
+			return new AbasDate(abasType, varname, this);
+		}
 		// Strings
-		// TODO Datum
 		return value;
 	}
 
@@ -569,8 +620,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestelltes H
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object h(String varname) {
+	public Object h(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("H|" + varname, FO.Hvar(varname));
 	}
 
@@ -717,8 +770,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestellte 1
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object l1(String varname) {
+	public Object l1(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("1|" + varname, FO.getValue("1", varname));
 	}
 
@@ -729,8 +784,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestellte 2
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object l2(String varname) {
+	public Object l2(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("2|" + varname, FO.getValue("2", varname));
 	}
 
@@ -742,7 +799,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l3(String varname) {
+	public Object l3(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("3|" + varname, FO.getValue("3", varname));
 	}
 
@@ -753,8 +810,10 @@ public abstract class AbasBaseScript extends Script {
 	 *            Variablenname ohne vorangestellte 4
 	 * 
 	 * @return
+	 * @throws GroovyFOException
+	 * @throws FOPException
 	 */
-	public Object l4(String varname) {
+	public Object l4(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("4|" + varname, FO.getValue("4", varname));
 	}
 
@@ -766,7 +825,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l5(String varname) {
+	public Object l5(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("5|" + varname, FO.getValue("5", varname));
 	}
 
@@ -778,7 +837,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l6(String varname) {
+	public Object l6(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("6|" + varname, FO.getValue("6", varname));
 	}
 
@@ -790,7 +849,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l7(String varname) {
+	public Object l7(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("7|" + varname, FO.getValue("7", varname));
 	}
 
@@ -802,7 +861,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l8(String varname) {
+	public Object l8(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("8|" + varname, FO.getValue("8", varname));
 	}
 
@@ -814,7 +873,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object l9(String varname) {
+	public Object l9(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("9|" + varname, FO.getValue("9", varname));
 	}
 
@@ -926,7 +985,7 @@ public abstract class AbasBaseScript extends Script {
 	 * 
 	 * @return
 	 */
-	public Object m(String varname) {
+	public Object m(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("M|" + varname, FO.Mvar(varname));
 	}
 
@@ -945,7 +1004,7 @@ public abstract class AbasBaseScript extends Script {
 				&& (mehr.equals("ja") || mehr.equals("true") || mehr
 						.equals("yes"));
 	}
-	
+
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
 	}
@@ -996,7 +1055,7 @@ public abstract class AbasBaseScript extends Script {
 		ausgabe(cmd);
 	}
 
-	public Object p(String varname) {
+	public Object p(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("P|" + varname, FO.Pvar(varname));
 	}
 
@@ -1040,6 +1099,10 @@ public abstract class AbasBaseScript extends Script {
 			FO.println(cmd);
 	}
 
+	public void println(Object cmd) {
+		FO.println(cmd.toString());
+	}
+
 	public void protection(String cmd) {
 		schutz(cmd);
 	}
@@ -1078,7 +1141,7 @@ public abstract class AbasBaseScript extends Script {
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {
 			buffer = buffer.toLowerCase();
-			for (Entry<String,String> entry: this.variableTypes.entrySet()) {
+			for (Entry<String, String> entry : this.variableTypes.entrySet()) {
 				if (entry.getKey().toLowerCase().startsWith(buffer)) {
 					this.variableTypes.remove(entry.getKey());
 				}
@@ -1098,7 +1161,7 @@ public abstract class AbasBaseScript extends Script {
 		rechts(cmd);
 	}
 
-	public Object s(String varname) {
+	public Object s(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("S|" + varname, FO.Svar(varname));
 	}
 
@@ -1146,7 +1209,7 @@ public abstract class AbasBaseScript extends Script {
 		return mehr();
 	}
 
-	public Object t(String varname) {
+	public Object t(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("T|" + varname, FO.Tvar(varname));
 	}
 
@@ -1178,7 +1241,7 @@ public abstract class AbasBaseScript extends Script {
 		return art(type, def);
 	}
 
-	public Object u(String varname) {
+	public Object u(String varname) throws FOPException, GroovyFOException {
 		return this.getValue("U|" + varname, FO.Uvar(varname));
 	}
 

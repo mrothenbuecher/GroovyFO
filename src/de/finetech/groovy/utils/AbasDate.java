@@ -1,103 +1,110 @@
 package de.finetech.groovy.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class AbasDate extends GregorianCalendar {
+import de.abas.eks.jfop.FOPException;
+import de.abas.eks.jfop.remote.FO;
+import de.finetech.groovy.AbasBaseScript;
+import de.finetech.utils.RandomString;
 
-	private static final long serialVersionUID = -1498611589708068192L;
+public class AbasDate {
 
-	public AbasDate(String type, String value) throws ParseException {
-		// Montag ist der erste Tag der Woche
-		this.setFirstDayOfWeek(Calendar.MONDAY);
+	private AbasBaseScript script;
 
-		// Java 1.6 kompatbilitÃ¤t
-		if (type.equals("GD") || type.equals("GD0")) {
-			this.setTime(this.getValue("dd.MM.yyyy", value));
-		} else if (type.equals("GD2")) {
-			this.setTime(this.getValue("dd.MM.yy", value));
-		} else if (type.equals("GD7")) {
-			this.setTime(this.getValue("yyyy-MM-dd", value));
-		} else if (type.equals("GD8")) {
-			this.setTime(this.getValue("yyyyMMdd", value));
-		} else if (type.equals("GD13")) {
-			this.setTime(this.getValue("yyyy-MM-dd HH:mm:ss", value));
-		} else if (type.equals("GD14")) {
-			if (value.length() != 8)
-				this.setTime(this.getValue("yyyyMMddHHmmss", value));
-			else
-				this.setTime(this.getValue("yyyyMMdd", value));
-		} else if (type.equals("GW2")) {
-			this.setTime(this.getValue("ww/yy", value));
-		} else if (type.equals("GW4")) {
-			this.setTime(this.getValue("ww/yyyy", value));
-		} else if (type.equals("Z")) {
-			this.setTime(this.getValue("HH:mm", value));
-		} else if (type.equals("J2")) {
-			this.setTime(this.getValue("yy", value));
-		} else if (type.equals("J4")) {
-			this.setTime(this.getValue("yyyy", value));
-		} else if (type.equals("GJ")) {
-			if (value.length() == 4)
-				this.setTime(this.getValue("yyyy", value));
-			else
-				this.setTime(this.getValue("yy", value));
-		}/* else if (type.equals("GP4")) {
-			this.setTime(this.getValue("D'D'HH'h'mm'm'ss's'", value));
-		}*/
-		// TODO GD19 && GD20
-		// FIXME Problem mit der Dauer Type GP
+	private int DATE = 0, DAY_OF_WEEK = 1, NAME = 2;
+
+	private static Pattern pattern = Pattern
+			.compile("\\bGD\\b|\\bGD0\\b|\\bGD2\\b|\\bGD7\\b|\\bGD8\\b|\\bGD13\\b|\\bGD14\\b|\\bGD19\\b|\\bGD20\\b|"
+					+ "\\bGW2\\b|\\bGW4\\b|"
+					+ "\\bZ\\b"
+					+ "|\\bJ2\\b|\\bGJ\\b|"
+					+ "\\bGP1\\b|\\bGP2\\b|\\bGP3\\b|\\bGP4\\b|"
+					+ "\\bDATUM\\b|\\bWOCHE\\b|\\bTERMIN\\b|\\bZEIT\\b");
+	private String type, variable;
+	private String[] tempvars = { "xfooaddate", "xfooadweekday",
+			"xfooadweekdayname" };
+
+	public static boolean isDate(String type) {
+		type = type.toUpperCase();
+		Matcher match = pattern.matcher(type);
+		return match.find();
 	}
 
-	private Date getValue(String pattern, String value) throws ParseException {
-		SimpleDateFormat sdfmt = new SimpleDateFormat();
-		sdfmt.applyPattern(pattern);
-		return sdfmt.parse(value);
+	/**
+	 * 
+	 * @param type
+	 *            - abas type bsp.: GD, GD2, ...
+	 * @param var
+	 *            - Variable mit Puffer! bsp M|von, U|xvon
+	 * @param script
+	 *            - script welches den abastype anlegt
+	 * @throws GroovyFOException
+	 */
+	public AbasDate(String type, String var, AbasBaseScript script)
+			throws GroovyFOException {
+		this.script = script;
+		this.type = type;
+		this.variable = var;
+		this.tempvars[DATE] = this.script.art(this.type, tempvars[DATE] + type);
+		this.tempvars[DAY_OF_WEEK] = this.script.art("INT",
+				tempvars[DAY_OF_WEEK]);
+		this.tempvars[NAME] = this.script.art("TEXT", tempvars[NAME]);
+		if (!AbasDate.isDate(type))
+			throw new GroovyFOException(type
+					+ " is not a abas datetype for date/time/duration");
 	}
 
-	public AbasDate plus(int i) {
-		this.add(Calendar.DATE, i);
-		return this;
+	// FIXME GD19+GP = GD19 usw siehe hilfe
+
+	public Object plus(int i) throws FOPException, GroovyFOException {
+		return this.script.formel(tempvars[0], this.variable + " + " + i);
 	}
 
-	public AbasDate minus(int i) {
-		this.add(Calendar.DATE, -i);
-		return this;
+	public Object next() throws FOPException, GroovyFOException {
+		return this.script.formel(this.variable, this.variable + " + " + 1);
 	}
 
-	public Object mod(int i) {
-		int day = this.get(Calendar.DAY_OF_WEEK);
-		switch(i) {
-			//TODO Sprach unabhÃ¤ngigkeit
-			case 1:
-				if(day == 0){
-					return "Montag";
-				}
-				if(day == 1){
-					return "Dienstag";
-				}
-				if(day == 2){
-					return "Mittwoch";
-				}
-				if(day == 3){
-					return "Donnerstag";
-				}
-				if(day == 4){
-					return "Freitag";
-				}
-				if(day == 5){
-					return "Samstag";
-				}
-				if(day == 6){
-					return "Sonntag";
-				}
-			case 7:
-				return day+1;
-			default:
-				return "";
+	public Object previous() throws FOPException, GroovyFOException {
+		return this.script.formel(this.variable, this.variable + " -1 " + 1);
+	}
+
+	public Object minus(int i) throws FOPException, GroovyFOException {
+		return this.plus(-i);
+	}
+
+	/**
+	 * 
+	 * @param i
+	 *            m�gliche Werte 1 oder 7
+	 * @return Datum // i
+	 * @throws GroovyFOException
+	 */
+	public Object mod(int i) throws GroovyFOException {
+		switch (i) {
+		case 1:
+			return this.script.formel(tempvars[NAME], this.variable + " // "
+					+ i);
+		case 7:
+			return this.script.formel(tempvars[DAY_OF_WEEK], this.variable
+					+ " // " + i);
 		}
+		throw new GroovyFOException("operation // " + i + " not supported on "
+				+ this.variable + " of type " + this.type);
+	}
+
+	public String getSortable() throws FOPException, GroovyFOException {
+		return this.script.formel(tempvars[NAME], this.variable + ":8")
+				.toString();
+	}
+
+	public Object and(int i) throws FOPException, GroovyFOException {
+		return this.script.formel(tempvars[0], this.variable + " & " + i);
+	}
+
+	@Override
+	public String toString() {
+		String[] var = this.variable.split(AbasBaseScript.PIPE_PATTERN);
+		return FO.getValue(var[0], var[1]);
 	}
 }

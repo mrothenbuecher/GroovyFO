@@ -34,7 +34,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true fÃ¼r dialoglose Selektion, false fÃ¼r Dialog
+	 *            - true für dialoglose Selektion, false für Dialog
 	 */
 	public SelectionBuilder(boolean hidden) {
 		if (hidden) {
@@ -47,7 +47,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true fÃ¼r die Dialoglose Selektion, false fÃ¼r Dialog
+	 *            - true für die Dialoglose Selektion, false für Dialog
 	 * @param selection
 	 *            - Nummer der Selektion
 	 */
@@ -62,7 +62,7 @@ public class SelectionBuilder {
 	/**
 	 * 
 	 * @param hidden
-	 *            - true fÃ¼r die Dialoglose Selektion, false fÃ¼r Dialog
+	 *            - true für die Dialoglose Selektion, false für Dialog
 	 * @param selection
 	 *            - Suchwort oder Nummer der Selektion
 	 */
@@ -79,7 +79,9 @@ public class SelectionBuilder {
 		return this;
 	}
 
-	public SelectionBuilder normal(String var, String from, String to) {
+	public SelectionBuilder normal(String var, Object ofrom, Object oto) {
+		String from = ofrom.toString();
+		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -94,7 +96,9 @@ public class SelectionBuilder {
 		return this;
 	}
 
-	public SelectionBuilder normalEx(String var, String from, String to) {
+	public SelectionBuilder normalEx(String var, Object ofrom, Object oto) {
+		String from = ofrom.toString();
+		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -109,7 +113,9 @@ public class SelectionBuilder {
 		return this;
 	}
 
-	public SelectionBuilder normalExG(String var, String from, String to) {
+	public SelectionBuilder normalExG(String var, Object ofrom, Object oto) {
+		String from = ofrom.toString();
+		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "~=!!" + to + ";";
 		} else if ((to == null || to.isEmpty())
@@ -124,12 +130,14 @@ public class SelectionBuilder {
 		return this;
 	}
 
-	public SelectionBuilder startWith(String var, String value) {
+	public SelectionBuilder startWith(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "=" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder startWithG(String var, String value) {
+	public SelectionBuilder startWithG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~=" + value + ";";
 		return this;
 	}
@@ -144,82 +152,98 @@ public class SelectionBuilder {
 		return this;
 	}
 
-	public SelectionBuilder similar(String var, String value) {
+	public SelectionBuilder similar(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "==" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder unsimilar(String var, String value) {
+	public SelectionBuilder unsimilar(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "<>" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder similarG(String var, String value) {
+	public SelectionBuilder similarG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder unsimilarG(String var, String value) {
+	public SelectionBuilder unsimilarG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~<>" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder contains(String var, String value) {
+	public SelectionBuilder contains(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "/" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder containsG(String var, String value) {
+	public SelectionBuilder containsG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~/" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder containsW(String var, String value) {
+	public SelectionBuilder containsW(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "//" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder containsGW(String var, String value) {
+	public SelectionBuilder containsGW(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~//" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder matchcode(String var, String value) {
+	public SelectionBuilder matchcode(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "=`" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder matchcodeN(String var, String value) {
+	public SelectionBuilder matchcodeN(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "<>`" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder matchcodeG(String var, String value) {
+	public SelectionBuilder matchcodeG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~=`" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder matchcodeGN(String var, String value) {
+	public SelectionBuilder matchcodeGN(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~<>`" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder expression(String var, String value) {
+	public SelectionBuilder expression(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "/==" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder expressionN(String var, String value) {
+	public SelectionBuilder expressionN(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "/<>" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder expressionG(String var, String value) {
+	public SelectionBuilder expressionG(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~/==" + value + ";";
 		return this;
 	}
 
-	public SelectionBuilder expressionGN(String var, String value) {
+	public SelectionBuilder expressionGN(String var, Object ovalue) {
+		String value = ovalue.toString();
 		this.variables += var + "~/<>" + value + ";";
 		return this;
 	}
@@ -246,7 +270,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder optimalkey(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@optschl="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -257,7 +281,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder link(boolean AND) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@verknuepfung="
 					+ (AND == true ? "und" : "oder") + ";";
@@ -268,7 +292,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder range(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@bereich="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -279,10 +303,10 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder direction(boolean forward) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@richtung="
-					+ (forward == true ? "vorwÃ¤rts" : "rÃ¼ckwÃ¤rts") + ";";
+					+ (forward == true ? "vorwärts" : "rückwärts") + ";";
 		else
 			this.selectionOption += "@direction="
 					+ (forward == true ? "forward" : "backward") + ";";
@@ -290,7 +314,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder objectselection(String value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@objektwahl=" + value + ";";
 		else
@@ -299,7 +323,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder read(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@lesen=" + (value == true ? "yes" : "no")
 					+ ";";
@@ -310,7 +334,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder autostart(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@autostart="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -321,7 +345,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder database(int value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@datenbank=" + value + ";";
 		else
@@ -330,7 +354,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder rows(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@zeilen="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -341,7 +365,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder fprotection(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@fschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -352,7 +376,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder gprotection(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@gschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -363,7 +387,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder bprotection(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@bschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -374,7 +398,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder note(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@merken="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -433,7 +457,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder dynprotection(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@dynschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -444,7 +468,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder stdsel(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@stdsel="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -455,7 +479,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder templsel(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@rohlsel="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -466,7 +490,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder initialvalues(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@initialwerte="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -477,7 +501,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder lastname(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@letztername="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -496,7 +520,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder opprotection(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@opschutz="
 					+ (value == true ? "ja" : "nein") + ";";
@@ -528,7 +552,7 @@ public class SelectionBuilder {
 	}
 
 	public SelectionBuilder englvar(boolean value) {
-		// FIXME SprachunabhÃ¤nigkeit
+		// FIXME Sprachunabhänigkeit
 		if (isDe)
 			this.selectionOption += "@englvar="
 					+ (value == true ? "ja" : "nein") + ";";
