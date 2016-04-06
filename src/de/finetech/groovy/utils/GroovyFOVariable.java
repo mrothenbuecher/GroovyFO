@@ -8,59 +8,50 @@ import de.finetech.groovy.AbasBaseScript;
  * 
  * @author MKürbis
  *
- * bei der Implementierung von Comparable ist auf die Kompatiblitöt der abas Typen unter einander zu achten!
+ *         bei der Implementierung von Comparable ist auf die Kompatiblitöt der
+ *         abas Typen unter einander zu achten!
  * @param <V>
  */
 
-public abstract class GroovyFOVariable<V> implements Comparable<Object>  {
+public abstract class GroovyFOVariable<V> implements Comparable<Object> {
 
-	protected String buffer, varname, type;
+	protected String varname, type;
 	protected AbasBaseScript script;
-	
+
 	/**
 	 * 
-	 * @param varname U|von M|von H|von ...
+	 * @param varname
+	 *            U|von M|von H|von ...
 	 * @param script
 	 */
-	public GroovyFOVariable(String varname,AbasBaseScript script ){
-		String[] foo = varname.split(AbasBaseScript.PIPE_PATTERN);
-		this.buffer = foo[0];
-		this.varname = foo[1];
-		this.script  = script;
-	}
-	
-	/**
-	 * 
-	 * @param buffer H,M,D,1,....
-	 * @param varname xvon, von, fooo
-	 * @param script
-	 */
-	public GroovyFOVariable(String buffer, String varname, AbasBaseScript script){
-		this.buffer = buffer;
+	public GroovyFOVariable(String varname, AbasBaseScript script) {
+		// String[] foo = varname.split(AbasBaseScript.PIPE_PATTERN);
+		// this.buffer = foo[0];
 		this.varname = varname;
-		this.script  = script;
+		this.script = script;
 	}
-	
+
 	public abstract V getValue();
-	
-	public String getType(){
-		if(type == null){
-			this.type = FO.getValue("F", "typeof("+this.getVariablename()+")");
+
+	public String getType() {
+		if (type == null) {
+			this.type = FO.getValue("F", "typeof(F|expr(" + this.getVariablename()
+					+ "))");
 		}
 		return type;
 	}
-	
+
 	public String plus(Object i) throws FOPException, GroovyFOException {
 		return this.getValue().toString().concat(i.toString());
 	}
-	
-	public String getVariablename(){
-		return this.buffer+"|"+this.varname;
+
+	public String getVariablename() {
+		return this.varname;
 	}
-	
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.getValue().toString();
 	}
-	
+
 }

@@ -32,7 +32,7 @@ public abstract class AbasBaseScript extends Script {
 
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
-	private Pattern integerPattern = Pattern.compile("(IP.*)|(IN.*)|(K.*)");
+	private Pattern integerPattern = Pattern.compile("(I[0-9].*)|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
@@ -144,8 +144,7 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public String art(String type, String def) throws GroovyFOException {
 		String defined = FO.getValue("F", "defined(" + def + ")").toLowerCase();
-		if (!(defined.equals("ja") || defined.equals("true") || defined
-				.equals("yes"))) {
+		if (!this.isTrue(defined)) {
 			FO.art(type + " " + def);
 			this.variableTypes.put("U|" + def, type);
 		} else {
@@ -373,6 +372,10 @@ public abstract class AbasBaseScript extends Script {
 		fehler(cmd);
 	}
 
+	public Object expr(String expr) throws GroovyFOException{
+		return this.getComputedValue(expr);
+	}
+
 	/**
 	 * liefert den Variablenwert aus dem F Puffer
 	 * 
@@ -455,6 +458,18 @@ public abstract class AbasBaseScript extends Script {
 		FO.flattersatz("");
 	}
 
+	public Object fo(String var, AbasDate value) throws FOPException,
+			GroovyFOException {
+		FO.formel(var + "=\"" + value.toString() + "\"");
+		return this.getValue(var);
+	}
+
+	public Object fo(String var, AbasPointer value) throws FOPException,
+			GroovyFOException {
+		FO.formel(var + "=\"" + value.toString() + "\"");
+		return this.getValue(var);
+	}
+
 	public Object fo(String var, boolean value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
@@ -470,18 +485,6 @@ public abstract class AbasBaseScript extends Script {
 	public Object fo(String var, int value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + value);
-		return this.getValue(var);
-	}
-
-	public Object fo(String var, AbasDate value) throws FOPException,
-			GroovyFOException {
-		FO.formel(var + "=\"" + value.toString() + "\"");
-		return this.getValue(var);
-	}
-
-	public Object fo(String var, AbasPointer value) throws FOPException,
-			GroovyFOException {
-		FO.formel(var + "=\"" + value.toString() + "\"");
 		return this.getValue(var);
 	}
 
@@ -544,6 +547,23 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
+	 * lässt abas den Werberechnen
+	 * @param expr - U|von, U|von-U|bis, usw...
+	 * @return
+	 * @throws GroovyFOException 
+	 */
+	public Object getComputedValue(String expr) throws GroovyFOException{
+		println("DEBUG 1: "+expr);
+		String result = FO.getValue("F", "expr(" + expr + ")");
+		String type = FO.getValue("F", "typeof(F|expr(" + expr + "))");
+		println("DEBUG 2: "+result);
+		println("DEBUG 3: "+type);
+		Object o = this.getValueByType(type, expr, result);
+		println("DEBUG 4: "+o.getClass().getName());
+		return o;
+	}
+
+	/**
 	 * liefert den abas Typ der Variable
 	 * 
 	 * @param variable
@@ -576,7 +596,7 @@ public abstract class AbasBaseScript extends Script {
 		String varname = foo[1];
 		return this.getValue(var, FO.getValue(buffer, varname));
 	}
-
+	
 	/**
 	 * liefert basierend auf dem abas internen Typ den Wert einer Variablen
 	 * 
@@ -592,10 +612,14 @@ public abstract class AbasBaseScript extends Script {
 	 * @return
 	 * @throws GroovyFOException
 	 */
-	protected Object getValue(String varname, String value)
+	public Object getValue(String varname, String value)
 			throws GroovyFOException {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
+		return this.getValueByType(abasType, varname, value);
+	}
+
+	public Object getValueByType(String abasType, String expr, String value) throws GroovyFOException {
 		// Integer
 		if (integerPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
@@ -611,19 +635,18 @@ public abstract class AbasBaseScript extends Script {
 		// bool
 		if (boolPattern.matcher(abasType).matches()) {
 			value = value.toLowerCase();
-			return value.matches("ja") || value.matches("yes")
-					|| value.matches("true");
+			return isTrue(value);
 		}
 		if (AbasDate.isDate(abasType)) {
-			return new AbasDate(abasType, varname, this);
+			return new AbasDate(abasType, expr, this);
 		}
 		if (pointerPattern.matcher(abasType).matches()) {
-			return new AbasPointer(varname, this);
+			return new AbasPointer(expr, this);
 		}
 		// Strings
 		return value;
 	}
-
+	
 	/**
 	 * liefert den Variablenwert aus dem Hole Puffer
 	 * 
@@ -744,6 +767,11 @@ public abstract class AbasBaseScript extends Script {
 
 	public void input(String fopName) {
 		eingabe(fopName);
+	}
+
+	public boolean isTrue(String value){
+		return value != null && !value.isEmpty() && value.matches("ja") || value.matches("yes")
+		|| value.matches("true");
 	}
 
 	public void justified() {
@@ -1011,9 +1039,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean mehr() {
 		String mehr = FO.Gvar("mehr").toLowerCase();
 		// FIXME SprachunterstÃ¼tzung
-		return mehr != null
-				&& (mehr.equals("ja") || mehr.equals("true") || mehr
-						.equals("yes"));
+		return isTrue(mehr);
 	}
 
 	public int menu(String title, String[] options) {
@@ -1102,6 +1128,10 @@ public abstract class AbasBaseScript extends Script {
 		println(Integer.toString(cmd));
 	}
 
+	public void println(Object cmd) {
+		FO.println(cmd.toString());
+	}
+
 	public void println(String cmd) {
 		cmd = cmd.replaceAll("\"", "'DBLQUOTE'");
 		if (cmd.length() > 2999)
@@ -1109,11 +1139,7 @@ public abstract class AbasBaseScript extends Script {
 		else
 			FO.println(cmd);
 	}
-
-	public void println(Object cmd) {
-		FO.println(cmd.toString());
-	}
-
+	
 	public void protection(String cmd) {
 		schutz(cmd);
 	}

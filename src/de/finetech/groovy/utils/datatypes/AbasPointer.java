@@ -25,7 +25,7 @@ public class AbasPointer extends GroovyFOVariable<String> {
 
 	@Override
 	public String getValue() {
-		return FO.getValue(this.buffer, this.varname);
+		return FO.getValue("F", "expr("+this.varname+")");
 	}
 
 	/**
