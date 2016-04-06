@@ -58,7 +58,7 @@ public class AbasDate extends GroovyFOVariable<String> {
 	// FIXME GD19+GP = GD19 usw siehe hilfe
 
 	public Object plus(int i) throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[0], this.getVariablename() + " + "
+		return this.script.formel(tempvars[DATE], this.getVariablename() + " + "
 				+ i);
 	}
 
@@ -74,6 +74,28 @@ public class AbasDate extends GroovyFOVariable<String> {
 
 	public Object minus(int i) throws FOPException, GroovyFOException {
 		return this.plus(-i);
+	}
+	
+	/**
+	 * abasdate - abasdate
+	 * @param i
+	 * @return
+	 * @throws FOPException
+	 * @throws GroovyFOException
+	 */
+	public Object minus(AbasDate i) throws FOPException, GroovyFOException {
+		return script.formel(tempvars[DATE], this.getVariablename() +"-"+i.getVariablename());
+	}
+	
+	/**
+	 *  abasdate + abasdate
+	 * @param i
+	 * @return
+	 * @throws FOPException
+	 * @throws GroovyFOException
+	 */
+	public Object plus(AbasDate i) throws FOPException, GroovyFOException {
+		return script.formel(tempvars[DATE], this.getVariablename() +"+"+i.getVariablename());
 	}
 
 	/**
