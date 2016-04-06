@@ -1,7 +1,16 @@
 package de.finetech.groovy.utils;
 
+import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
+
+/**
+ * 
+ * @author MKürbis
+ *
+ * bei der Implementierung von Comparable ist auf die Kompatiblitöt der abas Typen unter einander zu achten!
+ * @param <V>
+ */
 
 public abstract class GroovyFOVariable<V> implements Comparable<Object>  {
 
@@ -39,6 +48,10 @@ public abstract class GroovyFOVariable<V> implements Comparable<Object>  {
 			this.type = FO.getValue("F", "typeof("+this.getVariablename()+")");
 		}
 		return type;
+	}
+	
+	public String plus(Object i) throws FOPException, GroovyFOException {
+		return this.getValue().toString().concat(i.toString());
 	}
 	
 	public String getVariablename(){

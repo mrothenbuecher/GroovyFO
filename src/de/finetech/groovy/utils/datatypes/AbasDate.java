@@ -58,15 +58,18 @@ public class AbasDate extends GroovyFOVariable<String> {
 	// FIXME GD19+GP = GD19 usw siehe hilfe
 
 	public Object plus(int i) throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[0], this.getVariablename() + " + " + i);
+		return this.script.formel(tempvars[0], this.getVariablename() + " + "
+				+ i);
 	}
 
 	public Object next() throws FOPException, GroovyFOException {
-		return this.script.formel(this.getVariablename(), this.getVariablename() + " + " + 1);
+		return this.script.formel(this.getVariablename(),
+				this.getVariablename() + " + " + 1);
 	}
 
 	public Object previous() throws FOPException, GroovyFOException {
-		return this.script.formel(this.getVariablename(), this.getVariablename() + " -1 " + 1);
+		return this.script.formel(this.getVariablename(),
+				this.getVariablename() + " -1 " + 1);
 	}
 
 	public Object minus(int i) throws FOPException, GroovyFOException {
@@ -83,23 +86,25 @@ public class AbasDate extends GroovyFOVariable<String> {
 	public Object mod(int i) throws GroovyFOException {
 		switch (i) {
 		case 1:
-			return this.script.formel(tempvars[NAME], this.getVariablename() + " // "
-					+ i);
-		case 7:
-			return this.script.formel(tempvars[DAY_OF_WEEK], this.getVariablename()
+			return this.script.formel(tempvars[NAME], this.getVariablename()
 					+ " // " + i);
+		case 7:
+			return this.script.formel(tempvars[DAY_OF_WEEK],
+					this.getVariablename() + " // " + i);
 		}
 		throw new GroovyFOException("operation // " + i + " not supported on "
 				+ this.getVariablename() + " of type " + this.type);
 	}
 
 	public String getSortable() throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[NAME], this.getVariablename() + ":8")
+		return this.script
+				.formel(tempvars[NAME], this.getVariablename() + ":8")
 				.toString();
 	}
 
 	public Object and(int i) throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[0], this.getVariablename() + " & " + i);
+		return this.script.formel(tempvars[0], this.getVariablename() + " & "
+				+ i);
 	}
 
 	@Override
@@ -109,7 +114,26 @@ public class AbasDate extends GroovyFOVariable<String> {
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
+		if (arg0 instanceof AbasDate) {
+			AbasDate date = (AbasDate) arg0;
+			try {
+				String xbfoo = script.art("bool", "xboolabasdateFOO");
+				if ((Boolean) script.formel(xbfoo,
+						this.varname + " > " + date.getVariablename()))
+					return 1;
+				else if ((Boolean) script.formel(xbfoo, this.varname + " < "
+						+ date.getVariablename()))
+					return -1;
+				else
+					return 0;
+			} catch (GroovyFOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if (arg0 == null)
+				return -10;
+			this.getValue().compareTo(arg0.toString());
+		}
 		return 0;
 	}
 }

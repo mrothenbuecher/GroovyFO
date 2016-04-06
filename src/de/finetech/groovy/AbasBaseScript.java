@@ -35,7 +35,8 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern integerPattern = Pattern.compile("(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
-	private Pattern pointerPattern = Pattern.compile("(PS.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
+	private Pattern pointerPattern = Pattern
+			.compile("(PS.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOMap d = new GroovyFOMap("d", this);
@@ -478,6 +479,12 @@ public abstract class AbasBaseScript extends Script {
 		return this.getValue(var);
 	}
 
+	public Object fo(String var, AbasPointer value) throws FOPException,
+			GroovyFOException {
+		FO.formel(var + "=\"" + value.toString() + "\"");
+		return this.getValue(var);
+	}
+
 	/**
 	 * 
 	 * @param var
@@ -610,7 +617,7 @@ public abstract class AbasBaseScript extends Script {
 		if (AbasDate.isDate(abasType)) {
 			return new AbasDate(abasType, varname, this);
 		}
-		if(pointerPattern.matcher(abasType).matches()){
+		if (pointerPattern.matcher(abasType).matches()) {
 			return new AbasPointer(varname, this);
 		}
 		// Strings

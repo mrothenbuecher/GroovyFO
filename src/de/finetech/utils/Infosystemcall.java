@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 /**
- * fÃ¼hrt einen Infosystem aufruf mit edpinfosys.sh
+ * führt einen Infosystem aufruf mit edpinfosys.sh
  * aus
  * 
- * @author MKÃ¼rbis
+ * @author MKürbis
  *
  */
 public class Infosystemcall {
@@ -53,15 +53,15 @@ public class Infosystemcall {
 		this.outputFile = outputFile;
 	}
 
-	public Infosystemcall setHeadParameter(String name, String value) {
+	public Infosystemcall setHeadParameter(String name, Object value) {
 		this.headParameter.put(name,
-				value == null ? "" : value);
+				value == null ? "" : value.toString());
 		return this;
 	}
 	
-	public Infosystemcall setTableParameter(String name, int row, String value) {
+	public Infosystemcall setTableParameter(String name, int row, Object value) {
 		this.headParameter.put(row+":"+name,
-				value == null ? "" : value);
+				value == null ? "" : value.toString());
 		return this;
 	}
 
@@ -145,7 +145,7 @@ public class Infosystemcall {
 			foo += (key + "=" + this.headParameter.get(key) + "|");
 		}
 		foo = foo.substring(0, foo.length() - 1);
-		//FIXME sprachunabhÃ¤ngigkeit
+		//FIXME sprachunabhängigkeit
 		return "*<Infosystem>"+this.infosystem+"<hole>?"+foo;
 	}
 
