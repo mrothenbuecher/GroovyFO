@@ -27,12 +27,12 @@ de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_
 
 ## Beispiel GroovyFO
 
-Text ow1/GROOVYTEST wie folgt anlegen.
+Text ow1/GROOVYFO.TEST wie folgt anlegen.
 ```groovy
 /*
 * Beispiel GroovyFO holt die ersten 100 Teile aus der DB
 * und gibt deren Suchwort aus
-* ow1/GROOVYTEST
+* ow1/GROOVYFO.TEST
 */
 
 for(def i=0; i<100 && hole("Teil"); i++){
@@ -43,7 +43,7 @@ for(def i=0; i<100 && hole("Teil"); i++){
 ```
 Zum testen Kommando aufrufen mit
 ```
-<Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYTEST<zeigen>
+<Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYFO.TEST<zeigen>
 ```
 
 ## Funktionsweise
