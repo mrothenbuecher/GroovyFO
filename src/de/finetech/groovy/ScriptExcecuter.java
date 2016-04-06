@@ -10,6 +10,8 @@ import java.io.StringWriter;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
+import de.abas.eks.jfop.AbortedException;
+import de.abas.eks.jfop.CommandException;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.abas.eks.jfop.remote.FOPRunnable;
@@ -43,6 +45,8 @@ public class ScriptExcecuter implements FOPRunnable {
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
 						ic.addStarImports("de.finetech.groovy");
+						ic.addStarImports("de.finetech.groovy.utils");
+						ic.addStarImports("de.finetech.groovy.utils.datatypes");
 						// 
 						ic.addImports("java.awt.Color", "java.util.Calendar",
 								"java.text.SimpleDateFormat",
@@ -61,7 +65,20 @@ public class ScriptExcecuter implements FOPRunnable {
 						shell.evaluate(groovyScript);
 
 						return 0;
+					} catch(CommandException e){
+						//FIXME Sprach unabhängigkeit
+						e.printStackTrace();
+						FO.box("Fehler", e.getMessage());
+						StringWriter sw = new StringWriter();
+						PrintWriter pw = new PrintWriter(sw);
+						e.printStackTrace(pw);
+						FO.box("Unbehandelte Ausnahme in " + arg0[1],
+								sw.toString());
+					} catch(AbortedException e){
+						//FIXME Sprach unabhängigkeit
+						FO.box("FOP abgebrochen", "FOP wurde durch Anwender abgebrochen");
 					} catch (Exception e) {
+						//FIXME Sprach unabhängigkeit
 						StringWriter sw = new StringWriter();
 						PrintWriter pw = new PrintWriter(sw);
 						e.printStackTrace(pw);

@@ -84,8 +84,8 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 					} else if (value instanceof Double) {
 						script.fo(buffer + "|" + key,
 								((Double) value).doubleValue());
-					} else if (value instanceof AbasDate) {
-						script.fo(buffer + "|" + key, ((AbasDate) value));
+					} else if (value instanceof GroovyFOVariable) {
+						script.fo(buffer + "|" + key, ((GroovyFOVariable<?>) value).getValue().toString());
 					} else {
 						script.fo(buffer + "|" + key, val);
 					}
@@ -111,6 +111,10 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 
 	public Collection<Object> values() {
 		return null;
+	}
+	
+	public Object or(String key){
+		return this.get(key);
 	}
 
 }

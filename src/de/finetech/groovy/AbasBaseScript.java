@@ -32,7 +32,7 @@ public abstract class AbasBaseScript extends Script {
 
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
-	private Pattern integerPattern = Pattern.compile("(I[0-9].*)|(IP.*)|(IN.*)|(K.*)");
+	private Pattern integerPattern = Pattern.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
@@ -553,14 +553,9 @@ public abstract class AbasBaseScript extends Script {
 	 * @throws GroovyFOException 
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException{
-		println("DEBUG 1: "+expr);
 		String result = FO.getValue("F", "expr(" + expr + ")");
 		String type = FO.getValue("F", "typeof(F|expr(" + expr + "))");
-		println("DEBUG 2: "+result);
-		println("DEBUG 3: "+type);
-		Object o = this.getValueByType(type, expr, result);
-		println("DEBUG 4: "+o.getClass().getName());
-		return o;
+		return this.getValueByType(type, expr, result);
 	}
 
 	/**
@@ -1041,6 +1036,10 @@ public abstract class AbasBaseScript extends Script {
 		// FIXME Sprachunterstützung
 		return isTrue(mehr);
 	}
+	
+	public boolean getMehr() {
+		return mehr();
+	}
 
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
@@ -1073,6 +1072,10 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public boolean more() {
+		return mehr();
+	}
+	
+	public boolean getMore() {
 		return mehr();
 	}
 
