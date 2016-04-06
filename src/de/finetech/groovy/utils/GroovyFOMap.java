@@ -8,6 +8,7 @@ import java.util.Set;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
+import de.finetech.groovy.utils.datatypes.AbasDate;
 
 public class GroovyFOMap implements Map<String, Object>, Cloneable,
 		Serializable {

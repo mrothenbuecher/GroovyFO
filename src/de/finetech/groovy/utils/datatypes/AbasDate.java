@@ -1,4 +1,4 @@
-package de.finetech.groovy.utils;
+package de.finetech.groovy.utils.datatypes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -6,9 +6,10 @@ import java.util.regex.Pattern;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
-import de.finetech.utils.RandomString;
+import de.finetech.groovy.utils.GroovyFOException;
+import de.finetech.groovy.utils.GroovyFOVariable;
 
-public class AbasDate {
+public class AbasDate extends GroovyFOVariable<String> {
 
 	private AbasBaseScript script;
 
@@ -21,7 +22,6 @@ public class AbasDate {
 					+ "|\\bJ2\\b|\\bGJ\\b|"
 					+ "\\bGP1\\b|\\bGP2\\b|\\bGP3\\b|\\bGP4\\b|"
 					+ "\\bDATUM\\b|\\bWOCHE\\b|\\bTERMIN\\b|\\bZEIT\\b");
-	private String type, variable;
 	private String[] tempvars = { "xfooaddate", "xfooadweekday",
 			"xfooadweekdayname" };
 
@@ -43,9 +43,9 @@ public class AbasDate {
 	 */
 	public AbasDate(String type, String var, AbasBaseScript script)
 			throws GroovyFOException {
+		super(var, script);
 		this.script = script;
 		this.type = type;
-		this.variable = var;
 		this.tempvars[DATE] = this.script.art(this.type, tempvars[DATE] + type);
 		this.tempvars[DAY_OF_WEEK] = this.script.art("INT",
 				tempvars[DAY_OF_WEEK]);
@@ -58,15 +58,15 @@ public class AbasDate {
 	// FIXME GD19+GP = GD19 usw siehe hilfe
 
 	public Object plus(int i) throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[0], this.variable + " + " + i);
+		return this.script.formel(tempvars[0], this.getVariablename() + " + " + i);
 	}
 
 	public Object next() throws FOPException, GroovyFOException {
-		return this.script.formel(this.variable, this.variable + " + " + 1);
+		return this.script.formel(this.getVariablename(), this.getVariablename() + " + " + 1);
 	}
 
 	public Object previous() throws FOPException, GroovyFOException {
-		return this.script.formel(this.variable, this.variable + " -1 " + 1);
+		return this.script.formel(this.getVariablename(), this.getVariablename() + " -1 " + 1);
 	}
 
 	public Object minus(int i) throws FOPException, GroovyFOException {
@@ -83,28 +83,33 @@ public class AbasDate {
 	public Object mod(int i) throws GroovyFOException {
 		switch (i) {
 		case 1:
-			return this.script.formel(tempvars[NAME], this.variable + " // "
+			return this.script.formel(tempvars[NAME], this.getVariablename() + " // "
 					+ i);
 		case 7:
-			return this.script.formel(tempvars[DAY_OF_WEEK], this.variable
+			return this.script.formel(tempvars[DAY_OF_WEEK], this.getVariablename()
 					+ " // " + i);
 		}
 		throw new GroovyFOException("operation // " + i + " not supported on "
-				+ this.variable + " of type " + this.type);
+				+ this.getVariablename() + " of type " + this.type);
 	}
 
 	public String getSortable() throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[NAME], this.variable + ":8")
+		return this.script.formel(tempvars[NAME], this.getVariablename() + ":8")
 				.toString();
 	}
 
 	public Object and(int i) throws FOPException, GroovyFOException {
-		return this.script.formel(tempvars[0], this.variable + " & " + i);
+		return this.script.formel(tempvars[0], this.getVariablename() + " & " + i);
 	}
 
 	@Override
-	public String toString() {
-		String[] var = this.variable.split(AbasBaseScript.PIPE_PATTERN);
-		return FO.getValue(var[0], var[1]);
+	public String getValue() {
+		return FO.getValue(this.buffer, this.varname);
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

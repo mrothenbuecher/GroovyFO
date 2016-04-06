@@ -11,9 +11,10 @@ import java.util.regex.Pattern;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.EKS;
 import de.abas.eks.jfop.remote.FO;
-import de.finetech.groovy.utils.AbasDate;
 import de.finetech.groovy.utils.GroovyFOException;
 import de.finetech.groovy.utils.GroovyFOMap;
+import de.finetech.groovy.utils.datatypes.AbasDate;
+import de.finetech.groovy.utils.datatypes.AbasPointer;
 import de.finetech.utils.SelectionBuilder;
 
 /**
@@ -31,9 +32,10 @@ public abstract class AbasBaseScript extends Script {
 
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
-	private Pattern integerPattern = Pattern.compile("(I.*)|(GRN.*)|(K.*)");
+	private Pattern integerPattern = Pattern.compile("(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
+	private Pattern pointerPattern = Pattern.compile("(PS.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOMap d = new GroovyFOMap("d", this);
@@ -588,8 +590,7 @@ public abstract class AbasBaseScript extends Script {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		String abasType = this.getType(varname).toUpperCase();
 		// Integer
-		if (!abasType.startsWith("ID")
-				&& integerPattern.matcher(abasType).matches()) {
+		if (integerPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
 				return 0;
 			return Integer.parseInt(value);
@@ -608,6 +609,9 @@ public abstract class AbasBaseScript extends Script {
 		}
 		if (AbasDate.isDate(abasType)) {
 			return new AbasDate(abasType, varname, this);
+		}
+		if(pointerPattern.matcher(abasType).matches()){
+			return new AbasPointer(varname, this);
 		}
 		// Strings
 		return value;

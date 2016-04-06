@@ -15,16 +15,16 @@ import de.abas.eks.jfop.remote.FO;
 import de.abas.eks.jfop.remote.FOPRunnable;
 
 /**
- * @author Michael KÃ¼rbis, Finetech GmbH & Co. KG
+ * @author Michael Kürbis, Finetech GmbH & Co. KG
  * 
  *         JFOP erwartet als zweiten Parameter das Groovyscript welches
- *         ausgefÃ¼hrt werden soll und Ã¼bergibt alle parameter an dieses weiter
+ *         ausgeführt werden soll und übergibt alle parameter an dieses weiter
  * 
  */
 public class ScriptExcecuter implements FOPRunnable {
 
 	public int runFop(String[] arg0) throws FOPException {
-		// Genug Parameter Ã¼bergben?
+		// Genug Parameter übergben?
 		if (arg0.length > 1) {
 			File groovyScript = new File(arg0[1]);
 			// existiert die Datei ?
@@ -37,7 +37,7 @@ public class ScriptExcecuter implements FOPRunnable {
 						binding.setVariable("arg", arg0);
 
 						// Imports festlegen damit diese nicht selbst
-						// hinzugefÃ¼gt werden mÃ¼ssen
+						// hinzugefügt werden müssen
 						CompilerConfiguration cc = new CompilerConfiguration();
 						ImportCustomizer ic = new ImportCustomizer();
 						// abas Standard
@@ -55,7 +55,7 @@ public class ScriptExcecuter implements FOPRunnable {
 						// Basisklasse festlegen
 						cc.setScriptBaseClass("de.finetech.groovy.AbasBaseScript");
 
-						// Script ausfÃ¼hren
+						// Script ausführen
 						GroovyShell shell = new GroovyShell(this.getClass()
 								.getClassLoader(), binding, cc);
 						shell.evaluate(groovyScript);
