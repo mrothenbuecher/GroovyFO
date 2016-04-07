@@ -4,6 +4,7 @@ import groovy.lang.Script;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -24,15 +25,14 @@ import de.finetech.utils.SelectionBuilder;
  */
 public abstract class AbasBaseScript extends Script {
 
-	public final static String PIPE_PATTERN = Pattern.quote("|");
-
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
 
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
-	private Pattern integerPattern = Pattern.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
+	private Pattern integerPattern = Pattern
+			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
@@ -372,7 +372,7 @@ public abstract class AbasBaseScript extends Script {
 		fehler(cmd);
 	}
 
-	public Object expr(String expr) throws GroovyFOException{
+	public Object expr(String expr) throws GroovyFOException {
 		return this.getComputedValue(expr);
 	}
 
@@ -548,11 +548,13 @@ public abstract class AbasBaseScript extends Script {
 
 	/**
 	 * lässt abas den Werberechnen
-	 * @param expr - U|von, U|von-U|bis, usw...
+	 * 
+	 * @param expr
+	 *            - U|von, U|von-U|bis, usw...
 	 * @return
-	 * @throws GroovyFOException 
+	 * @throws GroovyFOException
 	 */
-	public Object getComputedValue(String expr) throws GroovyFOException{
+	public Object getComputedValue(String expr) throws GroovyFOException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
 		String type = FO.getValue("F", "typeof(F|expr(" + expr + "))");
 		return this.getValueByType(type, expr, result);
@@ -586,12 +588,16 @@ public abstract class AbasBaseScript extends Script {
 	 * @throws FOPException
 	 */
 	public Object getValue(String var) throws FOPException, GroovyFOException {
-		String[] foo = var.split(PIPE_PATTERN);
-		String buffer = foo[0];
-		String varname = foo[1];
-		return this.getValue(var, FO.getValue(buffer, varname));
+		/*
+		 * Matcher matcher = varPattern.matcher(var); if(matcher.matches()){ int
+		 * count = matcher.groupCount(); println("DEBUG: ANZAHL "+count);
+		 * for(int i=0;i<count;i++) println("DEBUG: GROUP "+matcher.group(i)); }
+		 * String[] foo = var.split(PIPE_PATTERN); String buffer = foo[0];
+		 * String varname = foo[1];
+		 */
+		return this.getValue(var, FO.getValue("F", "expr(" + var + ")"));
 	}
-	
+
 	/**
 	 * liefert basierend auf dem abas internen Typ den Wert einer Variablen
 	 * 
@@ -614,7 +620,8 @@ public abstract class AbasBaseScript extends Script {
 		return this.getValueByType(abasType, varname, value);
 	}
 
-	public Object getValueByType(String abasType, String expr, String value) throws GroovyFOException {
+	public Object getValueByType(String abasType, String expr, String value)
+			throws GroovyFOException {
 		// Integer
 		if (integerPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
@@ -633,7 +640,12 @@ public abstract class AbasBaseScript extends Script {
 			return isTrue(value);
 		}
 		if (AbasDate.isDate(abasType)) {
-			return new AbasDate(abasType, expr, this);
+			try {
+				return new AbasDate(abasType, expr, value, this);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (pointerPattern.matcher(abasType).matches()) {
 			return new AbasPointer(expr, this);
@@ -641,7 +653,7 @@ public abstract class AbasBaseScript extends Script {
 		// Strings
 		return value;
 	}
-	
+
 	/**
 	 * liefert den Variablenwert aus dem Hole Puffer
 	 * 
@@ -764,9 +776,9 @@ public abstract class AbasBaseScript extends Script {
 		eingabe(fopName);
 	}
 
-	public boolean isTrue(String value){
-		return value != null && !value.isEmpty() && value.matches("ja") || value.matches("yes")
-		|| value.matches("true");
+	public boolean isTrue(String value) {
+		return value != null && !value.isEmpty() && value.matches("ja")
+				|| value.matches("yes") || value.matches("true");
 	}
 
 	public void justified() {
@@ -1036,7 +1048,7 @@ public abstract class AbasBaseScript extends Script {
 		// FIXME SprachunterstÃ¼tzung
 		return isTrue(mehr);
 	}
-	
+
 	public boolean getMehr() {
 		return mehr();
 	}
@@ -1074,7 +1086,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean more() {
 		return mehr();
 	}
-	
+
 	public boolean getMore() {
 		return mehr();
 	}
@@ -1142,7 +1154,7 @@ public abstract class AbasBaseScript extends Script {
 		else
 			FO.println(cmd);
 	}
-	
+
 	public void protection(String cmd) {
 		schutz(cmd);
 	}
