@@ -36,7 +36,9 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
-			.compile("(PS.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
+			.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
+
+	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOMap d = new GroovyFOMap("d", this);
@@ -82,6 +84,9 @@ public abstract class AbasBaseScript extends Script {
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
 	protected ConcurrentHashMap<String, String> variableTypes = new ConcurrentHashMap<String, String>();
+
+	// zwischenspeicher um nicht immer neue Objekte erzeugen zu müssen
+	protected ConcurrentHashMap<String, Object> variables = new ConcurrentHashMap<String, Object>();
 
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
@@ -143,7 +148,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @throws GroovyFOException
 	 */
 	public String art(String type, String def) throws GroovyFOException {
-		String defined = FO.getValue("F", "defined(" + def + ")").toLowerCase();
+		String defined = FO.getValue("F", "defined(" + def + ")");
 		if (!this.isTrue(defined)) {
 			FO.art(type + " " + def);
 			this.variableTypes.put("U|" + def, type);
@@ -300,20 +305,6 @@ public abstract class AbasBaseScript extends Script {
 		this.kopieren(cmd);
 	}
 
-	/**
-	 * liefert den Variablenwert aus dem Dazu Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes D
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object d(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("D|" + varname, FO.Dvar(varname));
-	}
-
 	public void datei(String cmd) {
 		EKS.datei(cmd);
 	}
@@ -328,20 +319,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public void drucke(String cmd) {
 		EKS.drucke(cmd);
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem E Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes E
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object e(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("E|" + varname, FO.Evar(varname));
 	}
 
 	public void edit(String cmd) {
@@ -374,20 +351,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public Object expr(String expr) throws GroovyFOException {
 		return this.getComputedValue(expr);
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem F Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes F
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object f(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("F|" + varname, FO.Gvar(varname));
 	}
 
 	public void farbe(String cmd) {
@@ -528,20 +491,6 @@ public abstract class AbasBaseScript extends Script {
 		return this.formel(var, value);
 	}
 
-	/**
-	 * liefert den Variablenwert aus dem G Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes G
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object g(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("G|" + varname, FO.Gvar(varname));
-	}
-
 	public void gedruckt(String cmd) {
 		EKS.gedruckt(cmd);
 	}
@@ -588,13 +537,6 @@ public abstract class AbasBaseScript extends Script {
 	 * @throws FOPException
 	 */
 	public Object getValue(String var) throws FOPException, GroovyFOException {
-		/*
-		 * Matcher matcher = varPattern.matcher(var); if(matcher.matches()){ int
-		 * count = matcher.groupCount(); println("DEBUG: ANZAHL "+count);
-		 * for(int i=0;i<count;i++) println("DEBUG: GROUP "+matcher.group(i)); }
-		 * String[] foo = var.split(PIPE_PATTERN); String buffer = foo[0];
-		 * String varname = foo[1];
-		 */
 		return this.getValue(var, FO.getValue("F", "expr(" + var + ")"));
 	}
 
@@ -622,6 +564,9 @@ public abstract class AbasBaseScript extends Script {
 
 	public Object getValueByType(String abasType, String expr, String value)
 			throws GroovyFOException {
+		
+		boolean isVar = varPattern.matcher(expr).matches();
+		
 		// Integer
 		if (integerPattern.matcher(abasType).matches()) {
 			if (value == null || value.isEmpty())
@@ -636,11 +581,19 @@ public abstract class AbasBaseScript extends Script {
 		}
 		// bool
 		if (boolPattern.matcher(abasType).matches()) {
-			value = value.toLowerCase();
 			return isTrue(value);
 		}
 		if (AbasDate.isDate(abasType)) {
 			try {
+				if(isVar){
+					if(this.variables.containsKey(expr)){
+						return (AbasDate)this.variables.get(expr);
+					}else{
+						AbasDate date = new AbasDate(abasType, expr, value, this);
+						this.variables.put(expr, date);
+						return date;
+					}
+				}
 				return new AbasDate(abasType, expr, value, this);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -652,20 +605,6 @@ public abstract class AbasBaseScript extends Script {
 		}
 		// Strings
 		return value;
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem Hole Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes H
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object h(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("H|" + varname, FO.Hvar(varname));
 	}
 
 	public void help(String cmd) {
@@ -758,11 +697,11 @@ public abstract class AbasBaseScript extends Script {
 	 *            - abas Selektionstring,
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
-	public boolean hole(String db, String selection) {
+	public boolean hole(String db, Object selection) {
 		if (this.hselection != null && this.hselection.equals(selection)) {
 			return FO.hole(db);
 		} else {
-			this.hselection = selection;
+			this.hselection = selection.toString();
 			this.resetMap("h");
 			return FO.hole(db + " \"" + selection + "\"");
 		}
@@ -777,6 +716,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public boolean isTrue(String value) {
+		value = value.toLowerCase();
 		return value != null && !value.isEmpty() && value.matches("ja")
 				|| value.matches("yes") || value.matches("true");
 	}
@@ -807,120 +747,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public void kopieren(String cmd) {
 		EKS.kopieren(cmd);
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 1 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 1
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object l1(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("1|" + varname, FO.getValue("1", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 2 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 2
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object l2(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("2|" + varname, FO.getValue("2", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 3 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 3
-	 * 
-	 * @return
-	 */
-	public Object l3(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("3|" + varname, FO.getValue("3", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 4 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 4
-	 * 
-	 * @return
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object l4(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("4|" + varname, FO.getValue("4", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 5 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 5
-	 * 
-	 * @return
-	 */
-	public Object l5(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("5|" + varname, FO.getValue("5", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 6 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 6
-	 * 
-	 * @return
-	 */
-	public Object l6(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("6|" + varname, FO.getValue("6", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 7 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 7
-	 * 
-	 * @return
-	 */
-	public Object l7(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("7|" + varname, FO.getValue("7", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 8 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 8
-	 * 
-	 * @return
-	 */
-	public Object l8(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("8|" + varname, FO.getValue("8", varname));
-	}
-
-	/**
-	 * liefert den Variablenwert aus dem lade 9 Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestellte 9
-	 * 
-	 * @return
-	 */
-	public Object l9(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("9|" + varname, FO.getValue("9", varname));
 	}
 
 	/**
@@ -962,13 +788,13 @@ public abstract class AbasBaseScript extends Script {
 	 *            - abas Selektionsstring
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
-	public boolean lade(int puffer, String db, String selection) {
+	public boolean lade(int puffer, String db, Object selection) {
 		if (this.lselection[puffer] != null
 				&& this.lselection[puffer].equals(selection)) {
 			return FO.lade(puffer + " " + db);
 		} else {
 			this.resetMap(Integer.toString(puffer));
-			this.lselection[puffer] = selection;
+			this.lselection[puffer] = selection.toString();
 			return FO.lade(puffer + " " + db + " \"" + selection + "\"");
 		}
 	}
@@ -1023,18 +849,6 @@ public abstract class AbasBaseScript extends Script {
 		EKS.loesche(cmd);
 	}
 
-	/**
-	 * liefert den Variablenwert aus dem Masken Puffer
-	 * 
-	 * @param varname
-	 *            Variablenname ohne vorangestelltes M
-	 * 
-	 * @return
-	 */
-	public Object m(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("M|" + varname, FO.Mvar(varname));
-	}
-
 	public void mache(String cmd) {
 		EKS.mache(cmd);
 	}
@@ -1044,7 +858,7 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	public boolean mehr() {
-		String mehr = FO.Gvar("mehr").toLowerCase();
+		String mehr = FO.Gvar("mehr");
 		// FIXME SprachunterstÃ¼tzung
 		return isTrue(mehr);
 	}
@@ -1105,10 +919,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public void output(String cmd) {
 		ausgabe(cmd);
-	}
-
-	public Object p(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("P|" + varname, FO.Pvar(varname));
 	}
 
 	public void page(String cmd) {
@@ -1198,6 +1008,11 @@ public abstract class AbasBaseScript extends Script {
 					this.variableTypes.remove(entry.getKey());
 				}
 			}
+			for (Entry<String, Object> entry : this.variables.entrySet()) {
+				if (entry.getKey().toLowerCase().startsWith(buffer)) {
+					this.variables.remove(entry.getKey());
+				}
+			}
 		}
 	}
 
@@ -1211,10 +1026,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public void right(String cmd) {
 		rechts(cmd);
-	}
-
-	public Object s(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("S|" + varname, FO.Svar(varname));
 	}
 
 	public void schutz(String cmd) {
@@ -1261,10 +1072,6 @@ public abstract class AbasBaseScript extends Script {
 		return mehr();
 	}
 
-	public Object t(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("T|" + varname, FO.Tvar(varname));
-	}
-
 	public void tabellensatz(String cmd) {
 		EKS.tabellensatz(cmd);
 	}
@@ -1291,10 +1098,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public String[] type(String type, String... def) throws GroovyFOException {
 		return art(type, def);
-	}
-
-	public Object u(String varname) throws FOPException, GroovyFOException {
-		return this.getValue("U|" + varname, FO.Uvar(varname));
 	}
 
 	public void uebersetzen(String cmd) {

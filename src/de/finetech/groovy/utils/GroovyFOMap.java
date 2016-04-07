@@ -8,7 +8,6 @@ import java.util.Set;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
-import de.finetech.groovy.utils.datatypes.AbasDate;
 
 public class GroovyFOMap implements Map<String, Object>, Cloneable,
 		Serializable {
@@ -26,9 +25,8 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 	}
 
 	public boolean containsKey(Object key) {
-		String value = FO.getValue("F", "defined(" + buffer + "|" + key + ")")
-				.toLowerCase();
-		return value.equals("true") || value.equals("ja");
+		String value = FO.getValue("F", "defined(" + buffer + "|" + key + ")");
+		return script.isTrue(value);
 	}
 
 	public boolean containsValue(java.lang.Object value) {
@@ -40,16 +38,15 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 	}
 
 	public Object get(Object key) {
-		if (this.containsKey(key))
-			try {
-				return script.getValue(buffer + "|" + key);
-			} catch (FOPException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (GroovyFOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			return script.getComputedValue(buffer + "|" + key);
+		} catch (FOPException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GroovyFOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -69,35 +66,33 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 	}
 
 	public Object put(String key, Object value) {
-		if (this.containsKey(key)) {
-			String val = value.toString();
-			// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
-			// wert so übergeben das abas ihn interpretiert
-			try {
-				if (val.startsWith("'")) {
-					val = val.substring(1);
-					script.formula(buffer + "|" + key, val);
+		String val = value.toString();
+		// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
+		// wert so übergeben das abas ihn interpretiert
+		try {
+			// FIXME muss besser gehen
+			if (val.startsWith("'")) {
+				val = val.substring(1);
+				script.formula(buffer + "|" + key, val);
+			} else {
+				if (value instanceof Integer) {
+					script.fo(buffer + "|" + key, ((Integer) value).intValue());
+				} else if (value instanceof Double) {
+					script.fo(buffer + "|" + key,
+							((Double) value).doubleValue());
+				} else if (value instanceof GroovyFOVariable) {
+					script.fo(buffer + "|" + key, ((GroovyFOVariable<?>) value)
+							.getValue().toString());
 				} else {
-					if (value instanceof Integer) {
-						script.fo(buffer + "|" + key,
-								((Integer) value).intValue());
-					} else if (value instanceof Double) {
-						script.fo(buffer + "|" + key,
-								((Double) value).doubleValue());
-					} else if (value instanceof GroovyFOVariable) {
-						script.fo(buffer + "|" + key, ((GroovyFOVariable<?>) value).getValue().toString());
-					} else {
-						script.fo(buffer + "|" + key, val);
-					}
+					script.fo(buffer + "|" + key, val);
 				}
-			} catch (FOPException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (GroovyFOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} catch (FOPException e) {
+			e.printStackTrace();
+		} catch (GroovyFOException e) {
+			e.printStackTrace();
 		}
+
 		return null;
 	}
 
@@ -112,8 +107,12 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 	public Collection<Object> values() {
 		return null;
 	}
-	
-	public Object or(String key){
+
+	public Object call(Object key) {
+		return this.get(key.toString());
+	}
+
+	public Object or(String key) {
 		return this.get(key);
 	}
 

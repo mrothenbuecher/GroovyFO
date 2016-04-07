@@ -1,5 +1,7 @@
 package de.finetech.groovy.utils;
 
+import java.util.concurrent.Callable;
+
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
@@ -46,6 +48,10 @@ public abstract class GroovyFOVariable<V> implements Comparable<Object> {
 	}
 
 	public String getVariablename() {
+		return this.varname;
+	}
+	
+	public String getVar() {
 		return this.varname;
 	}
 
