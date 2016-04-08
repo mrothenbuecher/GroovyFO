@@ -38,7 +38,6 @@ Text ow1/GROOVYFO.TEST wie folgt anlegen.
 for(def i=0; i<100 && hole("Teil"); i++){
         // Ausgabe auf Konsole
         println ( h.such )
-        //alternativ auch println ( h("such") )
 }
 ```
 Zum testen Kommando aufrufen mit
