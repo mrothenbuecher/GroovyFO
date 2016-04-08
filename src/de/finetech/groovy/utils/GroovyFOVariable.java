@@ -1,7 +1,5 @@
 package de.finetech.groovy.utils;
 
-import java.util.concurrent.Callable;
-
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;

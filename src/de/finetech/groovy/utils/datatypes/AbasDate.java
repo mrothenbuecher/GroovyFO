@@ -84,7 +84,7 @@ public class AbasDate extends GroovyFOVariable<String> {
 	 * 
 	 * @param i
 	 *            mögliche Werte 1 oder 7
-	 * @return Datum // i
+	 * @return Datum // i aus dem abas
 	 * @throws GroovyFOException
 	 */
 	public Object mod(int i) throws GroovyFOException {

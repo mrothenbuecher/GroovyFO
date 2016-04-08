@@ -6,27 +6,27 @@ import java.util.Map;
 import java.util.Set;
 
 import de.abas.eks.jfop.FOPException;
-import de.abas.eks.jfop.remote.FO;
+import de.abas.jfop.base.buffer.BaseReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
-public class GroovyFOMap implements Map<String, Object>, Cloneable,
+public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements Map<String, Object>, Cloneable,
 		Serializable {
 
 	private static final long serialVersionUID = 4146145334512673667L;
-	private String buffer = null;
-	private AbasBaseScript script;
+	//private String buffer = null;
+	protected AbasBaseScript script;
+	protected T buffer;
 
 	public void clear() {
 	}
 
-	public GroovyFOMap(String buffer, AbasBaseScript script) {
+	public GroovyFOReadableMap(T buffer, AbasBaseScript script) {
 		this.script = script;
 		this.buffer = buffer;
 	}
 
 	public boolean containsKey(Object key) {
-		String value = FO.getValue("F", "defined(" + buffer + "|" + key + ")");
-		return script.isTrue(value);
+		return buffer.isVarDefined(key.toString());
 	}
 
 	public boolean containsValue(java.lang.Object value) {
@@ -39,7 +39,7 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 
 	public Object get(Object key) {
 		try {
-			return script.getComputedValue(buffer + "|" + key);
+			return script.getComputedValue(buffer.getQualifiedFieldName(key.toString()));
 		} catch (FOPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,6 +48,10 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public String getType(Object key){
+		return buffer.getFieldType(key.toString());
 	}
 
 	public boolean isEmpty() {
@@ -66,33 +70,6 @@ public class GroovyFOMap implements Map<String, Object>, Cloneable,
 	}
 
 	public Object put(String key, Object value) {
-		String val = value.toString();
-		// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
-		// wert so übergeben das abas ihn interpretiert
-		try {
-			// FIXME muss besser gehen
-			if (val.startsWith("'")) {
-				val = val.substring(1);
-				script.formula(buffer + "|" + key, val);
-			} else {
-				if (value instanceof Integer) {
-					script.fo(buffer + "|" + key, ((Integer) value).intValue());
-				} else if (value instanceof Double) {
-					script.fo(buffer + "|" + key,
-							((Double) value).doubleValue());
-				} else if (value instanceof GroovyFOVariable) {
-					script.fo(buffer + "|" + key, ((GroovyFOVariable<?>) value)
-							.getValue().toString());
-				} else {
-					script.fo(buffer + "|" + key, val);
-				}
-			}
-		} catch (FOPException e) {
-			e.printStackTrace();
-		} catch (GroovyFOException e) {
-			e.printStackTrace();
-		}
-
 		return null;
 	}
 

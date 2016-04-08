@@ -12,8 +12,12 @@ import java.util.regex.Pattern;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.EKS;
 import de.abas.eks.jfop.remote.FO;
+import de.abas.eks.jfop.remote.FOPSessionContext;
+import de.abas.erp.db.DbContext;
+import de.abas.jfop.base.buffer.BufferFactory;
 import de.finetech.groovy.utils.GroovyFOException;
-import de.finetech.groovy.utils.GroovyFOMap;
+import de.finetech.groovy.utils.GroovyFOReadableMap;
+import de.finetech.groovy.utils.GroovyFOWriteableMap;
 import de.finetech.groovy.utils.datatypes.AbasDate;
 import de.finetech.groovy.utils.datatypes.AbasPointer;
 import de.finetech.utils.SelectionBuilder;
@@ -41,44 +45,46 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
-	protected GroovyFOMap d = new GroovyFOMap("d", this);
-	protected GroovyFOMap D = d;
-	protected GroovyFOMap e = new GroovyFOMap("e", this);
-	protected GroovyFOMap E = e;
-	protected GroovyFOMap f = new GroovyFOMap("f", this);
-	protected GroovyFOMap F = f;
-	protected GroovyFOMap g = new GroovyFOMap("g", this);
-	protected GroovyFOMap G = g;
-	protected GroovyFOMap h = new GroovyFOMap("h", this);
-	protected GroovyFOMap H = h;
-	protected GroovyFOMap l1 = new GroovyFOMap("1", this);
-	protected GroovyFOMap L1 = l1;
-	protected GroovyFOMap l2 = new GroovyFOMap("2", this);
-	protected GroovyFOMap L2 = l2;
-	protected GroovyFOMap l3 = new GroovyFOMap("3", this);
-	protected GroovyFOMap L3 = l3;
-	protected GroovyFOMap l4 = new GroovyFOMap("4", this);
-	protected GroovyFOMap L4 = l4;
-	protected GroovyFOMap l5 = new GroovyFOMap("5", this);
-	protected GroovyFOMap L5 = l5;
-	protected GroovyFOMap l6 = new GroovyFOMap("6", this);
-	protected GroovyFOMap L6 = l6;
-	protected GroovyFOMap l7 = new GroovyFOMap("7", this);
-	protected GroovyFOMap L7 = l7;
-	protected GroovyFOMap l8 = new GroovyFOMap("8", this);
-	protected GroovyFOMap L8 = l8;
-	protected GroovyFOMap l9 = new GroovyFOMap("9", this);
-	protected GroovyFOMap L9 = l9;
-	protected GroovyFOMap m = new GroovyFOMap("m", this);
-	protected GroovyFOMap M = m;
-	protected GroovyFOMap p = new GroovyFOMap("p", this);
-	protected GroovyFOMap P = p;
-	protected GroovyFOMap s = new GroovyFOMap("p", this);
-	protected GroovyFOMap S = s;
-	protected GroovyFOMap t = new GroovyFOMap("t", this);
-	protected GroovyFOMap T = t;
-	protected GroovyFOMap u = new GroovyFOMap("u", this);
-	protected GroovyFOMap U = u;
+	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory.newInstance().getParentScreenBuffer(), this);
+	protected GroovyFOWriteableMap D = d;
+	protected GroovyFOWriteableMap a = d;
+	protected GroovyFOWriteableMap A = d;
+	protected GroovyFOReadableMap e = new GroovyFOReadableMap(BufferFactory.newInstance().getEnvBuffer(), this);
+	protected GroovyFOReadableMap E = e;
+	//protected GroovyFOMap f = new GroovyFOMap(BufferFactory.newInstance().get, this);
+	//protected GroovyFOMap F = f;
+	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(BufferFactory.newInstance().getGlobalTextBuffer(), this);
+	protected GroovyFOWriteableMap G = g;
+	protected GroovyFOWriteableMap h = new GroovyFOWriteableMap(BufferFactory.newInstance().getSelectBuffer(), this);
+	protected GroovyFOWriteableMap H = h;
+	protected GroovyFOWriteableMap l1 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(1), this);
+	protected GroovyFOWriteableMap L1 = l1;
+	protected GroovyFOWriteableMap l2 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(2), this);
+	protected GroovyFOWriteableMap L2 = l2;
+	protected GroovyFOWriteableMap l3 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(3), this);
+	protected GroovyFOWriteableMap L3 = l3;
+	protected GroovyFOWriteableMap l4 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(4), this);
+	protected GroovyFOWriteableMap L4 = l4;
+	protected GroovyFOWriteableMap l5 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(5), this);
+	protected GroovyFOWriteableMap L5 = l5;
+	protected GroovyFOWriteableMap l6 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(6), this);
+	protected GroovyFOWriteableMap L6 = l6;
+	protected GroovyFOWriteableMap l7 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(7), this);
+	protected GroovyFOWriteableMap L7 = l7;
+	protected GroovyFOWriteableMap l8 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(8), this);
+	protected GroovyFOWriteableMap L8 = l8;
+	protected GroovyFOWriteableMap l9 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(9), this);
+	protected GroovyFOWriteableMap L9 = l9;
+	protected GroovyFOWriteableMap m = new GroovyFOWriteableMap(BufferFactory.newInstance().getScreenBuffer(), this);
+	protected GroovyFOWriteableMap M = m;
+	protected GroovyFOWriteableMap p = new GroovyFOWriteableMap(BufferFactory.newInstance().getPrintBuffer(), this);
+	protected GroovyFOWriteableMap P = p;
+	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory.newInstance().getCharactBarBuffer(), this);
+	protected GroovyFOWriteableMap S = s;
+	//protected GroovyFOMap t = new GroovyFOMap(BufferFactory.newInstance().getTextBuffer(), this);
+	//protected GroovyFOMap T = t;
+	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory.newInstance().getUserTextBuffer(), this);
+	protected GroovyFOWriteableMap U = u;
 
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
@@ -88,11 +94,17 @@ public abstract class AbasBaseScript extends Script {
 	// zwischenspeicher um nicht immer neue Objekte erzeugen zu müssen
 	protected ConcurrentHashMap<String, Object> variables = new ConcurrentHashMap<String, Object>();
 
+	protected FOPSessionContext arg0;
+	protected String[] arg1;
+	
+	protected DbContext dbContext;
+	
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
 	public AbasBaseScript() {
-		FO.setCommandLanguage(FO.CMDLANG_GERMAN);
+		//println ("Session context not defined? "+arg0 == null );
+		//DbContext dbContext = arg0.getDbContext();
 	}
 
 	public void absatz(String cmd) {
@@ -148,8 +160,7 @@ public abstract class AbasBaseScript extends Script {
 	 * @throws GroovyFOException
 	 */
 	public String art(String type, String def) throws GroovyFOException {
-		String defined = FO.getValue("F", "defined(" + def + ")");
-		if (!this.isTrue(defined)) {
+		if (!u.containsKey(def)) {
 			FO.art(type + " " + def);
 			this.variableTypes.put("U|" + def, type);
 		} else {
