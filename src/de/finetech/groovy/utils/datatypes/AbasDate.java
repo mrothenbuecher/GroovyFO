@@ -36,11 +36,11 @@ public class AbasDate extends GroovyFOVariable<String> {
 	 * @throws GroovyFOException
 	 * @throws ParseException
 	 */
-	public AbasDate(String type, String expr, String value,
+	public AbasDate(String expr, String value,
 			AbasBaseScript script) throws GroovyFOException, ParseException {
 		super(expr, script);
 		this.script = script;
-		this.type = type;
+		this.type = FO.getValue("F", "typeof(F|expr("+expr+"))");
 
 		if (!AbasDate.isDate(type))
 			throw new GroovyFOException(type

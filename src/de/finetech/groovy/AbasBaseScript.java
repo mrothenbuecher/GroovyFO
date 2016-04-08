@@ -1,6 +1,7 @@
 package de.finetech.groovy;
 
 import groovy.lang.Script;
+import groovy.transform.CompileStatic;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -27,6 +28,7 @@ import de.finetech.utils.SelectionBuilder;
  * @author Michael Kürbis, Finetech GmbH & Co. KG
  * 
  */
+@CompileStatic
 public abstract class AbasBaseScript extends Script {
 
 	// Temp Variablen um sich die letzten Selektion zu speichern
@@ -45,66 +47,85 @@ public abstract class AbasBaseScript extends Script {
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
-	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory.newInstance().getParentScreenBuffer(), this);
+	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getParentScreenBuffer(), this);
 	protected GroovyFOWriteableMap D = d;
 	protected GroovyFOWriteableMap a = d;
 	protected GroovyFOWriteableMap A = d;
-	protected GroovyFOReadableMap e = new GroovyFOReadableMap(BufferFactory.newInstance().getEnvBuffer(), this);
+	protected GroovyFOReadableMap e = new GroovyFOReadableMap(BufferFactory
+			.newInstance().getEnvBuffer(), this);
 	protected GroovyFOReadableMap E = e;
-	//protected GroovyFOMap f = new GroovyFOMap(BufferFactory.newInstance().get, this);
-	//protected GroovyFOMap F = f;
-	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(BufferFactory.newInstance().getGlobalTextBuffer(), this);
+	// protected GroovyFOMap f = new
+	// GroovyFOMap(BufferFactory.newInstance().get, this);
+	// protected GroovyFOMap F = f;
+	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getGlobalTextBuffer(), this);
 	protected GroovyFOWriteableMap G = g;
-	protected GroovyFOWriteableMap h = new GroovyFOWriteableMap(BufferFactory.newInstance().getSelectBuffer(), this);
+	protected GroovyFOWriteableMap h = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getSelectBuffer(), this);
 	protected GroovyFOWriteableMap H = h;
-	protected GroovyFOWriteableMap l1 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(1), this);
+	protected GroovyFOWriteableMap l1 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(1), this);
 	protected GroovyFOWriteableMap L1 = l1;
-	protected GroovyFOWriteableMap l2 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(2), this);
+	protected GroovyFOWriteableMap l2 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(2), this);
 	protected GroovyFOWriteableMap L2 = l2;
-	protected GroovyFOWriteableMap l3 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(3), this);
+	protected GroovyFOWriteableMap l3 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(3), this);
 	protected GroovyFOWriteableMap L3 = l3;
-	protected GroovyFOWriteableMap l4 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(4), this);
+	protected GroovyFOWriteableMap l4 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(4), this);
 	protected GroovyFOWriteableMap L4 = l4;
-	protected GroovyFOWriteableMap l5 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(5), this);
+	protected GroovyFOWriteableMap l5 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(5), this);
 	protected GroovyFOWriteableMap L5 = l5;
-	protected GroovyFOWriteableMap l6 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(6), this);
+	protected GroovyFOWriteableMap l6 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(6), this);
 	protected GroovyFOWriteableMap L6 = l6;
-	protected GroovyFOWriteableMap l7 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(7), this);
+	protected GroovyFOWriteableMap l7 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(7), this);
 	protected GroovyFOWriteableMap L7 = l7;
-	protected GroovyFOWriteableMap l8 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(8), this);
+	protected GroovyFOWriteableMap l8 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(8), this);
 	protected GroovyFOWriteableMap L8 = l8;
-	protected GroovyFOWriteableMap l9 = new GroovyFOWriteableMap(BufferFactory.newInstance().getLoadBuffer(9), this);
+	protected GroovyFOWriteableMap l9 = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getLoadBuffer(9), this);
 	protected GroovyFOWriteableMap L9 = l9;
-	protected GroovyFOWriteableMap m = new GroovyFOWriteableMap(BufferFactory.newInstance().getScreenBuffer(), this);
+	protected GroovyFOWriteableMap m = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getScreenBuffer(), this);
 	protected GroovyFOWriteableMap M = m;
-	protected GroovyFOWriteableMap p = new GroovyFOWriteableMap(BufferFactory.newInstance().getPrintBuffer(), this);
+	protected GroovyFOWriteableMap p = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getPrintBuffer(), this);
 	protected GroovyFOWriteableMap P = p;
-	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory.newInstance().getCharactBarBuffer(), this);
+	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getCharactBarBuffer(), this);
 	protected GroovyFOWriteableMap S = s;
-	//protected GroovyFOMap t = new GroovyFOMap(BufferFactory.newInstance().getTextBuffer(), this);
-	//protected GroovyFOMap T = t;
-	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory.newInstance().getUserTextBuffer(), this);
+	// protected GroovyFOMap t = new
+	// GroovyFOMap(BufferFactory.newInstance().getTextBuffer(), this);
+	// protected GroovyFOMap T = t;
+	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory
+			.newInstance().getUserTextBuffer(), this);
 	protected GroovyFOWriteableMap U = u;
 
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
-	protected ConcurrentHashMap<String, String> variableTypes = new ConcurrentHashMap<String, String>();
+	protected ConcurrentHashMap<String, Class<?>> variableTypes = new ConcurrentHashMap<String, Class<?>>();
 
 	// zwischenspeicher um nicht immer neue Objekte erzeugen zu müssen
 	protected ConcurrentHashMap<String, Object> variables = new ConcurrentHashMap<String, Object>();
 
 	protected FOPSessionContext arg0;
 	protected String[] arg1;
-	
+
 	protected DbContext dbContext;
-	
+
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
 	public AbasBaseScript() {
-		//println ("Session context not defined? "+arg0 == null );
-		//DbContext dbContext = arg0.getDbContext();
+		// println ("Session context not defined? "+arg0 == null );
+		// DbContext dbContext = arg0.getDbContext();
 	}
 
 	public void absatz(String cmd) {
@@ -162,16 +183,38 @@ public abstract class AbasBaseScript extends Script {
 	public String art(String type, String def) throws GroovyFOException {
 		if (!u.containsKey(def)) {
 			FO.art(type + " " + def);
-			this.variableTypes.put("U|" + def, type);
+			this.variableTypes.put("U|" + def, this.getClassOfType(type));
 		} else {
-			// prüfen ob die Typen übereinstimmen
-			if (!this.variableTypes.get("U|" + def).equals(type)) {
-				throw new GroovyFOException("different types same name");
-			}
+			//TODO prüfen ob die Typen übereinstimmen
+			//if (!this.variableTypes.get("U|" + def).equals(type)) {
+			//	throw new GroovyFOException("different types same name");
+			//}
 		}
 		return "U|" + def;
 	}
 
+	protected Class<?> getClassOfType(String abasType){
+		if (integerPattern.matcher(abasType).matches()) {
+			return int.class;
+		}
+		// Real
+		if (realPattern.matcher(abasType).matches()) {
+			return double.class;
+		}
+		// bool
+		if (boolPattern.matcher(abasType).matches()) {
+			return boolean.class;
+		}
+		if (AbasDate.isDate(abasType)) {
+			return AbasDate.class;
+		}
+		if (pointerPattern.matcher(abasType).matches()) {
+			return AbasPointer.class;
+		}
+		// Strings
+		return String.class;
+	}
+	
 	/**
 	 * Definition von n NutzerVariablen eines Types
 	 * 
@@ -516,7 +559,7 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
-		String type = FO.getValue("F", "typeof(F|expr(" + expr + "))");
+		Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(F|expr(" + expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
 
@@ -527,13 +570,13 @@ public abstract class AbasBaseScript extends Script {
 	 *            mit vorangestellten Puffer buchstaben bsp.: H|id
 	 * @return
 	 */
-	protected String getType(String variable) {
+	protected Class<?> getType(String variable) {
 		variable = variable.toLowerCase();
 		if (this.variableTypes.containsKey(variable)) {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			String type = FO.getValue("F", "typeof(" + variable + ")");
+			Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(" + variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
@@ -569,49 +612,50 @@ public abstract class AbasBaseScript extends Script {
 	public Object getValue(String varname, String value)
 			throws GroovyFOException {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
-		String abasType = this.getType(varname).toUpperCase();
+		Class<?> abasType = this.getType(varname);
 		return this.getValueByType(abasType, varname, value);
 	}
 
-	public Object getValueByType(String abasType, String expr, String value)
+	public Object getValueByType(Class<?> abasType, String expr, String value)
 			throws GroovyFOException {
-		
+
 		boolean isVar = varPattern.matcher(expr).matches();
 		
 		// Integer
-		if (integerPattern.matcher(abasType).matches()) {
+		if (abasType == int.class) {
 			if (value == null || value.isEmpty())
 				return 0;
 			return Integer.parseInt(value);
 		}
 		// Real
-		if (realPattern.matcher(abasType).matches()) {
+		if (double.class == abasType) {
 			if (value == null || value.isEmpty())
 				return 0.0d;
 			return Double.parseDouble(value);
 		}
 		// bool
-		if (boolPattern.matcher(abasType).matches()) {
+		if (boolean.class == abasType) {
 			return isTrue(value);
 		}
-		if (AbasDate.isDate(abasType)) {
+		if (AbasDate.class == abasType) {
 			try {
-				if(isVar){
-					if(this.variables.containsKey(expr)){
-						return (AbasDate)this.variables.get(expr);
-					}else{
-						AbasDate date = new AbasDate(abasType, expr, value, this);
+				if (isVar) {
+					if (this.variables.containsKey(expr)) {
+						return (AbasDate) this.variables.get(expr);
+					} else {
+						AbasDate date = new AbasDate(expr, value,
+								this);
 						this.variables.put(expr, date);
 						return date;
 					}
 				}
-				return new AbasDate(abasType, expr, value, this);
+				return new AbasDate(expr, value, this);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		if (pointerPattern.matcher(abasType).matches()) {
+		if (abasType == AbasPointer.class) {
 			return new AbasPointer(expr, this);
 		}
 		// Strings
@@ -1014,7 +1058,7 @@ public abstract class AbasBaseScript extends Script {
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {
 			buffer = buffer.toLowerCase();
-			for (Entry<String, String> entry : this.variableTypes.entrySet()) {
+			for (Entry<String, Class<?>> entry : this.variableTypes.entrySet()) {
 				if (entry.getKey().toLowerCase().startsWith(buffer)) {
 					this.variableTypes.remove(entry.getKey());
 				}

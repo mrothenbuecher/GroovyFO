@@ -9,11 +9,11 @@ import de.abas.eks.jfop.FOPException;
 import de.abas.jfop.base.buffer.BaseReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
-public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements Map<String, Object>, Cloneable,
-		Serializable {
+public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
+		Map<String, Object>, Cloneable, Serializable {
 
 	private static final long serialVersionUID = 4146145334512673667L;
-	//private String buffer = null;
+	// private String buffer = null;
 	protected AbasBaseScript script;
 	protected T buffer;
 
@@ -39,7 +39,8 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements Map<St
 
 	public Object get(Object key) {
 		try {
-			return script.getComputedValue(buffer.getQualifiedFieldName(key.toString()));
+			return script
+					.getValue(buffer.getQualifiedFieldName(key.toString()));
 		} catch (FOPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,8 +50,8 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements Map<St
 		}
 		return null;
 	}
-	
-	public String getType(Object key){
+
+	public String getType(Object key) {
 		return buffer.getFieldType(key.toString());
 	}
 
