@@ -4,33 +4,40 @@ import de.abas.eks.jfop.FOPException;
 import de.abas.jfop.base.buffer.WriteableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
-public class GroovyFOWriteableMap<T extends WriteableBuffer> extends GroovyFOReadableMap<T> {
+public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
+		GroovyFOReadableMap<T> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2863196830703951276L;
 
 	public GroovyFOWriteableMap(T buffer, AbasBaseScript script) {
 		super(buffer, script);
 	}
-
+	
 	@Override
 	public Object put(String key, Object value) {
-		String val = value.toString();
-		// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
-		// wert so übergeben das abas ihn interpretiert
 		try {
 			// FIXME muss besser gehen
-			if (val.startsWith("'")) {
-				val = val.substring(1);
-				script.formula(buffer + "|" + key, val);
+			if (value instanceof Integer) {
+				return script.fo(key, (Integer) value);
+			} else if (value instanceof Double) {
+				return script.fo(key, (Double) value);
+			} else if (value instanceof Boolean) {
+				Boolean b = (Boolean) value;
+				return script.fo(key, b.booleanValue() ? "G|TRUE":"G|FALSE"  );
+			} else if (value instanceof GroovyFOVariable) {
+				return script.fo(key, value.toString());
 			} else {
-				if (value instanceof Integer) {
-					script.fo(buffer + "|" + key, ((Integer) value).intValue());
-				} else if (value instanceof Double) {
-					script.fo(buffer + "|" + key,
-							((Double) value).doubleValue());
-				} else if (value instanceof GroovyFOVariable) {
-					script.fo(buffer + "|" + key, ((GroovyFOVariable<?>) value)
-							.getValue().toString());
+				// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
+				// wert so übergeben das abas ihn interpretiert
+				String val = value.toString();
+				if (val.startsWith("'")) {
+					val = val.substring(1);
+					script.formula(buffer + "|" + key, val);
 				} else {
-					script.fo(buffer + "|" + key, val);
+					return script.fo(key, val);
 				}
 			}
 		} catch (FOPException e) {

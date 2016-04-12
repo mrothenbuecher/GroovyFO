@@ -39,6 +39,7 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
 
 	public Object get(Object key) {
 		try {
+			// buffer.
 			return script
 					.getValue(buffer.getQualifiedFieldName(key.toString()));
 		} catch (FOPException e) {

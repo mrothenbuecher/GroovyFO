@@ -120,6 +120,8 @@ public abstract class AbasBaseScript extends Script {
 
 	protected DbContext dbContext;
 
+	protected static DecimalFormat df = new DecimalFormat("0.0000");
+
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
@@ -185,15 +187,15 @@ public abstract class AbasBaseScript extends Script {
 			FO.art(type + " " + def);
 			this.variableTypes.put("U|" + def, this.getClassOfType(type));
 		} else {
-			//TODO prüfen ob die Typen übereinstimmen
-			//if (!this.variableTypes.get("U|" + def).equals(type)) {
-			//	throw new GroovyFOException("different types same name");
-			//}
+			// TODO prüfen ob die Typen übereinstimmen
+			// if (!this.variableTypes.get("U|" + def).equals(type)) {
+			// throw new GroovyFOException("different types same name");
+			// }
 		}
 		return "U|" + def;
 	}
 
-	protected Class<?> getClassOfType(String abasType){
+	protected Class<?> getClassOfType(String abasType) {
 		if (integerPattern.matcher(abasType).matches()) {
 			return int.class;
 		}
@@ -214,7 +216,7 @@ public abstract class AbasBaseScript extends Script {
 		// Strings
 		return String.class;
 	}
-	
+
 	/**
 	 * Definition von n NutzerVariablen eines Types
 	 * 
@@ -237,6 +239,22 @@ public abstract class AbasBaseScript extends Script {
 
 	public void assign(String cmd) {
 		zuweisen(cmd);
+	}
+
+	public void assign(String key, int value) {
+		zuweisen(key + "=" + Integer.toString(value));
+	}
+
+	public void assign(String key, double value) {
+		zuweisen(key + "=" + df.format(value));
+	}
+
+	public void assign(String key, boolean value) {
+		zuweisen(key + "=" + (value ? "G|TRUE" : "G|false"));
+	}
+
+	public void assign(String key, String value) {
+		zuweisen(key + "=" + value);
 	}
 
 	/**
@@ -478,31 +496,36 @@ public abstract class AbasBaseScript extends Script {
 	public Object fo(String var, AbasDate value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.toString() + "\"");
-		return this.getValue(var);
+		return value;
+		//return this.getValue(var, value);
 	}
 
 	public Object fo(String var, AbasPointer value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.toString() + "\"");
-		return this.getValue(var);
+		//return this.getValue(var);
+		return value;
 	}
 
 	public Object fo(String var, boolean value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
-		return this.getValue(var);
+		//return this.getValue(var);
+		return value;
 	}
 
 	public Object fo(String var, double value) throws FOPException,
 			GroovyFOException {
-		FO.formel(var + "=" + new DecimalFormat("0.0000").format(value));
-		return this.getValue(var);
+		FO.formel(var + "=" + df.format(value));
+		//return this.getValue(var);
+		return value;
 	}
 
 	public Object fo(String var, int value) throws FOPException,
 			GroovyFOException {
-		FO.formel(var + "=" + value);
-		return this.getValue(var);
+		FO.formel(var + "=" + Integer.toString(value));
+		//return this.getValue(var);
+		return value;
 	}
 
 	/**
@@ -520,7 +543,8 @@ public abstract class AbasBaseScript extends Script {
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"")
 				+ "\"");
-		return this.getValue(var);
+		//return this.getValue(var);
+		return value;
 	}
 
 	/**
@@ -559,7 +583,8 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
-		Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(F|expr(" + expr + "))"));
+		Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(F|expr("
+				+ expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
 
@@ -576,7 +601,8 @@ public abstract class AbasBaseScript extends Script {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(" + variable + ")"));
+			Class<?> type = this.getClassOfType(FO.getValue("F", "typeof("
+					+ variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
@@ -618,9 +644,6 @@ public abstract class AbasBaseScript extends Script {
 
 	public Object getValueByType(Class<?> abasType, String expr, String value)
 			throws GroovyFOException {
-
-		boolean isVar = varPattern.matcher(expr).matches();
-		
 		// Integer
 		if (abasType == int.class) {
 			if (value == null || value.isEmpty())
@@ -629,6 +652,7 @@ public abstract class AbasBaseScript extends Script {
 		}
 		// Real
 		if (double.class == abasType) {
+
 			if (value == null || value.isEmpty())
 				return 0.0d;
 			return Double.parseDouble(value);
@@ -639,12 +663,12 @@ public abstract class AbasBaseScript extends Script {
 		}
 		if (AbasDate.class == abasType) {
 			try {
+				boolean isVar = varPattern.matcher(expr).matches();
 				if (isVar) {
 					if (this.variables.containsKey(expr)) {
 						return (AbasDate) this.variables.get(expr);
 					} else {
-						AbasDate date = new AbasDate(expr, value,
-								this);
+						AbasDate date = new AbasDate(expr, value, this);
 						this.variables.put(expr, date);
 						return date;
 					}
@@ -1226,6 +1250,22 @@ public abstract class AbasBaseScript extends Script {
 
 	public void zuweisen(String cmd) {
 		EKS.zuweisen(cmd);
+	}
+
+	public void zuweisen(String key, int value) {
+		EKS.zuweisen(key + "=" + Integer.toString(value));
+	}
+
+	public void zuweisen(String key, double value) {
+		EKS.zuweisen(key + "=" + Double.toString(value));
+	}
+
+	public void zuweisen(String key, boolean value) {
+		EKS.zuweisen(key = (value ? "G|TRUE" : "G|false"));
+	}
+
+	public void zuweisen(String key, String value) {
+		EKS.zuweisen(key + "=" + value);
 	}
 
 }
