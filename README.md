@@ -114,6 +114,3 @@ for(def row: result.table){
         println row.teprice
 }
 ```
-
-
-Die Implementierung ist bei weitem nicht Vollständig!
