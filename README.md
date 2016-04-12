@@ -3,6 +3,8 @@ GroovyFO
 
 GroovyFO ist der Versuch das gute aus JFOP und Standard FO des abas-ERP zu kombinieren.
 
+GroovyFO vereinfacht den Umgang mit JFOP durch das bereitstellen eines einfachen an FOP angelehnten Syntaxes.
+
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
 Kontakt via Slack:
