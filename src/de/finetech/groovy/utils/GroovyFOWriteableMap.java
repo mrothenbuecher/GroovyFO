@@ -19,12 +19,13 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 	@Override
 	public Object put(String key, Object value) {
 		try {
+			Class<?> valueClass = value.getClass();
 			// FIXME muss besser gehen
-			if (value instanceof Integer) {
+			if (valueClass == Integer.class) {
 				return script.fo(key, (Integer) value);
-			} else if (value instanceof Double) {
+			} else if (valueClass == Double.class) {
 				return script.fo(key, (Double) value);
-			} else if (value instanceof Boolean) {
+			} else if (valueClass == Boolean.class) {
 				Boolean b = (Boolean) value;
 				return script.fo(key, b.booleanValue() ? "G|TRUE":"G|FALSE"  );
 			} else if (value instanceof GroovyFOVariable) {

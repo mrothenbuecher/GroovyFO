@@ -110,10 +110,10 @@ public abstract class AbasBaseScript extends Script {
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
-	protected ConcurrentHashMap<String, Class<?>> variableTypes = new ConcurrentHashMap<String, Class<?>>();
+	protected ConcurrentHashMap<String, PossibleDatatypes> variableTypes = new ConcurrentHashMap<String, PossibleDatatypes>();
 
 	// zwischenspeicher um nicht immer neue Objekte erzeugen zu müssen
-	protected ConcurrentHashMap<String, Object> variables = new ConcurrentHashMap<String, Object>();
+	protected ConcurrentHashMap<String, AbasDate> variables = new ConcurrentHashMap<String, AbasDate>();
 
 	protected FOPSessionContext arg0;
 	protected String[] arg1;
@@ -122,6 +122,10 @@ public abstract class AbasBaseScript extends Script {
 
 	protected static DecimalFormat df = new DecimalFormat("0.0000");
 
+	protected static enum PossibleDatatypes {
+		INTEGER, DOUBLE, BOOLEAN, ABASDATE, ABASPOINTER, STRING
+	};
+	
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
@@ -195,26 +199,26 @@ public abstract class AbasBaseScript extends Script {
 		return "U|" + def;
 	}
 
-	protected Class<?> getClassOfType(String abasType) {
+	protected PossibleDatatypes getClassOfType(String abasType) {
 		if (integerPattern.matcher(abasType).matches()) {
-			return int.class;
+			return PossibleDatatypes.INTEGER;
 		}
 		// Real
 		if (realPattern.matcher(abasType).matches()) {
-			return double.class;
+			return PossibleDatatypes.DOUBLE;
 		}
 		// bool
 		if (boolPattern.matcher(abasType).matches()) {
-			return boolean.class;
+			return PossibleDatatypes.BOOLEAN;
 		}
 		if (AbasDate.isDate(abasType)) {
-			return AbasDate.class;
+			return PossibleDatatypes.ABASDATE;
 		}
 		if (pointerPattern.matcher(abasType).matches()) {
-			return AbasPointer.class;
+			return PossibleDatatypes.ABASPOINTER;
 		}
 		// Strings
-		return String.class;
+		return PossibleDatatypes.STRING;
 	}
 
 	/**
@@ -561,7 +565,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object formel(String var, String value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + value);
-		return this.getValue(var);
+		return this.getComputedValue(var);
 	}
 
 	public Object formula(String var, String value) throws FOPException,
@@ -583,7 +587,7 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
-		Class<?> type = this.getClassOfType(FO.getValue("F", "typeof(F|expr("
+		PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof(F|expr("
 				+ expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
@@ -595,31 +599,23 @@ public abstract class AbasBaseScript extends Script {
 	 *            mit vorangestellten Puffer buchstaben bsp.: H|id
 	 * @return
 	 */
-	protected Class<?> getType(String variable) {
+	protected PossibleDatatypes getType(String variable) {
 		variable = variable.toLowerCase();
 		if (this.variableTypes.containsKey(variable)) {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			Class<?> type = this.getClassOfType(FO.getValue("F", "typeof("
+			PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof("
 					+ variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
 	}
-
-	/**
-	 * 
-	 * @param var
-	 *            - Muss die form haben M|asd od. G|asd usw
-	 * @return Wert der Variablen
-	 * @throws GroovyFOException
-	 * @throws FOPException
-	 */
-	public Object getValue(String var) throws FOPException, GroovyFOException {
-		return this.getValue(var, FO.getValue("F", "expr(" + var + ")"));
+	
+	public Object getValue(String varname) throws GroovyFOException {
+		return this.getComputedValue(varname);
 	}
-
+	
 	/**
 	 * liefert basierend auf dem abas internen Typ den Wert einer Variablen
 	 * 
@@ -638,52 +634,46 @@ public abstract class AbasBaseScript extends Script {
 	public Object getValue(String varname, String value)
 			throws GroovyFOException {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
-		Class<?> abasType = this.getType(varname);
+		PossibleDatatypes abasType = this.getType(varname);
 		return this.getValueByType(abasType, varname, value);
 	}
 
-	public Object getValueByType(Class<?> abasType, String expr, String value)
+	public Object getValueByType(PossibleDatatypes abasType, String expr, String value)
 			throws GroovyFOException {
-		// Integer
-		if (abasType == int.class) {
-			if (value == null || value.isEmpty())
-				return 0;
-			return Integer.parseInt(value);
-		}
-		// Real
-		if (double.class == abasType) {
-
-			if (value == null || value.isEmpty())
-				return 0.0d;
-			return Double.parseDouble(value);
-		}
-		// bool
-		if (boolean.class == abasType) {
-			return isTrue(value);
-		}
-		if (AbasDate.class == abasType) {
-			try {
-				boolean isVar = varPattern.matcher(expr).matches();
-				if (isVar) {
-					if (this.variables.containsKey(expr)) {
-						return (AbasDate) this.variables.get(expr);
-					} else {
-						AbasDate date = new AbasDate(expr, value, this);
-						this.variables.put(expr, date);
-						return date;
+		value = value.trim();
+		switch(abasType){
+			case INTEGER:
+				if (value == null || value.isEmpty())
+					return 0;
+				return Integer.parseInt(value);
+			case DOUBLE:
+				if (value == null || value.isEmpty())
+					return 0.0d;
+				return Double.parseDouble(value);
+			case BOOLEAN:
+				return isTrue(value);
+			case ABASPOINTER:
+				return new AbasPointer(expr, this);
+			case ABASDATE:
+				try {
+					boolean isVar = varPattern.matcher(expr).matches();
+					if (isVar) {
+						if (this.variables.containsKey(expr)) {
+							return this.variables.get(expr);
+						} else {
+							AbasDate date = new AbasDate(expr, value, this);
+							this.variables.put(expr, date);
+							return date;
+						}
 					}
+					return new AbasDate(expr, value, this);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				return new AbasDate(expr, value, this);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			default:
+				return value;
 		}
-		if (abasType == AbasPointer.class) {
-			return new AbasPointer(expr, this);
-		}
-		// Strings
-		return value;
 	}
 
 	public void help(String cmd) {
@@ -1082,12 +1072,12 @@ public abstract class AbasBaseScript extends Script {
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {
 			buffer = buffer.toLowerCase();
-			for (Entry<String, Class<?>> entry : this.variableTypes.entrySet()) {
+			for (Entry<String, PossibleDatatypes> entry : this.variableTypes.entrySet()) {
 				if (entry.getKey().toLowerCase().startsWith(buffer)) {
 					this.variableTypes.remove(entry.getKey());
 				}
 			}
-			for (Entry<String, Object> entry : this.variables.entrySet()) {
+			for (Entry<String, AbasDate> entry : this.variables.entrySet()) {
 				if (entry.getKey().toLowerCase().startsWith(buffer)) {
 					this.variables.remove(entry.getKey());
 				}

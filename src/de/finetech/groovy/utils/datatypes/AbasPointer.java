@@ -41,7 +41,7 @@ public class AbasPointer extends GroovyFOVariable<String> {
 	 * @throws GroovyFOException
 	 */
 	public Object xor(String var) throws FOPException, GroovyFOException{
-			Object o = this.script.getValue(this.getVariablename()+"^"+var);
+			Object o = this.script.getComputedValue(this.getVariablename()+"^"+var);
 			return o;
 	}
 	

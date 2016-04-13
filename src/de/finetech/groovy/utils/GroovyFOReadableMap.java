@@ -40,8 +40,9 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
 	public Object get(Object key) {
 		try {
 			// buffer.
+			String skey = key.toString();
 			return script
-					.getValue(buffer.getQualifiedFieldName(key.toString()));
+					.getValue(buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
 		} catch (FOPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
