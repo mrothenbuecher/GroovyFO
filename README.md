@@ -11,6 +11,11 @@ Kontakt via Slack:
 
 [![Fragen? Anregungen?](https://powerful-waters-31137.herokuapp.com/badge.svg)](https://powerful-waters-31137.herokuapp.com/)
 
+[Übersicht zur API](https://github.com/mkuerbis/GroovyFO/wiki/API)
+
+[Benchmark](https://github.com/mkuerbis/GroovyFO/wiki/Benchmark)
+
+
 ## Installation
 Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei den eigenen JFOP einfügen (abas Tools).
 
