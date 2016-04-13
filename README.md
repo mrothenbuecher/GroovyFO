@@ -15,6 +15,12 @@ Kontakt via Slack:
 
 [Benchmark](https://github.com/mkuerbis/GroovyFO/wiki/Benchmark)
 
+## Funktionsweise
+
+Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. 
+Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. 
+Diese Klasse kapselt JFOP-Funktionen um so schreibarbeit sparen zukönnen. Weiterhin besteht durch die Verwendung von Groovy die möglichkeit Kontrollstrukturen wie if-Anweisungen, Schleifen oder eben auch Klassen im Kontext eines FOP zu verwenden. Dadurch das bei jeden aufruf des ScriptExecuters die Groovy Datei neu interpretiert wird, können Änderungen an dieser Datei ohne erneutes redeployen des JFOP-Server wirksam werden. Dieses Verhalten ist ähnlich dem Verhalten von FOP's. 
+
 
 ## Installation
 Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei den eigenen JFOP einfügen (abas Tools).
@@ -51,13 +57,6 @@ Zum testen Kommando aufrufen mit
 ```
 <Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYFO.TEST<zeigen>
 ```
-
-## Funktionsweise
-
-Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. 
-Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. 
-Diese Klasse kapselt einige Funktionen um so schreibarbeit im eigentlichen Script sparen zukönnen.
-
 
 ### Beispiele:
 
