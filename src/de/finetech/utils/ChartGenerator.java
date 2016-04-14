@@ -28,7 +28,7 @@ public class ChartGenerator {
 		this.type = type;
 	}
 
-	public ChartGenerator create(ChartType type) throws GroovyFOException {
+	public static ChartGenerator create(ChartType type) throws GroovyFOException {
 		if (type == null)
 			throw new GroovyFOException("charttype must be specified");
 		return new ChartGenerator(type);
@@ -287,6 +287,26 @@ public class ChartGenerator {
 
 	public ChartGenerator removeConstant(Constant c) {
 		this.constants.remove(c);
+		return this;
+	}
+	
+	public ChartGenerator addStripe(Stripe c) {
+		this.stripes.add(c);
+		return this;
+	}
+
+	public ChartGenerator removeStripe(Stripe c) {
+		this.stripes.remove(c);
+		return this;
+	}
+	
+	public ChartGenerator addDataseries(DataSeries c) {
+		this.dataseries.add(c);
+		return this;
+	}
+
+	public ChartGenerator removeDataseries(DataSeries c) {
+		this.dataseries.remove(c);
 		return this;
 	}
 

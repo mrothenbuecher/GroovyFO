@@ -39,19 +39,19 @@ public class Value {
 		values[3] = close;
 	}
 	
-	public Value create(Object value){
+	public static Value create(Object value){
 		return new Value(value.toString());
 	}
 	
-	public Value create(Object start, Object end){
+	public static Value create(Object start, Object end){
 		return new Value(start.toString(), end.toString());
 	}
 	
-	public Value create(Object start, Object end, Object diameter){
+	public static Value create(Object start, Object end, Object diameter){
 		return new Value(start.toString(), end.toString(), diameter.toString());
 	}
 	
-	public Value create(Object open, Object high, Object low, Object close){
+	public static Value create(Object open, Object high, Object low, Object close){
 		return new Value(open.toString(), high.toString(), low.toString(), close.toString());
 	}
 
