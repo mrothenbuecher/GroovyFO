@@ -121,7 +121,7 @@ for(def row: result.table){
 #### ChartGenerator
 
 Eine Klasse zum erzeugen von Charts
-```
+```groovy
 // Liniendiagramm erzeugen
 ChartGenerator gen  = ChartGenerator.create(ChartType.LINES);
 // Titel setzen 
