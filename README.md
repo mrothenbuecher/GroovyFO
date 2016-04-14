@@ -83,7 +83,7 @@ Zum testen Kommando aufrufen mit
 ### Helferlein
 
 #### SelectionBuilder
-Der SelectionBuilder ist eine Hilfsklasse um einfach Selektion definieren zu können.
+Der [SelectionBuilder](https://github.com/mkuerbis/GroovyFO/wiki/SelectionBuilder) ist eine Hilfsklasse um einfach Selektion definieren zu können.
 ```groovy
 // Artikel von a bis b
 def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
