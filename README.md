@@ -118,3 +118,28 @@ for(def row: result.table){
         println row.teprice
 }
 ```
+#### ChartGenerator
+
+Eine Klasse zum erzeugen von Charts
+```
+// Liniendiagramm erzeugen
+ChartGenerator gen  = ChartGenerator.create(ChartType.LINES);
+// Titel setzen 
+gen.setChartTitle("Hallo Welt");
+
+// neue Datenserie definieren
+DataSeries series = new DataSeries();
+series.setTitle("Test Serie");
+series.addValue(Value.create(1));
+series.addValue(Value.create(2).setTip("toller Tooltip"));
+series.addValue(Value.create(3));
+series.addValue(Value.create(4));
+series.addValue(Value.create(5));
+
+// neue Datenserie dem Chart bekannt machen
+gen.addDataseries(series);
+
+// eigentliche generien des Charts im abas
+// ychart ist im Kopfbereich ein Chartfeld
+gen.generate("ychart");
+```
