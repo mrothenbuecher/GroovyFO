@@ -158,3 +158,6 @@ gen.addDataseries(series2);
 // ychart ist im Kopfbereich ein Chartfeld
 gen.generate("ychart");
 ```
+Ergebnis:
+
+![Chart](https://raw.githubusercontent.com/mkuerbis/GroovyFO/master/img/chart.jpg)
