@@ -123,21 +123,36 @@ for(def row: result.table){
 Eine Klasse zum erzeugen von Charts
 ```groovy
 // Liniendiagramm erzeugen
-ChartGenerator gen  = ChartGenerator.create(ChartType.LINES);
+ChartGenerator gen = ChartGenerator.create(ChartType.LINES);
 // Titel setzen 
-gen.setChartTitle("Hallo Welt");
+gen.setChartTitle("Hello World");
+gen.setMarkerx("first", "second", "third", "fourth", "fifth")
+gen.setAnglex(45)
+
 
 // neue Datenserie definieren
 DataSeries series = new DataSeries();
-series.setTitle("Test Serie");
+series.setTitle("Series 1");
 series.addValue(Value.create(1));
 series.addValue(Value.create(2));
 series.addValue(Value.create(3));
 series.addValue(Value.create(4));
 series.addValue(Value.create(5));
 
+// weiter Serie
+DataSeries series2 = new DataSeries();
+series2.setTitle("Series 2");
+series2.addValue(Value.create(5));
+series2.addValue(Value.create(4));
+series2.addValue(Value.create(3));
+series2.addValue(Value.create(2));
+series2.addValue(Value.create(1));
+
+gen.setOptions(true)
+
 // neue Datenserie dem Chart bekannt machen
 gen.addDataseries(series);
+gen.addDataseries(series2);
 
 // eigentliche generien des Charts im abas
 // ychart ist im Kopfbereich ein Chartfeld
