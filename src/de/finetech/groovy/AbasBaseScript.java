@@ -4,6 +4,8 @@ import groovy.lang.Script;
 import groovy.transform.CompileStatic;
 
 import java.awt.Color;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map.Entry;
@@ -31,21 +33,25 @@ import de.finetech.utils.SelectionBuilder;
 @CompileStatic
 public abstract class AbasBaseScript extends Script {
 
+	protected static enum PossibleDatatypes {
+		INTEGER, DOUBLE, BOOLEAN, ABASDATE, ABASPOINTER, STRING
+	}
+	protected static DecimalFormat df = new DecimalFormat("0.0000");
+
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
-
 	// private Pattern stringPattern =
 	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
 	private Pattern integerPattern = Pattern
 			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
+
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
+
 	private Pattern pointerPattern = Pattern
 			.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|C.*");
-
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
-
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getParentScreenBuffer(), this);
@@ -100,31 +106,27 @@ public abstract class AbasBaseScript extends Script {
 	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getCharactBarBuffer(), this);
 	protected GroovyFOWriteableMap S = s;
+
 	// protected GroovyFOMap t = new
 	// GroovyFOMap(BufferFactory.newInstance().getTextBuffer(), this);
 	// protected GroovyFOMap T = t;
 	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getUserTextBuffer(), this);
+
 	protected GroovyFOWriteableMap U = u;
 
 	// zwischenspeicher um nicht immer F|typeof aufrufen zumüssen, schlüssel ist
 	// der Variablenname mit vorangestelltem Puffer (m|foo), Wert ist der abas
 	// Typ
 	protected ConcurrentHashMap<String, PossibleDatatypes> variableTypes = new ConcurrentHashMap<String, PossibleDatatypes>();
-
 	// zwischenspeicher um nicht immer neue Objekte erzeugen zu müssen
 	protected ConcurrentHashMap<String, AbasDate> variables = new ConcurrentHashMap<String, AbasDate>();
 
 	protected FOPSessionContext arg0;
+
 	protected String[] arg1;
 
-	protected DbContext dbContext;
-
-	protected static DecimalFormat df = new DecimalFormat("0.0000");
-
-	protected static enum PossibleDatatypes {
-		INTEGER, DOUBLE, BOOLEAN, ABASDATE, ABASPOINTER, STRING
-	};
+	protected DbContext dbContext;;
 	
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
@@ -133,16 +135,16 @@ public abstract class AbasBaseScript extends Script {
 		// println ("Session context not defined? "+arg0 == null );
 		// DbContext dbContext = arg0.getDbContext();
 	}
-
+	
 	public void absatz(String cmd) {
 		EKS.absatz(cmd);
 	}
-
+	
 	// TODO Methoden startTransaction, commitTransaction, abortTransaction,
 	public void action(String cmd) {
 		aktion(cmd);
 	}
-
+	
 	public boolean add(String cmd) {
 		return EKS.dazu(cmd);
 	}
@@ -159,6 +161,12 @@ public abstract class AbasBaseScript extends Script {
 	public void aktion(String cmd) {
 		EKS.aktion(cmd);
 	}
+
+	/**
+	 * Methode wird immer ausgeführt nach Ende des Scriptes
+	 * 
+	 */
+	public void always(){}
 
 	/**
 	 * Definition genau einer NutzerVariablen
@@ -199,28 +207,6 @@ public abstract class AbasBaseScript extends Script {
 		return "U|" + def;
 	}
 
-	protected PossibleDatatypes getClassOfType(String abasType) {
-		if (integerPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.INTEGER;
-		}
-		// Real
-		if (realPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.DOUBLE;
-		}
-		// bool
-		if (boolPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.BOOLEAN;
-		}
-		if (AbasDate.isDate(abasType)) {
-			return PossibleDatatypes.ABASDATE;
-		}
-		if (pointerPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.ABASPOINTER;
-		}
-		// Strings
-		return PossibleDatatypes.STRING;
-	}
-
 	/**
 	 * Definition von n NutzerVariablen eines Types
 	 * 
@@ -245,16 +231,16 @@ public abstract class AbasBaseScript extends Script {
 		zuweisen(cmd);
 	}
 
-	public void assign(String key, int value) {
-		zuweisen(key + "=" + Integer.toString(value));
+	public void assign(String key, boolean value) {
+		zuweisen(key + "=" + (value ? "G|TRUE" : "G|false"));
 	}
 
 	public void assign(String key, double value) {
 		zuweisen(key + "=" + df.format(value));
 	}
 
-	public void assign(String key, boolean value) {
-		zuweisen(key + "=" + (value ? "G|TRUE" : "G|false"));
+	public void assign(String key, int value) {
+		zuweisen(key + "=" + Integer.toString(value));
 	}
 
 	public void assign(String key, String value) {
@@ -577,6 +563,28 @@ public abstract class AbasBaseScript extends Script {
 		EKS.gedruckt(cmd);
 	}
 
+	protected PossibleDatatypes getClassOfType(String abasType) {
+		if (integerPattern.matcher(abasType).matches()) {
+			return PossibleDatatypes.INTEGER;
+		}
+		// Real
+		if (realPattern.matcher(abasType).matches()) {
+			return PossibleDatatypes.DOUBLE;
+		}
+		// bool
+		if (boolPattern.matcher(abasType).matches()) {
+			return PossibleDatatypes.BOOLEAN;
+		}
+		if (AbasDate.isDate(abasType)) {
+			return PossibleDatatypes.ABASDATE;
+		}
+		if (pointerPattern.matcher(abasType).matches()) {
+			return PossibleDatatypes.ABASPOINTER;
+		}
+		// Strings
+		return PossibleDatatypes.STRING;
+	}
+
 	/**
 	 * lässt abas den Werberechnen
 	 * 
@@ -592,6 +600,14 @@ public abstract class AbasBaseScript extends Script {
 		return this.getValueByType(type, expr, result);
 	}
 
+	public boolean getMehr() {
+		return mehr();
+	}
+
+	public boolean getMore() {
+		return mehr();
+	}
+	
 	/**
 	 * liefert den abas Typ der Variable
 	 * 
@@ -615,7 +631,7 @@ public abstract class AbasBaseScript extends Script {
 	public Object getValue(String varname) throws GroovyFOException {
 		return this.getComputedValue(varname);
 	}
-	
+
 	/**
 	 * liefert basierend auf dem abas internen Typ den Wert einer Variablen
 	 * 
@@ -746,17 +762,6 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * Nutzt die Methode {@link #hole(String, String)}
-	 * 
-	 * @param db
-	 * @param builder
-	 * @return
-	 */
-	public boolean hole(String db, SelectionBuilder builder) {
-		return this.hole(db, builder.toString());
-	}
-
-	/**
 	 * sollte der Selektionstring Identisch mit einer vorher gehenden Abfragen
 	 * sein so wird nur der nächste Datensatz geholt
 	 * 
@@ -774,6 +779,17 @@ public abstract class AbasBaseScript extends Script {
 			this.resetMap("h");
 			return FO.hole(db + " \"" + selection + "\"");
 		}
+	}
+
+	/**
+	 * Nutzt die Methode {@link #hole(String, String)}
+	 * 
+	 * @param db
+	 * @param builder
+	 * @return
+	 */
+	public boolean hole(String db, SelectionBuilder builder) {
+		return this.hole(db, builder.toString());
 	}
 
 	public void in(String fopName) {
@@ -833,18 +849,6 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	/**
-	 * Nutzt die Methode {@link #lade(int, String, String)}
-	 * 
-	 * @param puffer
-	 * @param db
-	 * @param builder
-	 * @return
-	 */
-	public boolean lade(int puffer, String db, SelectionBuilder builder) {
-		return this.lade(puffer, db, builder.toString());
-	}
-
-	/**
 	 * 
 	 * sollte der Selektionstring und der Puffer Identisch mit einer vorher
 	 * gehenden Abfragen sein so wird nur der nÃ¤chste Datensatz geholt
@@ -866,6 +870,18 @@ public abstract class AbasBaseScript extends Script {
 			this.lselection[puffer] = selection.toString();
 			return FO.lade(puffer + " " + db + " \"" + selection + "\"");
 		}
+	}
+
+	/**
+	 * Nutzt die Methode {@link #lade(int, String, String)}
+	 * 
+	 * @param puffer
+	 * @param db
+	 * @param builder
+	 * @return
+	 */
+	public boolean lade(int puffer, String db, SelectionBuilder builder) {
+		return this.lade(puffer, db, builder.toString());
 	}
 
 	public boolean lade(String cmd) {
@@ -932,10 +948,6 @@ public abstract class AbasBaseScript extends Script {
 		return isTrue(mehr);
 	}
 
-	public boolean getMehr() {
-		return mehr();
-	}
-
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
 	}
@@ -970,10 +982,6 @@ public abstract class AbasBaseScript extends Script {
 		return mehr();
 	}
 
-	public boolean getMore() {
-		return mehr();
-	}
-
 	public void note(String hinweis) {
 		hinweis(hinweis);
 	}
@@ -985,6 +993,11 @@ public abstract class AbasBaseScript extends Script {
 	public void occupy(String cmd) {
 		belegen(cmd);
 	}
+
+	/**
+	 * Methode wird beim Auftretten einer unbehandelten Ausnahme ausgeführt
+	 */
+	public void onerror(){}
 
 	public void output(String cmd) {
 		ausgabe(cmd);
@@ -1096,6 +1109,29 @@ public abstract class AbasBaseScript extends Script {
 	public void right(String cmd) {
 		rechts(cmd);
 	}
+
+	@Override
+	public Object run(){
+		Object o = null;
+		try{
+			o = runCode();
+		}catch(Exception e){
+			onerror();
+			e.printStackTrace();
+			FO.box("Fehler", e.getMessage());
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			FO.box("Unbehandelte Ausnahme in " + arg1[1],
+					sw.toString());
+		}
+		finally{
+			always();
+		}
+		return o;
+	}
+
+	public abstract Object runCode();
 
 	public void schutz(String cmd) {
 		EKS.schutz(cmd);
@@ -1242,18 +1278,18 @@ public abstract class AbasBaseScript extends Script {
 		EKS.zuweisen(cmd);
 	}
 
-	public void zuweisen(String key, int value) {
-		EKS.zuweisen(key + "=" + Integer.toString(value));
+	public void zuweisen(String key, boolean value) {
+		EKS.zuweisen(key = (value ? "G|TRUE" : "G|false"));
 	}
 
 	public void zuweisen(String key, double value) {
 		EKS.zuweisen(key + "=" + Double.toString(value));
 	}
-
-	public void zuweisen(String key, boolean value) {
-		EKS.zuweisen(key = (value ? "G|TRUE" : "G|false"));
+	
+	public void zuweisen(String key, int value) {
+		EKS.zuweisen(key + "=" + Integer.toString(value));
 	}
-
+	
 	public void zuweisen(String key, String value) {
 		EKS.zuweisen(key + "=" + value);
 	}

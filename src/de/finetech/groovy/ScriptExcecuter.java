@@ -2,6 +2,7 @@ package de.finetech.groovy;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -30,7 +31,10 @@ public class ScriptExcecuter implements ContextRunnable {
 	@Override
 	public int runFop(FOPSessionContext arg0, String[] arg1)
 			throws FOPException {
-		// Genug Parameter Ã¼bergben?
+		GroovyShell shell = null;
+		Script script = null;
+		boolean error = false;
+		// Genug Parameter übergben?
 		if (arg1.length > 1) {
 			File groovyScript = new File(arg1[1]);
 			// existiert die Datei ?
@@ -44,11 +48,12 @@ public class ScriptExcecuter implements ContextRunnable {
 						binding.setVariable("arg1", arg1);
 
 						// Imports festlegen damit diese nicht selbst
-						// hinzugefÃ¼gt werden mÃ¼ssen
+						// hinzugefügt werden müssen
 						CompilerConfiguration cc = new CompilerConfiguration();
 						ImportCustomizer ic = new ImportCustomizer();
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
+						// Helferklassen für GroovyFO
 						ic.addStarImports("de.finetech.groovy");
 						ic.addStarImports("de.finetech.groovy.utils");
 						ic.addStarImports("de.finetech.groovy.utils.datatypes");
@@ -57,21 +62,16 @@ public class ScriptExcecuter implements ContextRunnable {
 						ic.addImports("java.awt.Color", "java.util.Calendar",
 								"java.text.SimpleDateFormat",
 								"java.text.DateFormat", "java.util.Date");
-						//ic.addImports("de.finetech.utils.SelectionBuilder",
-						//		"de.finetech.utils.Infosystemcall",
-						//		"de.finetech.utils.InfosystemcallResult");
-						// ic.addStaticImport("de.finetech.groovy.SelectionBuilder",
-						// "SelectionBuilder");
+
 						cc.addCompilationCustomizers(ic);
 						// Basisklasse festlegen
 						cc.setScriptBaseClass("de.finetech.groovy.AbasBaseScript");
 
-						// Script ausfÃ¼hren
-						GroovyShell shell = new GroovyShell(this.getClass()
+						// Script ausführen
+						shell = new GroovyShell(this.getClass()
 								.getClassLoader(), binding, cc);
 						shell.evaluate(groovyScript);
-
-						return 0;
+						error = false;
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
 						e.printStackTrace();
@@ -81,10 +81,12 @@ public class ScriptExcecuter implements ContextRunnable {
 						e.printStackTrace(pw);
 						FO.box("Unbehandelte Ausnahme in " + arg1[1],
 								sw.toString());
+						error = true;
 					} catch (AbortedException e) {
 						// FIXME Sprach unabhängigkeit
 						FO.box("FOP abgebrochen",
 								"FOP wurde durch Anwender abgebrochen");
+						error = true;
 					} catch (CompilationFailedException e) {
 						StringWriter sw = new StringWriter();
 						PrintWriter pw = new PrintWriter(sw);
@@ -92,7 +94,7 @@ public class ScriptExcecuter implements ContextRunnable {
 						FO.box("Übersetzung fehlgeschlagen",
 								"GroovyFO konnte das Script nicht übersetzen: "
 										+ e.getMessage() + "\n" + sw.toString());
-
+						error = true;
 					} catch (Exception e) {
 						// FIXME Sprach unabhängigkeit
 						StringWriter sw = new StringWriter();
@@ -100,6 +102,12 @@ public class ScriptExcecuter implements ContextRunnable {
 						e.printStackTrace(pw);
 						FO.box("Unbehandelte Ausnahme in " + arg1[1],
 								sw.toString());
+						error = true;
+					} finally {
+						if(error){
+							return -2;
+						}
+						return 0;
 					}
 				} else {
 					FO.box("Unzureichende Argumente",
