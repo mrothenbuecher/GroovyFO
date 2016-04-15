@@ -52,13 +52,14 @@ public class ScriptExcecuter implements ContextRunnable {
 						ic.addStarImports("de.finetech.groovy");
 						ic.addStarImports("de.finetech.groovy.utils");
 						ic.addStarImports("de.finetech.groovy.utils.datatypes");
+						ic.addStarImports("de.finetech.utils","de.finetech.utils.charts");
 						//
 						ic.addImports("java.awt.Color", "java.util.Calendar",
 								"java.text.SimpleDateFormat",
 								"java.text.DateFormat", "java.util.Date");
-						ic.addImports("de.finetech.utils.SelectionBuilder",
-								"de.finetech.utils.Infosystemcall",
-								"de.finetech.utils.InfosystemcallResult");
+						//ic.addImports("de.finetech.utils.SelectionBuilder",
+						//		"de.finetech.utils.Infosystemcall",
+						//		"de.finetech.utils.InfosystemcallResult");
 						// ic.addStaticImport("de.finetech.groovy.SelectionBuilder",
 						// "SelectionBuilder");
 						cc.addCompilationCustomizers(ic);

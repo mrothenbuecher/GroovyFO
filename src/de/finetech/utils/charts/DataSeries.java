@@ -12,7 +12,7 @@ public class DataSeries {
 	public DataSeries setTitle(String title){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("", title);
+		this.parameter.put("", "\""+title+"\"");
 		return this;
 	}
 	
@@ -23,17 +23,17 @@ public class DataSeries {
 		return this;
 	}
 	
-	public DataSeries setColor(String color){
+	public DataSeries setColor(Object color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-color", color);
+		this.parameter.put("-color", color.toString());
 		return this;
 	}
 	
 	public DataSeries setRGBcolor(String color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-rgbcolor", color);
+		this.parameter.put("-rgbcolor", "\""+color+"\"");
 		return this;
 	}
 	
@@ -59,12 +59,12 @@ public class DataSeries {
 	}
 	
 	public DataSeries addValue(Value value){
-		this.addValue(value);
+		values.add(value);
 		return this;
 	}
 	
 	public DataSeries removeValue(Value value){
-		this.removeValue(value);
+		values.remove(value);
 		return this;
 	}
 	

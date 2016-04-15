@@ -16,17 +16,17 @@ public class Stripe {
 		this.end = end;
 	}
 	
-	public Stripe setColor(String color){
+	public Stripe setColor(Object color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-color", color);
+		this.parameter.put("-color", color.toString());
 		return this;
 	}
 	
 	public Stripe setRGBcolor(String color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-rgbcolor", color);
+		this.parameter.put("-rgbcolor", "\""+color+"\"");
 		return this;
 	}
 	

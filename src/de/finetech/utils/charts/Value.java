@@ -72,21 +72,21 @@ public class Value {
 	public Value setId(String id){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-id", id);
+		this.parameter.put("-id", "\""+id+"\"");
 		return this;
 	}
 	
 	public Value setData(String data){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-data", data);
+		this.parameter.put("-data", "\""+data+"\"");
 		return this;
 	}
 	
 	public Value setTip(String tip){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-tip", tip);
+		this.parameter.put("-tip", "\""+tip+"\"");
 		return this;
 	}
 	

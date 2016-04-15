@@ -18,21 +18,21 @@ public class Constant {
 	public Constant setTitle(String title){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-title", title);
+		this.parameter.put("-title", "\""+title+"\"");
 		return this;
 	}
 	
-	public Constant setColor(String color){
+	public Constant setColor(Object color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-color", color);
+		this.parameter.put("-color", color.toString());
 		return this;
 	}
 	
 	public Constant setRGBcolor(String color){
 		//TODO prüfen ob vorhanden usw.
 		//TODO entfernen wenn null oder leer
-		this.parameter.put("-rgbcolor", color);
+		this.parameter.put("-rgbcolor", "\""+color+"\"");
 		return this;
 	}
 	
