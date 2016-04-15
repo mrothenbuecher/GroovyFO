@@ -131,7 +131,7 @@ gen.setChartTitle("Hallo Welt");
 DataSeries series = new DataSeries();
 series.setTitle("Test Serie");
 series.addValue(Value.create(1));
-series.addValue(Value.create(2).setTip("toller Tooltip"));
+series.addValue(Value.create(2));
 series.addValue(Value.create(3));
 series.addValue(Value.create(4));
 series.addValue(Value.create(5));
