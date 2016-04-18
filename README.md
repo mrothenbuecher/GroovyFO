@@ -80,6 +80,26 @@ Zum testen Kommando aufrufen mit
 | | mehr() | success() or more()|
 |... | ... | ... |
 
+### Ablaufsteuerung
+
+In jedem GroovyFO gibt es die Möglichkeit die Methoden `onerror(Exception ex)` und `always()` zu überschreiben.
+
+`onerror` wird immer dann ausgeführt, solange sich das GroovyFO übersetzen lässt und wenn eine unbehandelte Ausnahme im Code des GroovyFO auftritt.<br>
+`always` wird, solange sich das GroovyFO übersetzen lässt, immer am Ende ausgeführt des Programmes ausgeführt. <br>
+
+```groovy
+
+def onerror(def ex){
+        // was ist zutun wenn ein Fehler beim ausführen des GroovyFO auftritt?
+}
+
+def always(){
+        // am ende des GroovyFO, was soll immer gemacht werden?
+        // diese Methode wird auch nach einem Fehler ausgeführt
+}
+
+```
+
 ### Helferlein
 
 #### SelectionBuilder
