@@ -7,6 +7,12 @@ GroovyFO vereinfacht den Umgang mit JFOP durch das bereitstellen eines einfachen
 
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
+Vorteile:<br>
+* Kontrollstrukturen aus Java
+* Syntax leichter als bei JFOP
+* kein Redeployen nach Änderungen an GroovyFO-Scripten nötig
+* diverse Helferklassen für Selektion, Infosystemaufrufe, Charts usw.
+
 Kontakt via Slack:
 
 [![Fragen? Anregungen?](https://powerful-waters-31137.herokuapp.com/badge.svg)](https://powerful-waters-31137.herokuapp.com/)
