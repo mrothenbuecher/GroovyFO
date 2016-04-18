@@ -84,8 +84,9 @@ Zum testen Kommando aufrufen mit
 
 In jedem GroovyFO gibt es die Möglichkeit die Methoden `onerror(Exception ex)` und `always()` zu überschreiben.
 
-`onerror` wird immer dann ausgeführt, solange sich das GroovyFO übersetzen lässt und wenn eine unbehandelte Ausnahme im Code des GroovyFO auftritt.<br>
-`always` wird, solange sich das GroovyFO übersetzen lässt, immer am Ende ausgeführt des Programmes ausgeführt. <br>
+`onerror` wird immer dann ausgeführt, solange sich das GroovyFO übersetzen lässt und wenn eine unbehandelte Ausnahme im Code des GroovyFO auftritt.
+
+`always` wird, solange sich das GroovyFO übersetzen lässt, immer am Ende ausgeführt. <br>
 
 ```groovy
 
