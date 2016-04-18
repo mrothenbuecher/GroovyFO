@@ -166,7 +166,7 @@ public abstract class AbasBaseScript extends Script {
 	 * Methode wird immer ausgeführt nach Ende des Scriptes
 	 * 
 	 */
-	public void always(){}
+	public Object always(){return null;}
 
 	/**
 	 * Definition genau einer NutzerVariablen
@@ -320,8 +320,12 @@ public abstract class AbasBaseScript extends Script {
 		FO.blocksatz(cmd);
 	}
 
+	public void box(String cmd) {
+		FO.box(cmd);
+	}
+	
 	public void box(String title, String content) {
-		FO.box(title, content);
+		FO.box(title, content.split("\n"));
 	}
 
 	public void bringe() {
@@ -332,6 +336,10 @@ public abstract class AbasBaseScript extends Script {
 		EKS.bringe(cmd);
 	}
 
+	public void browser(String cmd){
+		FO.browser(cmd);
+	}
+	
 	public void color(String cmd) {
 		this.farbe(cmd);
 	}
@@ -997,7 +1005,18 @@ public abstract class AbasBaseScript extends Script {
 	/**
 	 * Methode wird beim Auftretten einer unbehandelten Ausnahme ausgeführt
 	 */
-	public void onerror(){}
+	public Object onerror(Object ex){
+		if(ex instanceof Exception){
+			Exception e = (Exception) ex;
+			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			println("Unbehandelte Ausnahme: \n"+
+					sw.toString());
+		}
+		return null;
+	}
 
 	public void output(String cmd) {
 		ausgabe(cmd);
@@ -1041,6 +1060,7 @@ public abstract class AbasBaseScript extends Script {
 
 	public void println(String cmd) {
 		cmd = cmd.replaceAll("\"", "'DBLQUOTE'");
+		// String kürzen
 		if (cmd.length() > 2999)
 			FO.println(cmd.substring(0, 2999));
 		else
@@ -1116,14 +1136,7 @@ public abstract class AbasBaseScript extends Script {
 		try{
 			o = runCode();
 		}catch(Exception e){
-			onerror();
-			e.printStackTrace();
-			FO.box("Fehler", e.getMessage());
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			FO.box("Unbehandelte Ausnahme in " + arg1[1],
-					sw.toString());
+			onerror(e);
 		}
 		finally{
 			always();
