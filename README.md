@@ -10,7 +10,7 @@ Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von 
 Vorteile:<br>
 * Kontrollstrukturen aus Java
 * Syntax vereinfachung gegenüber JFOP
-* kein Redeployen nach Änderungen an GroovyFO-Scripten nötig
+* kein Redeployen nach Änderungen an GroovyFO-Scripten nötig, änderungen an den Scripten sind sofort wirksam
 * diverse Helferklassen für Selektion, Infosystemaufrufe, Charts usw.
 * Ablaufsteuerung durch die Methoden `always` und `onerror`
 
