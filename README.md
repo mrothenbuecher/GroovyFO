@@ -66,17 +66,15 @@ Zum testen Kommando aufrufen mit
 <Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYFO.TEST<zeigen>
 ```
 
-### Beispiele:
-
-#### Übersicht
+#### Kurzübersicht
 | JFOP            | dt | engl |
 | --------------- | ------------- | --------|
-| EKS.Hvar(...)   | h.von | |
-| EKS.Mvar(...)   | m.von | |
+| EKS.Hvar(...)   | h.von oder h("von") oder h\|von| |
+| EKS.Mvar(...)   | m.von oder m("von") oder m\|von| |
 | EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| select(...) <br/> select(String db, SelectBuilder builder) <br/> select(String db, String selektion)|
 | EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| load(...) <br/> load(int puffer, String db, SelectBuilder builder) <br/> load(int puffer, String db, String selektion)|
 | EKS.formel(...) | fo(String variable, wert)| |
-| EKS.getValue(puffer, varName)| l1("von") oder l1.von <br/> l2("von") oder l2.von <br/> usw...| |
+| EKS.getValue(puffer, varName)| l1("von") oder l1.von ... <br/> l2("von") oder l2.von ... <br/> usw...| |
 | EKS.println(...)| println(...)| |
 | EKS.box(...,...)| box(...,...)| |
 | EKS.eingabe(...)| ein(...)| in(...)|
@@ -84,7 +82,7 @@ Zum testen Kommando aufrufen mit
 | EKS.mache(...) | mache(...)| make()|
 | EKS.mache("maske zeile +O") | plusZeile()| addRow()|
 | EKS.bringe("maske zeile -O") | entfZeile()| removeRow()|
-| EKS.Dvar(...) | d.von| add("von") or d.von|
+| EKS.Dvar(...) | d.von| add("von") oder d.von ...|
 | | mehr() | success() or more()|
 |... | ... | ... |
 
