@@ -7,7 +7,8 @@ GroovyFO vereinfacht den Umgang mit JFOP durch das bereitstellen eines einfachen
 
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
-Vorteile:<br>
+einige Vorteile:<br>
+* Syntax an Standard FO angelehnt
 * Kontrollstrukturen aus Java
 * Syntax vereinfachung gegenüber JFOP
 * [automatische Typkonvertierung](https://github.com/mkuerbis/GroovyFO/wiki/automatische-Typkonvertierung),beim Zugriff auf abas Variablen (bsp.: I3 -> Integer)
