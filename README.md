@@ -32,9 +32,14 @@ Diese Klasse kapselt JFOP-Funktionen um so schreibarbeit sparen zukönnen. Weite
 
 
 ## Installation
+
+### via Quelltext
 Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei den eigenen JFOP einfügen (abas Tools).
 
 JFOP Server redeployen und wie in der Beispiel Sektion beschrieben testen.
+
+### via Release
+*.jar Datei des gewünschten Releases herunterladen und nach `~s3/java/lib` kopieren. Anschließend `~s3/java/thirdparty_homedir.classpath` ergänzen und JFOP Server neustarten.
 
 
 ## Verwendung
