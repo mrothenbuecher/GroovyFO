@@ -2,7 +2,7 @@ package de.finetech.utils;
 
 public class SelectionBuilder {
 
-	private boolean isDe = true;
+	private boolean isDe = false;
 
 	private String selectionType = "";
 	private String variables = "";
@@ -16,6 +16,7 @@ public class SelectionBuilder {
 	
 	/**
 	 * Standard ist die dialoglose Selektion
+	 * Standard Variablen sind deutsch
 	 */
 	public SelectionBuilder() {
 		this.selectionType = "$,";
@@ -74,6 +75,38 @@ public class SelectionBuilder {
 		}
 	}
 
+	/**
+	 * dialoglose Selektion
+	 * @return
+	 */
+	public static SelectionBuilder hidden(){
+		return new SelectionBuilder();
+	}
+	
+	/**
+	 * Selektion mit dialog
+	 * @return
+	 */
+	public static SelectionBuilder visible(){
+		return new SelectionBuilder(false);
+	}
+	
+	/**
+	 * Selektion mit dialog
+	 * @return
+	 */
+	public static SelectionBuilder visible(String selection){
+		return new SelectionBuilder(false, selection);
+	}
+	
+	/**
+	 * Selektion mit dialog
+	 * @return
+	 */
+	public static SelectionBuilder visible(int selection){
+		return new SelectionBuilder(false, selection);
+	}
+	
 	public SelectionBuilder setLanguage(String lang) {
 		isDe = lang.toLowerCase().equals("de");
 		return this;
@@ -553,12 +586,13 @@ public class SelectionBuilder {
 
 	public SelectionBuilder englvar(boolean value) {
 		// FIXME Sprachunabhänigkeit
+		isDe = value;
 		if (isDe)
 			this.selectionOption += "@englvar="
-					+ (value == true ? "ja" : "nein") + ";";
+					+ (isDe == true ? "ja" : "nein") + ";";
 		else
 			this.selectionOption += "@englvar="
-					+ (value == true ? "yes" : "no") + ";";
+					+ (isDe == true ? "yes" : "no") + ";";
 		return this;
 	}
 

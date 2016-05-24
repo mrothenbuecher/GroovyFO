@@ -1,6 +1,7 @@
 package de.finetech.groovy;
 
 import groovy.lang.Binding;
+import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
@@ -68,9 +69,10 @@ public class ScriptExcecuter implements ContextRunnable {
 						cc.setScriptBaseClass("de.finetech.groovy.AbasBaseScript");
 
 						// Script ausführen
-						shell = new GroovyShell(this.getClass()
-								.getClassLoader(), binding, cc);
-						shell.evaluate(groovyScript);
+						shell = new GroovyShell(new GroovyClassLoader(), binding, cc);
+						Script gscript = shell.parse(groovyScript);
+						gscript.run();
+						shell = null;
 						error = false;
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
@@ -104,6 +106,7 @@ public class ScriptExcecuter implements ContextRunnable {
 								sw.toString());
 						error = true;
 					} finally {
+						System.gc();
 						if(error){
 							return -2;
 						}
