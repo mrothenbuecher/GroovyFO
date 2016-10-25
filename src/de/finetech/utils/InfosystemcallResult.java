@@ -11,7 +11,7 @@ import de.abas.eks.jfop.remote.FO;
 /**
  * stellt das ergebnis eines Infosystem aufrufs dar.
  * 
- * @author MKï¿½rbis
+ * @author MKürbis
  *
  */
 public class InfosystemcallResult {
@@ -54,7 +54,7 @@ public class InfosystemcallResult {
 			if (!lines.isEmpty() && lines.size() > row) {
 				// zeile mit den Variablennamen speichern
 				String[] keys = lines.get(row);
-				// fï¿½r jede Datenzeile
+				// für jede Datenzeile
 				for (int j = row + 1; j < lines.size(); j++) {
 					TreeMap<String, String> foo = new TreeMap<String, String>();
 					for (int i = 0; i < keys.length; i++) {

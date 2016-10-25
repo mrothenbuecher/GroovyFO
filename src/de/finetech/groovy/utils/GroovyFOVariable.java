@@ -53,9 +53,12 @@ public abstract class GroovyFOVariable<V> implements Comparable<Object> {
 		return this.varname;
 	}
 	
+	//TODO Metafunktionen
+	
 	public boolean isEmpty() {
 		String empty = FO.getValue("F", "empty(" + this.getVariablename()
 				+ ")");
+		//TODO lang
 		return empty.equals("ja") || empty.equals("yes");
 	}
 
