@@ -48,9 +48,9 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	private Pattern integerPattern = Pattern
 			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
-	private Pattern realdPattern = Pattern.compile("(R..D.*)|(M..D.*)");
-	private Pattern realtPattern = Pattern.compile("(R..T.*)|(M..T.*)");
-	private Pattern realdtPattern = Pattern.compile("(R..DT.*)|(M..DT.*)");
+	private Pattern realdPattern = Pattern.compile("(R.*D.*)|(M.*D.*)");
+	private Pattern realtPattern = Pattern.compile("(R.*T.*)|(M.*T.*)");
+	private Pattern realdtPattern = Pattern.compile("(R.*DT.*)|(M.*DT.*)");
 	
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
@@ -419,7 +419,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		fehler(cmd);
 	}
 
-	public Object expr(String expr) throws GroovyFOException {
+	public Object expr(String expr) throws GroovyFOException, ParseException {
 		return this.getComputedValue(expr);
 	}
 
@@ -555,15 +555,16 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return
 	 * @throws GroovyFOException
 	 * @throws FOPException
+	 * @throws ParseException 
 	 */
 	public Object formel(String var, String value) throws FOPException,
-			GroovyFOException {
+			GroovyFOException, ParseException {
 		FO.formel(var + "=" + value);
 		return this.getComputedValue(var);
 	}
 
 	public Object formula(String var, String value) throws FOPException,
-			GroovyFOException {
+			GroovyFOException, ParseException {
 		return this.formel(var, value);
 	}
 
@@ -612,8 +613,9 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 *            - U|von, U|von-U|bis, usw...
 	 * @return
 	 * @throws GroovyFOException
+	 * @throws ParseException 
 	 */
-	public Object getComputedValue(String expr) throws GroovyFOException {
+	public Object getComputedValue(String expr) throws GroovyFOException, ParseException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
 		PossibleDatatypes type = this.getClassOfType(FO.getValue("F",
 				"typeof(F|expr(" + expr + "))"));
@@ -648,7 +650,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 	}
 
-	public Object getValue(String varname) throws GroovyFOException {
+	public Object getValue(String varname) throws GroovyFOException, ParseException {
 		return this.getComputedValue(varname);
 	}
 
@@ -666,16 +668,17 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * 
 	 * @return
 	 * @throws GroovyFOException
+	 * @throws ParseException 
 	 */
 	public Object getValue(String varname, String value)
-			throws GroovyFOException {
+			throws GroovyFOException, ParseException {
 		// Mapping der einzelnen abas Variablenarten auf Standard Typen
 		PossibleDatatypes abasType = this.getType(varname);
 		return this.getValueByType(abasType, varname, value);
 	}
 
 	public Object getValueByType(PossibleDatatypes abasType, String expr,
-			String value) throws GroovyFOException {
+			String value) throws GroovyFOException, ParseException {
 		value = value.trim();
 		switch (abasType) {
 		case INTEGER:
@@ -690,10 +693,12 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 				return 0.0d;
 			if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET || abasType == PossibleDatatypes.DOUBLED){
 				//FIXME was mit anderen Trennzeichen
-				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET)
+				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET){
 					value = value.replaceAll("\\.", "");
-				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLED)
-					value = value.replaceAll(",", ".");
+				}
+				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLED){
+					value = value.replace(',', '.');
+				}
 			}
 			return Double.parseDouble(value);
 		case BOOLEAN:
@@ -701,7 +706,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		case ABASPOINTER:
 			return new AbasPointer(expr, this);
 		case ABASDATE:
-			try {
 				boolean isVar = varPattern.matcher(expr).matches();
 				if (isVar) {
 					if (this.variables.containsKey(expr)) {
@@ -713,10 +717,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 					}
 				}
 				return new AbasDate(expr, value, this);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		default:
 			return value;
 		}
@@ -1295,7 +1295,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void view(String cmd) {
 		zeige(cmd);
 	}
-
+	
 	public void window(String cmd) {
 		fenster(cmd);
 	}

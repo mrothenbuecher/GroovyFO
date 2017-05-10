@@ -4,6 +4,7 @@ import groovy.lang.GroovyObject;
 import groovy.lang.GroovyObjectSupport;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> extends
 	}
 
 	// h.
-	public Object get(Object key) {
+	public Object get(Object key){
 		try {
 			// buffer.
 			String skey = key.toString();
@@ -53,6 +54,9 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> extends
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (GroovyFOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

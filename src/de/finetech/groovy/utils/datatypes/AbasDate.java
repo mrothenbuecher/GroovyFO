@@ -47,22 +47,22 @@ public class AbasDate extends GroovyFOVariable<String> {
 					+ " is not a abas datetype for date/time/duration");
 	}
 
-	public Object plus(int i) throws FOPException, GroovyFOException {
+	public Object plus(int i) throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + "+" + i;
 		return script.getComputedValue(expr);
 	}
 
-	public Object next() throws FOPException, GroovyFOException {
+	public Object next() throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + "+1";
 		return script.getComputedValue(expr);
 	}
 
-	public Object previous() throws FOPException, GroovyFOException {
+	public Object previous() throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + "-1";
 		return script.getComputedValue(expr);
 	}
 
-	public Object minus(int i) throws FOPException, GroovyFOException {
+	public Object minus(int i) throws FOPException, GroovyFOException, ParseException {
 		return this.plus(-i);
 	}
 
@@ -75,7 +75,7 @@ public class AbasDate extends GroovyFOVariable<String> {
 	 * @throws FOPException
 	 * @throws GroovyFOException
 	 */
-	public Object minus(AbasDate i) throws FOPException, GroovyFOException {
+	public Object minus(AbasDate i) throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + "-" + i.getVariablename();
 		return script.getComputedValue(expr);
 	}
@@ -87,7 +87,7 @@ public class AbasDate extends GroovyFOVariable<String> {
 	 * @return Datum // i aus dem abas
 	 * @throws GroovyFOException
 	 */
-	public Object mod(int i) throws GroovyFOException {
+	public Object mod(int i) throws GroovyFOException, ParseException {
 		switch (i) {
 		case 1:
 		case 7:
@@ -98,12 +98,12 @@ public class AbasDate extends GroovyFOVariable<String> {
 				+ this.getVariablename() + " of type " + this.type);
 	}
 
-	public String getSortable() throws FOPException, GroovyFOException {
+	public String getSortable() throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + ":8";
 		return script.getComputedValue(expr).toString();
 	}
 
-	public Object and(int i) throws FOPException, GroovyFOException {
+	public Object and(int i) throws FOPException, GroovyFOException, ParseException {
 		String expr = this.getVariablename() + "&" + i;
 		return script.getComputedValue(expr);
 	}
@@ -113,7 +113,7 @@ public class AbasDate extends GroovyFOVariable<String> {
 		return FO.getValue("F", "expr(" + this.varname + ")");
 	}
 
-	public boolean equals(AbasDate o) throws GroovyFOException{
+	public boolean equals(AbasDate o) throws GroovyFOException, ParseException{
 		return ((Boolean) script.getComputedValue(this.varname + " = "
 							+ o.getVariablename()));
 	}
@@ -126,6 +126,10 @@ public class AbasDate extends GroovyFOVariable<String> {
 					return ((Boolean) script.getComputedValue(this.varname + " = "
 							+ date.getVariablename()));
 				} catch (GroovyFOException e) {
+					e.printStackTrace();
+					return false;
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
 				}

@@ -1,5 +1,7 @@
 package de.finetech.groovy.utils;
 
+import java.text.ParseException;
+
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.abas.jfop.base.buffer.WriteableBuffer;
@@ -46,6 +48,8 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 		} catch (FOPException e) {
 			e.printStackTrace();
 		} catch (GroovyFOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 

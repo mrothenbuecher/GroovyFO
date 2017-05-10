@@ -1,5 +1,7 @@
 package de.finetech.groovy.utils.datatypes;
 
+import java.text.ParseException;
+
 import org.codehaus.groovy.runtime.NullObject;
 
 import de.abas.eks.jfop.FOPException;
@@ -42,13 +44,13 @@ public class AbasPointer extends GroovyFOVariable<String> {
 	 * @throws FOPException
 	 * @throws GroovyFOException
 	 */
-	public Object xor(String var) throws FOPException, GroovyFOException {
+	public Object xor(String var) throws FOPException, GroovyFOException, ParseException {
 		Object o = this.script.getComputedValue(this.getVariablename() + "^"
 				+ var);
 		return o;
 	}
 	
-	public Object xor(NullObject var) throws FOPException, GroovyFOException {
+	public Object xor(NullObject var) throws FOPException, GroovyFOException, ParseException {
 		FO.println("aua: "+var+" "+var.toString());
 		Object o = this.script.getComputedValue(this.getVariablename() + "^"
 				+ var.toString());
