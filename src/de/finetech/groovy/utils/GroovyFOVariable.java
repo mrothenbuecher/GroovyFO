@@ -1,5 +1,6 @@
 package de.finetech.groovy.utils;
 
+import groovy.lang.GroovyObject;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;

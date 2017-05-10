@@ -1,6 +1,7 @@
 package de.finetech.groovy.utils;
 
 import de.abas.eks.jfop.FOPException;
+import de.abas.eks.jfop.remote.FO;
 import de.abas.jfop.base.buffer.WriteableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
@@ -19,6 +20,7 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 	@Override
 	public Object put(String key, Object value) {
 		try {
+			//FO.println("key: "+key+" -> "+value.toString());
 			Class<?> valueClass = value.getClass();
 			// FIXME muss besser gehen
 			if (valueClass == Integer.class) {

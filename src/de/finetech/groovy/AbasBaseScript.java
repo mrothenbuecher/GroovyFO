@@ -1,5 +1,6 @@
 package de.finetech.groovy;
 
+import groovy.lang.GroovyObject;
 import groovy.lang.Script;
 import groovy.transform.CompileStatic;
 
@@ -31,27 +32,31 @@ import de.finetech.utils.SelectionBuilder;
  * 
  */
 @CompileStatic
-public abstract class AbasBaseScript extends Script {
+public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	protected static enum PossibleDatatypes {
-		INTEGER, DOUBLE, BOOLEAN, ABASDATE, ABASPOINTER, STRING
+		INTEGER, DOUBLE, DOUBLED, DOUBLET, DOUBLEDT, BOOLEAN, ABASDATE, ABASPOINTER, STRING
 	}
+
 	protected static DecimalFormat df = new DecimalFormat("0.0000");
 
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
-	// private Pattern stringPattern =
-	// Pattern.compile("(PS.*)|(ID.*)|(GL.*)|(T.*)|(N.*)|(BT.*)|(BG.*)|(ST.*)|(ST.*)|(SW.*)");
+	
+	// reguläre Ausdrücke zum erkennen von Variablen arten
 	private Pattern integerPattern = Pattern
 			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
 	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
-
+	private Pattern realdPattern = Pattern.compile("(R..D.*)|(M..D.*)");
+	private Pattern realtPattern = Pattern.compile("(R..T.*)|(M..T.*)");
+	private Pattern realdtPattern = Pattern.compile("(R..DT.*)|(M..DT.*)");
+	
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
-
 	private Pattern pointerPattern = Pattern
 			.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|(C.*)");
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
+	
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
 	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getParentScreenBuffer(), this);
@@ -61,9 +66,6 @@ public abstract class AbasBaseScript extends Script {
 	protected GroovyFOReadableMap e = new GroovyFOReadableMap(BufferFactory
 			.newInstance().getEnvBuffer(), this);
 	protected GroovyFOReadableMap E = e;
-	// protected GroovyFOMap f = new
-	// GroovyFOMap(BufferFactory.newInstance().get, this);
-	// protected GroovyFOMap F = f;
 	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getGlobalTextBuffer(), this);
 	protected GroovyFOWriteableMap G = g;
@@ -106,10 +108,6 @@ public abstract class AbasBaseScript extends Script {
 	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getCharactBarBuffer(), this);
 	protected GroovyFOWriteableMap S = s;
-
-	// protected GroovyFOMap t = new
-	// GroovyFOMap(BufferFactory.newInstance().getTextBuffer(), this);
-	// protected GroovyFOMap T = t;
 	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory
 			.newInstance().getUserTextBuffer(), this);
 
@@ -127,7 +125,7 @@ public abstract class AbasBaseScript extends Script {
 	protected String[] arg1;
 
 	protected DbContext dbContext;;
-	
+
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
@@ -135,16 +133,16 @@ public abstract class AbasBaseScript extends Script {
 		// println ("Session context not defined? "+arg0 == null );
 		// DbContext dbContext = arg0.getDbContext();
 	}
-	
+
 	public void absatz(String cmd) {
 		EKS.absatz(cmd);
 	}
-	
+
 	// TODO Methoden startTransaction, commitTransaction, abortTransaction,
 	public void action(String cmd) {
 		aktion(cmd);
 	}
-	
+
 	public boolean add(String cmd) {
 		return EKS.dazu(cmd);
 	}
@@ -166,7 +164,9 @@ public abstract class AbasBaseScript extends Script {
 	 * Methode wird immer ausgeführt nach Ende des Scriptes
 	 * 
 	 */
-	public Object always(){return null;}
+	public Object always() {
+		return null;
+	}
 
 	/**
 	 * Definition genau einer NutzerVariablen
@@ -323,7 +323,7 @@ public abstract class AbasBaseScript extends Script {
 	public void box(String cmd) {
 		FO.box(cmd);
 	}
-	
+
 	public void box(String title, String content) {
 		FO.box(title, content.split("\n"));
 	}
@@ -336,10 +336,10 @@ public abstract class AbasBaseScript extends Script {
 		EKS.bringe(cmd);
 	}
 
-	public void browser(String cmd){
+	public void browser(String cmd) {
 		FO.browser(cmd);
 	}
-	
+
 	public void color(String cmd) {
 		this.farbe(cmd);
 	}
@@ -495,34 +495,34 @@ public abstract class AbasBaseScript extends Script {
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.toString() + "\"");
 		return value;
-		//return this.getValue(var, value);
+		// return this.getValue(var, value);
 	}
 
 	public Object fo(String var, AbasPointer value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.toString() + "\"");
-		//return this.getValue(var);
+		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, boolean value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
-		//return this.getValue(var);
+		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, double value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + df.format(value));
-		//return this.getValue(var);
+		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, int value) throws FOPException,
 			GroovyFOException {
 		FO.formel(var + "=" + Integer.toString(value));
-		//return this.getValue(var);
+		// return this.getValue(var);
 		return value;
 	}
 
@@ -541,7 +541,7 @@ public abstract class AbasBaseScript extends Script {
 			GroovyFOException {
 		FO.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"")
 				+ "\"");
-		//return this.getValue(var);
+		// return this.getValue(var);
 		return value;
 	}
 
@@ -575,6 +575,18 @@ public abstract class AbasBaseScript extends Script {
 		if (integerPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.INTEGER;
 		}
+		// real tausender und dezimal
+		if(realdtPattern.matcher(abasType).matches()){
+			return PossibleDatatypes.DOUBLEDT;
+		}
+		// real tausender
+		if(realtPattern.matcher(abasType).matches()){
+			return PossibleDatatypes.DOUBLET;
+		}
+		// real dezimal trennzeichen
+		if(realdPattern.matcher(abasType).matches()){
+			return PossibleDatatypes.DOUBLED;
+		}
 		// Real
 		if (realPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLE;
@@ -603,8 +615,8 @@ public abstract class AbasBaseScript extends Script {
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
-		PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof(F|expr("
-				+ expr + "))"));
+		PossibleDatatypes type = this.getClassOfType(FO.getValue("F",
+				"typeof(F|expr(" + expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
 
@@ -615,7 +627,7 @@ public abstract class AbasBaseScript extends Script {
 	public boolean getMore() {
 		return mehr();
 	}
-	
+
 	/**
 	 * liefert den abas Typ der Variable
 	 * 
@@ -629,13 +641,13 @@ public abstract class AbasBaseScript extends Script {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof("
-					+ variable + ")"));
+			PossibleDatatypes type = this.getClassOfType(FO.getValue("F",
+					"typeof(" + variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
 	}
-	
+
 	public Object getValue(String varname) throws GroovyFOException {
 		return this.getComputedValue(varname);
 	}
@@ -662,41 +674,51 @@ public abstract class AbasBaseScript extends Script {
 		return this.getValueByType(abasType, varname, value);
 	}
 
-	public Object getValueByType(PossibleDatatypes abasType, String expr, String value)
-			throws GroovyFOException {
+	public Object getValueByType(PossibleDatatypes abasType, String expr,
+			String value) throws GroovyFOException {
 		value = value.trim();
-		switch(abasType){
-			case INTEGER:
-				if (value == null || value.isEmpty())
-					return 0;
-				return Integer.parseInt(value);
-			case DOUBLE:
-				if (value == null || value.isEmpty())
-					return 0.0d;
-				return Double.parseDouble(value);
-			case BOOLEAN:
-				return isTrue(value);
-			case ABASPOINTER:
-				return new AbasPointer(expr, this);
-			case ABASDATE:
-				try {
-					boolean isVar = varPattern.matcher(expr).matches();
-					if (isVar) {
-						if (this.variables.containsKey(expr)) {
-							return this.variables.get(expr);
-						} else {
-							AbasDate date = new AbasDate(expr, value, this);
-							this.variables.put(expr, date);
-							return date;
-						}
+		switch (abasType) {
+		case INTEGER:
+			if (value == null || value.isEmpty())
+				return 0;
+			return Integer.parseInt(value);
+		case DOUBLE:
+		case DOUBLEDT:
+		case DOUBLET:
+		case DOUBLED:
+			if (value == null || value.isEmpty())
+				return 0.0d;
+			if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET || abasType == PossibleDatatypes.DOUBLED){
+				//FIXME was mit anderen Trennzeichen
+				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET)
+					value = value.replaceAll("\\.", "");
+				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLED)
+					value = value.replaceAll(",", ".");
+			}
+			return Double.parseDouble(value);
+		case BOOLEAN:
+			return isTrue(value);
+		case ABASPOINTER:
+			return new AbasPointer(expr, this);
+		case ABASDATE:
+			try {
+				boolean isVar = varPattern.matcher(expr).matches();
+				if (isVar) {
+					if (this.variables.containsKey(expr)) {
+						return this.variables.get(expr);
+					} else {
+						AbasDate date = new AbasDate(expr, value, this);
+						this.variables.put(expr, date);
+						return date;
 					}
-					return new AbasDate(expr, value, this);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-			default:
-				return value;
+				return new AbasDate(expr, value, this);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		default:
+			return value;
 		}
 	}
 
@@ -1005,15 +1027,14 @@ public abstract class AbasBaseScript extends Script {
 	/**
 	 * Methode wird beim Auftretten einer unbehandelten Ausnahme ausgeführt
 	 */
-	public Object onerror(Object ex){
-		if(ex instanceof Exception){
+	public Object onerror(Object ex) {
+		if (ex instanceof Exception) {
 			Exception e = (Exception) ex;
 			e.printStackTrace();
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			println("Unbehandelte Ausnahme: \n"+
-					sw.toString());
+			println("Unbehandelte Ausnahme: \n" + sw.toString());
 		}
 		return null;
 	}
@@ -1105,7 +1126,8 @@ public abstract class AbasBaseScript extends Script {
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {
 			buffer = buffer.toLowerCase();
-			for (Entry<String, PossibleDatatypes> entry : this.variableTypes.entrySet()) {
+			for (Entry<String, PossibleDatatypes> entry : this.variableTypes
+					.entrySet()) {
 				if (entry.getKey().toLowerCase().startsWith(buffer)) {
 					this.variableTypes.remove(entry.getKey());
 				}
@@ -1131,14 +1153,13 @@ public abstract class AbasBaseScript extends Script {
 	}
 
 	@Override
-	public Object run(){
+	public Object run() {
 		Object o = null;
-		try{
+		try {
 			o = runCode();
-		}catch(Exception e){
+		} catch (Exception e) {
 			onerror(e);
-		}
-		finally{
+		} finally {
 			always();
 		}
 		return o;
@@ -1298,17 +1319,60 @@ public abstract class AbasBaseScript extends Script {
 	public void zuweisen(String key, double value) {
 		EKS.zuweisen(key + "=" + Double.toString(value));
 	}
-	
+
 	public void zuweisen(String key, int value) {
 		EKS.zuweisen(key + "=" + Integer.toString(value));
 	}
-	
+
 	public void zuweisen(String key, String value) {
 		EKS.zuweisen(key + "=" + value);
 	}
 
+	// Meta Programmierung
+	/*
+	@Override
+	public Object getProperty(String name) {
+		Object o = getMetaClass().getProperty(this, name);
+		if (o != null){
+			//FO.println("o not null "+name);
+			//FO.println(o);
+			return o;
+		}
+		else{
+			return name;
+		}
+	}
+	
+	/*
+	public Object methodMissing(String name, Object... args) {
+        return name;
+    }
+	
+	/*
+	public Object invokeMethod(String name, Object args){
+		FO.println("Method: "+name);
+		return name;
+	}
+	
+
+	public Object propertyMissing(String name) {
+		//FO.println("missing 2:"+name);
+		return name;
+	}
+	
+	public Object propertyMissing(String name,Object value) {
+		//FO.println("missing 3:"+name);
+		return name;
+	}
+	
+	/*
+	public Object methodMissing(String name, Object[] args) {
+        return name;
+   }
+   */
+
 	protected void finalize() throws Throwable {
-		try{
+		try {
 			hselection = null;
 			lselection = null;
 			integerPattern = null;
@@ -1318,49 +1382,49 @@ public abstract class AbasBaseScript extends Script {
 			varPattern = null;
 			d = null;
 			D = null;
-			 a = d;
-			 A = d;
+			a = d;
+			A = d;
 			e = null;
 			E = null;
 
-			 g = null;
-			 G = null;
-			 h = null;
-			 H = null;
-			 l1 = null;
-			 L1 = null;
-			 l2 = null;
-			 L2 = null;
-			 l3 = null;
-			 L3 = null;
-			 l4 = null;
-			 L4 = null;
-			 l5 = null;
-			 L5 = null;
-			 l6 = null;
-			 L6 = null;
-			 l7 = null;
-			 L7 = null;
-			 l8 = null;
-			 L8 = null;
-			 l9 = null;
-			 L9 = null;
-			 m = null;
-			 M = null;
-			 p = null;
-			 P = null;
-			 s = null;
-			 S = null;
-			 u = null;
-			 U = null;
+			g = null;
+			G = null;
+			h = null;
+			H = null;
+			l1 = null;
+			L1 = null;
+			l2 = null;
+			L2 = null;
+			l3 = null;
+			L3 = null;
+			l4 = null;
+			L4 = null;
+			l5 = null;
+			L5 = null;
+			l6 = null;
+			L6 = null;
+			l7 = null;
+			L7 = null;
+			l8 = null;
+			L8 = null;
+			l9 = null;
+			L9 = null;
+			m = null;
+			M = null;
+			p = null;
+			P = null;
+			s = null;
+			S = null;
+			u = null;
+			U = null;
 			variableTypes = null;
 			variables = null;
 			arg0 = null;
 			arg1 = null;
-			dbContext=null;
-		}finally{
+			dbContext = null;
+		} finally {
 			super.finalize();
 		}
 	}
-	
+
 }

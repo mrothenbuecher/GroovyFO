@@ -1,16 +1,21 @@
 package de.finetech.groovy.utils;
 
+import groovy.lang.GroovyObject;
+import groovy.lang.GroovyObjectSupport;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 import de.abas.eks.jfop.FOPException;
+import de.abas.eks.jfop.remote.FO;
 import de.abas.jfop.base.buffer.BaseReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
-public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
-		Map<String, Object>, Cloneable, Serializable {
+public class GroovyFOReadableMap<T extends BaseReadableBuffer> extends
+		GroovyObjectSupport implements Map<String, Object>, Cloneable,
+		Serializable, GroovyObject {
 
 	private static final long serialVersionUID = 4146145334512673667L;
 	// private String buffer = null;
@@ -37,12 +42,13 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
 		return null;
 	}
 
+	// h.
 	public Object get(Object key) {
 		try {
 			// buffer.
 			String skey = key.toString();
-			return script
-					.getValue(buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
+			return script.getValue(buffer.getQualifiedFieldName(skey),
+					buffer.getStringValue(skey));
 		} catch (FOPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,6 +98,20 @@ public class GroovyFOReadableMap<T extends BaseReadableBuffer> implements
 		return this.get(key.toString());
 	}
 
+	/*
+	@Override
+	public Object getProperty(String name) {
+		Object o = getMetaClass().getProperty(this, name);
+		if (o != null) {
+			//FO.println("o not null 2 " + name);
+			//FO.println(o);
+			return o;
+		} else {
+			return name;
+		}
+	}
+	 */
+	// h|
 	public Object or(String key) {
 		return this.get(key);
 	}

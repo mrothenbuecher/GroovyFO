@@ -87,6 +87,7 @@ public class ScriptExcecuter implements ContextRunnable {
 						error = false;
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
+						FO.eingabe("DATEI.F");
 						e.printStackTrace();
 						FO.box("Fehler", e.getMessage());
 						StringWriter sw = new StringWriter();

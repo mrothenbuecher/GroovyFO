@@ -1,5 +1,7 @@
 package de.finetech.groovy.utils.datatypes;
 
+import org.codehaus.groovy.runtime.NullObject;
+
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
@@ -10,7 +12,7 @@ import de.finetech.groovy.utils.GroovyFOVariable;
  * 
  * @author MKürbis
  *
- * Verweis Darstellung
+ *         Verweis Darstellung
  */
 public class AbasPointer extends GroovyFOVariable<String> {
 
@@ -25,13 +27,13 @@ public class AbasPointer extends GroovyFOVariable<String> {
 
 	@Override
 	public String getValue() {
-		return FO.getValue("F", "expr("+this.varname+")");
+		return FO.getValue("F", "expr(" + this.varname + ")");
 	}
 
 	/**
 	 * Zugriff auf Variablen eines Verweises
 	 * 
-	 * M|vorgang^id z.Bsp. in groovy fo dann 
+	 * M|vorgang^id z.Bsp. in groovy fo dann
 	 * 
 	 * m.vorgang^"id"
 	 * 
@@ -40,9 +42,16 @@ public class AbasPointer extends GroovyFOVariable<String> {
 	 * @throws FOPException
 	 * @throws GroovyFOException
 	 */
-	public Object xor(String var) throws FOPException, GroovyFOException{
-			Object o = this.script.getComputedValue(this.getVariablename()+"^"+var);
-			return o;
+	public Object xor(String var) throws FOPException, GroovyFOException {
+		Object o = this.script.getComputedValue(this.getVariablename() + "^"
+				+ var);
+		return o;
 	}
 	
+	public Object xor(NullObject var) throws FOPException, GroovyFOException {
+		FO.println("aua: "+var+" "+var.toString());
+		Object o = this.script.getComputedValue(this.getVariablename() + "^"
+				+ var.toString());
+		return o;
+	}
 }

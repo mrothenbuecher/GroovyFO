@@ -57,8 +57,9 @@ public class InfosystemcallResult {
 				// für jede Datenzeile
 				for (int j = row + 1; j < lines.size(); j++) {
 					TreeMap<String, String> foo = new TreeMap<String, String>();
-					for (int i = 0; i < keys.length; i++) {
-						foo.put(keys[i], lines.get(j)[i]);
+					String[] column = lines.get(j);
+					for (int i = 0; i < column.length; i++) {
+						foo.put(keys[i], column[i]);
 					}
 					table.add(foo);
 				}
