@@ -10,10 +10,13 @@ GroovyFO vereinfacht den Umgang mit JFOP durch das bereitstellen eines einfachen
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
 einige Vorteile:<br>
-* Syntax an Standard FO angelehnt
-* Kontrollstrukturen aus Java
-* Syntax vereinfachung gegenüber JFOP
 * [automatische Typkonvertierung](https://github.com/mkuerbis/GroovyFO/wiki/automatische-Typkonvertierung),beim Zugriff auf abas Variablen (bsp.: I3 -> Integer)
+* Syntax an Standard FO angelehnt
+    * Wertzuweisung `M|datum = M|datum +1`
+* Zugriff mittels Dachoperator `H|platz^id`
+* Kontrollstrukturen aus Java
+    * `for`, `while`, `if`, `switch`, Methoden, Klassen ...
+* Syntax vereinfachung gegenüber JFOP
 * kein Redeployen nach Änderungen an GroovyFO-Scripten nötig, änderungen an den Scripten sind sofort wirksam
 * diverse Helferklassen für Selektion, Infosystemaufrufe, Charts usw.
 * Ablaufsteuerung durch die Methoden `always` und `onerror`
@@ -142,7 +145,7 @@ def result = Infosystemcall.build("VKZENTRALE")
         .setHeadParameter("datet", ".")
         .setHeadParameter("bstart", "1")
         .execute()
-        
+
 for(def row: result.table){
         println row.ttrans
         println row.tdate
@@ -157,7 +160,7 @@ Eine Klasse zum erzeugen von Charts
 ```groovy
 // Liniendiagramm erzeugen
 ChartGenerator gen = ChartGenerator.create(ChartType.LINES);
-// Titel setzen 
+// Titel setzen
 gen.setChartTitle("Hello World");
 gen.setMarkerx("first", "second", "third", "fourth", "fifth")
 gen.setAnglex(45)
