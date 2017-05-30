@@ -11,6 +11,11 @@ Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von 
 
 einige Vorteile:<br>
 * [automatische Typkonvertierung](https://github.com/mkuerbis/GroovyFO/wiki/automatische-Typkonvertierung),beim Zugriff auf abas Variablen (bsp.: I3 -> Integer)
+    * Auch Umgang mit abas Datum möglich
+        *  `M|datum = M|datum +1`, einen Tag weiter
+        *  `M|datum = M|datum -1`, einen Tag zurück
+        *  `M|datum = M|datum & 1`
+        *  `M|datum = M|datum % 1`
 * Syntax an Standard FO angelehnt
     * Wertzuweisung `M|datum = M|datum +1`
 * Zugriff mittels Dachoperator `H|platz^id`
