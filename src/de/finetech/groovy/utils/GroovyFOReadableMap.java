@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.abas.eks.jfop.FOPException;
-import de.abas.eks.jfop.remote.FO;
 import de.abas.jfop.base.buffer.BaseReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 

@@ -1328,49 +1328,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.zuweisen(key + "=" + value);
 	}
 
-	// Meta Programmierung
-	/*
-	@Override
-	public Object getProperty(String name) {
-		Object o = getMetaClass().getProperty(this, name);
-		if (o != null){
-			//FO.println("o not null "+name);
-			//FO.println(o);
-			return o;
-		}
-		else{
-			return name;
-		}
-	}
-	
-	/*
-	public Object methodMissing(String name, Object... args) {
-        return name;
-    }
-	
-	/*
-	public Object invokeMethod(String name, Object args){
-		FO.println("Method: "+name);
-		return name;
-	}
-	
-
 	public Object propertyMissing(String name) {
-		//FO.println("missing 2:"+name);
 		return name;
 	}
 	
-	public Object propertyMissing(String name,Object value) {
-		//FO.println("missing 3:"+name);
-		return name;
-	}
-	
-	/*
-	public Object methodMissing(String name, Object[] args) {
-        return name;
-   }
-   */
-
 	protected void finalize() throws Throwable {
 		try {
 			hselection = null;

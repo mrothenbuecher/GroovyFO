@@ -1,6 +1,6 @@
 package de.finetech.groovy.utils;
 
-import groovy.lang.GroovyObject;
+import groovy.lang.GroovyObjectSupport;
 import de.abas.eks.jfop.FOPException;
 import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
@@ -14,7 +14,7 @@ import de.finetech.groovy.AbasBaseScript;
  * @param <V>
  */
 
-public abstract class GroovyFOVariable<V> implements Comparable<Object> {
+public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements Comparable<Object> {
 
 	protected String varname, type;
 	protected AbasBaseScript script;

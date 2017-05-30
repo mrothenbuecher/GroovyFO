@@ -37,7 +37,6 @@ public class ScriptExcecuter implements ContextRunnable {
 	public int runFop(FOPSessionContext arg0, String[] arg1)
 			throws FOPException {
 		GroovyShell shell = null;
-		Script script = null;
 		boolean error = false;
 		// Genug Parameter übergben?
 		if (arg1.length > 1) {
@@ -85,6 +84,7 @@ public class ScriptExcecuter implements ContextRunnable {
 						loader.clearCache();
 						shell = null;
 						error = false;
+						return 0;
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
 						FO.eingabe("DATEI.F");
@@ -120,9 +120,9 @@ public class ScriptExcecuter implements ContextRunnable {
 					} finally {
 						clearGroovyClassesCache();
 						if(error){
+							//FIXME möglichkeit für bösen Fehler
 							return -2;
 						}
-						return 0;
 					}
 				} else {
 					FO.box("Unzureichende Argumente",
