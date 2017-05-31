@@ -25,7 +25,7 @@ import de.abas.eks.jfop.remote.FO;
 import de.abas.eks.jfop.remote.FOPSessionContext;
 
 /**
- * @author Michael KÃ¼rbis, Finetech GmbH & Co. KG
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  * 
  *         JFOP erwartet als zweiten Parameter das Groovyscript welches
  *         ausgefÃ¼hrt werden soll und Ã¼bergibt alle parameter an dieses weiter
@@ -49,7 +49,7 @@ public class ScriptExcecuter implements ContextRunnable {
 						Binding binding = new Binding();
 						// Parameter weitergeben
 						binding.setVariable("arg0", arg0);
-						binding.setVariable("arg1", arg1);
+						binding.setVariable("args", arg1);
 
 						// Imports festlegen damit diese nicht selbst
 						// hinzugefügt werden müssen

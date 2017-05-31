@@ -8,7 +8,11 @@ import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
 import de.finetech.groovy.utils.GroovyFOException;
 import de.finetech.groovy.utils.GroovyFOVariable;
-
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co.KG
+ *
+ */
 public class AbasDate extends GroovyFOVariable<String> {
 
 	private AbasBaseScript script;

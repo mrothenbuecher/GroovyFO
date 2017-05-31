@@ -19,8 +19,9 @@ import de.abas.eks.jfop.remote.FO;
 import de.abas.eks.jfop.remote.FOPSessionContext;
 import de.abas.erp.db.DbContext;
 import de.abas.jfop.base.buffer.BufferFactory;
+import de.finetech.groovy.utils.GroovyFOBaseReadableMap;
 import de.finetech.groovy.utils.GroovyFOException;
-import de.finetech.groovy.utils.GroovyFOReadableMap;
+import de.finetech.groovy.utils.GroovyFOFBufferMap;
 import de.finetech.groovy.utils.GroovyFOWriteableMap;
 import de.finetech.groovy.utils.datatypes.AbasDate;
 import de.finetech.groovy.utils.datatypes.AbasPointer;
@@ -28,7 +29,7 @@ import de.finetech.utils.SelectionBuilder;
 
 /**
  * 
- * @author Michael Kürbis, Finetech GmbH & Co. KG
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  * 
  */
 @CompileStatic
@@ -43,7 +44,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	// Temp Variablen um sich die letzten Selektion zu speichern
 	private String hselection;
 	private String[] lselection = new String[11];
-	
+
 	// reguläre Ausdrücke zum erkennen von Variablen arten
 	private Pattern integerPattern = Pattern
 			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
@@ -51,65 +52,76 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	private Pattern realdPattern = Pattern.compile("(R.*D.*)|(M.*D.*)");
 	private Pattern realtPattern = Pattern.compile("(R.*T.*)|(M.*T.*)");
 	private Pattern realdtPattern = Pattern.compile("(R.*DT.*)|(M.*DT.*)");
-	
+
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
 			.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|(C.*)");
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
-	
+
+	protected BufferFactory bfactory = BufferFactory.newInstance();
+
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
-	protected GroovyFOWriteableMap d = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getParentScreenBuffer(), this);
+	// FIXME dazu puffer
+	protected GroovyFOWriteableMap d = null;
 	protected GroovyFOWriteableMap D = d;
-	protected GroovyFOWriteableMap a = d;
-	protected GroovyFOWriteableMap A = d;
-	protected GroovyFOReadableMap e = new GroovyFOReadableMap(BufferFactory
-			.newInstance().getEnvBuffer(), this);
-	protected GroovyFOReadableMap E = e;
-	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getGlobalTextBuffer(), this);
+	protected GroovyFOWriteableMap a = new GroovyFOWriteableMap(
+			bfactory.getParentScreenBuffer(), this);
+	protected GroovyFOWriteableMap A = a;
+	protected GroovyFOBaseReadableMap e = new GroovyFOBaseReadableMap(
+			bfactory.getEnvBuffer(), this);
+	protected GroovyFOBaseReadableMap E = e;
+	protected GroovyFOWriteableMap g = new GroovyFOWriteableMap(
+			bfactory.getGlobalTextBuffer(), this);
 	protected GroovyFOWriteableMap G = g;
-	protected GroovyFOWriteableMap h = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getSelectBuffer(), this);
+	protected GroovyFOFBufferMap f = new GroovyFOFBufferMap(this);
+	protected GroovyFOFBufferMap F = f;
+	protected GroovyFOWriteableMap h = new GroovyFOWriteableMap(
+			bfactory.getSelectBuffer(), this);
 	protected GroovyFOWriteableMap H = h;
-	protected GroovyFOWriteableMap l1 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(1), this);
+	protected GroovyFOWriteableMap l = new GroovyFOWriteableMap(
+			bfactory.getSelectBarBuffer(), this);
+	protected GroovyFOWriteableMap L = l;
+	protected GroovyFOWriteableMap l0 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(0), this);
+	protected GroovyFOWriteableMap L0 = l0;
+	protected GroovyFOWriteableMap l1 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(1), this);
 	protected GroovyFOWriteableMap L1 = l1;
-	protected GroovyFOWriteableMap l2 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(2), this);
+	protected GroovyFOWriteableMap l2 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(2), this);
 	protected GroovyFOWriteableMap L2 = l2;
-	protected GroovyFOWriteableMap l3 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(3), this);
+	protected GroovyFOWriteableMap l3 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(3), this);
 	protected GroovyFOWriteableMap L3 = l3;
-	protected GroovyFOWriteableMap l4 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(4), this);
+	protected GroovyFOWriteableMap l4 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(4), this);
 	protected GroovyFOWriteableMap L4 = l4;
-	protected GroovyFOWriteableMap l5 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(5), this);
+	protected GroovyFOWriteableMap l5 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(5), this);
 	protected GroovyFOWriteableMap L5 = l5;
-	protected GroovyFOWriteableMap l6 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(6), this);
+	protected GroovyFOWriteableMap l6 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(6), this);
 	protected GroovyFOWriteableMap L6 = l6;
-	protected GroovyFOWriteableMap l7 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(7), this);
+	protected GroovyFOWriteableMap l7 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(7), this);
 	protected GroovyFOWriteableMap L7 = l7;
-	protected GroovyFOWriteableMap l8 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(8), this);
+	protected GroovyFOWriteableMap l8 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(8), this);
 	protected GroovyFOWriteableMap L8 = l8;
-	protected GroovyFOWriteableMap l9 = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getLoadBuffer(9), this);
+	protected GroovyFOWriteableMap l9 = new GroovyFOWriteableMap(
+			bfactory.getLoadBuffer(9), this);
 	protected GroovyFOWriteableMap L9 = l9;
-	protected GroovyFOWriteableMap m = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getScreenBuffer(), this);
+	protected GroovyFOWriteableMap m = new GroovyFOWriteableMap(
+			bfactory.getScreenBuffer(), this);
 	protected GroovyFOWriteableMap M = m;
-	protected GroovyFOWriteableMap p = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getPrintBuffer(), this);
+	protected GroovyFOWriteableMap p = new GroovyFOWriteableMap(
+			bfactory.getPrintBuffer(), this);
 	protected GroovyFOWriteableMap P = p;
-	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getCharactBarBuffer(), this);
+	protected GroovyFOWriteableMap s = new GroovyFOWriteableMap(
+			bfactory.getCharactBarBuffer(), this);
 	protected GroovyFOWriteableMap S = s;
-	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(BufferFactory
-			.newInstance().getUserTextBuffer(), this);
+	protected GroovyFOWriteableMap u = new GroovyFOWriteableMap(
+			bfactory.getUserTextBuffer(), this);
 
 	protected GroovyFOWriteableMap U = u;
 
@@ -122,16 +134,14 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	protected FOPSessionContext arg0;
 
-	protected String[] arg1;
+	protected String[] args;
 
-	protected DbContext dbContext;;
+	protected DbContext dbContext;
 
 	/**
 	 * die interne standard Sprache des groovyFO ist Deutsch
 	 */
 	public AbasBaseScript() {
-		// println ("Session context not defined? "+arg0 == null );
-		// DbContext dbContext = arg0.getDbContext();
 	}
 
 	public void absatz(String cmd) {
@@ -146,6 +156,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public boolean add(String cmd) {
 		return EKS.dazu(cmd);
 	}
+	
 
 	public void addRow() {
 		plusZeile();
@@ -378,6 +389,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void datei(String cmd) {
 		EKS.datei(cmd);
 	}
+	
+	public boolean dazu(String cmd) {
+		return EKS.dazu(cmd);
+	}
 
 	public void delete(String cmd) {
 		loesche(cmd);
@@ -555,7 +570,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return
 	 * @throws GroovyFOException
 	 * @throws FOPException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public Object formel(String var, String value) throws FOPException,
 			GroovyFOException, ParseException {
@@ -577,15 +592,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			return PossibleDatatypes.INTEGER;
 		}
 		// real tausender und dezimal
-		if(realdtPattern.matcher(abasType).matches()){
+		if (realdtPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLEDT;
 		}
 		// real tausender
-		if(realtPattern.matcher(abasType).matches()){
+		if (realtPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLET;
 		}
 		// real dezimal trennzeichen
-		if(realdPattern.matcher(abasType).matches()){
+		if (realdPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLED;
 		}
 		// Real
@@ -613,9 +628,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 *            - U|von, U|von-U|bis, usw...
 	 * @return
 	 * @throws GroovyFOException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
-	public Object getComputedValue(String expr) throws GroovyFOException, ParseException {
+	public Object getComputedValue(String expr) throws GroovyFOException,
+			ParseException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
 		PossibleDatatypes type = this.getClassOfType(FO.getValue("F",
 				"typeof(F|expr(" + expr + "))"));
@@ -650,7 +666,8 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 	}
 
-	public Object getValue(String varname) throws GroovyFOException, ParseException {
+	public Object getValue(String varname) throws GroovyFOException,
+			ParseException {
 		return this.getComputedValue(varname);
 	}
 
@@ -668,7 +685,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * 
 	 * @return
 	 * @throws GroovyFOException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public Object getValue(String varname, String value)
 			throws GroovyFOException, ParseException {
@@ -691,32 +708,37 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		case DOUBLED:
 			if (value == null || value.isEmpty())
 				return 0.0d;
-			if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET || abasType == PossibleDatatypes.DOUBLED){
-				//FIXME was mit anderen Trennzeichen
-				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLET){
+			if (abasType == PossibleDatatypes.DOUBLEDT
+					|| abasType == PossibleDatatypes.DOUBLET
+					|| abasType == PossibleDatatypes.DOUBLED) {
+				// FIXME was mit anderen Trennzeichen
+				if (abasType == PossibleDatatypes.DOUBLEDT
+						|| abasType == PossibleDatatypes.DOUBLET) {
 					value = value.replaceAll("\\.", "");
 				}
-				if(abasType == PossibleDatatypes.DOUBLEDT || abasType == PossibleDatatypes.DOUBLED){
+				if (abasType == PossibleDatatypes.DOUBLEDT
+						|| abasType == PossibleDatatypes.DOUBLED) {
 					value = value.replace(',', '.');
 				}
 			}
 			return Double.parseDouble(value);
 		case BOOLEAN:
 			return isTrue(value);
+
 		case ABASPOINTER:
 			return new AbasPointer(expr, this);
 		case ABASDATE:
-				boolean isVar = varPattern.matcher(expr).matches();
-				if (isVar) {
-					if (this.variables.containsKey(expr)) {
-						return this.variables.get(expr);
-					} else {
-						AbasDate date = new AbasDate(expr, value, this);
-						this.variables.put(expr, date);
-						return date;
-					}
+			boolean isVar = varPattern.matcher(expr).matches();
+			if (isVar) {
+				if (this.variables.containsKey(expr)) {
+					return this.variables.get(expr);
+				} else {
+					AbasDate date = new AbasDate(expr, value, this);
+					this.variables.put(expr, date);
+					return date;
 				}
-				return new AbasDate(expr, value, this);
+			}
+			return new AbasDate(expr, value, this);
 		default:
 			return value;
 		}
@@ -1295,7 +1317,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void view(String cmd) {
 		zeige(cmd);
 	}
-	
+
 	public void window(String cmd) {
 		fenster(cmd);
 	}
@@ -1331,7 +1353,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public Object propertyMissing(String name) {
 		return name;
 	}
-	
+
 	protected void finalize() throws Throwable {
 		try {
 			hselection = null;
@@ -1341,17 +1363,24 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			boolPattern = null;
 			pointerPattern = null;
 			varPattern = null;
-			d = null;
-			D = null;
-			a = d;
-			A = d;
+			 d = null;
+			 D = null;
+			a = null;
+			A = null;
 			e = null;
 			E = null;
-
+			
+			f = null;
+			F = null;
+			
 			g = null;
 			G = null;
 			h = null;
 			H = null;
+			l = null;
+			L = null;
+			l0 = null;
+			L0 = null;
 			l1 = null;
 			L1 = null;
 			l2 = null;
@@ -1381,7 +1410,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			variableTypes = null;
 			variables = null;
 			arg0 = null;
-			arg1 = null;
+			args = null;
 			dbContext = null;
 		} finally {
 			super.finalize();

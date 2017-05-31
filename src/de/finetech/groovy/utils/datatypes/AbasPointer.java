@@ -10,7 +10,7 @@ import de.finetech.groovy.utils.GroovyFOVariable;
 
 /**
  * 
- * @author MKürbis
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
  *         Verweis Darstellung
  */
