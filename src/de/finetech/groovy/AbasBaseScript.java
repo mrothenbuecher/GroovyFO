@@ -146,13 +146,18 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public AbasBaseScript() {
 	}
 
+	/**
+	 * .absatz cmd
+	 * 
+	 * @param cmd
+	 */
 	public void absatz(String cmd) {
 		EKS.absatz(cmd);
 	}
 
 	// TODO Methoden startTransaction, commitTransaction, abortTransaction,
 	public void action(String cmd) {
-		aktion(cmd);
+		this.aktion(cmd);
 	}
 
 	public boolean add(String cmd) {
@@ -160,14 +165,19 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void addRow() {
-		plusZeile();
+		this.plusZeile();
 	}
 
 	@Deprecated
 	public void addZeile() {
-		plusZeile();
+		this.plusZeile();
 	}
 
+	/**
+	 * .aktion cmd
+	 * 
+	 * @param cmd
+	 */
 	public void aktion(String cmd) {
 		EKS.aktion(cmd);
 	}
@@ -185,7 +195,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * 
 	 * @param def
 	 *            bsp.: "GD2 xvon"
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablen bezeichnung zurück mit puffer bsp.: U|xvon
 	 * @throws Exception
 	 */
 	public String art(String def) throws GroovyFOException {
@@ -197,13 +207,16 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	/**
-	 * Definition genau einer NutzerVariablen
+	 * Definition genau einer Nutzervariablen ( U Puffer)
+	 * 
+	 * .art GD xfoo
 	 * 
 	 * @param type
-	 *            Variablenart "GD", "TEXT" usw.
+	 *            Variablenart "GD", "TEXT","P2:1" usw.
 	 * @param def
 	 *            Bezeichnung der Variablen bsp.: "xvon"
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablenbezeichnung zurück mit Puffer bsp.: U|xvon
+	 * 
 	 * @throws GroovyFOException
 	 */
 	public String art(String type, String def) throws GroovyFOException {
@@ -220,13 +233,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	/**
-	 * Definition von n NutzerVariablen eines Types
+	 * Definition von n Nutzervariablen eines Types (U Puffer)
+	 * 
+	 * .art GD xfoo xba
 	 * 
 	 * @param type
 	 *            Variablenart "GD", "TEXT" usw.
 	 * @param def
 	 *            die Variablen bezeichnungen als array
-	 * @return liefert die Variablen bezeichnung zurÃ¼ck mit puffer bsp.: U|xvon
+	 * @return liefert die Variablen bezeichnung zurück mit puffer bsp.: U|xvon
 	 * @throws GroovyFOException
 	 */
 	public String[] art(String type, String... def) throws GroovyFOException {
@@ -240,11 +255,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void assign(String cmd) {
-		zuweisen(cmd);
+		this.zuweisen(cmd);
 	}
 
 	public void assign(String key, boolean value) {
-		zuweisen(key + "=" + (value ? "G|TRUE" : "G|false"));
+		this.zuweisen(key + "=" + (value ? "G|TRUE" : "G|false"));
 	}
 
 	public void assign(String key, double value) {
@@ -252,11 +267,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void assign(String key, int value) {
-		zuweisen(key + "=" + Integer.toString(value));
+		this.zuweisen(key + "=" + Integer.toString(value));
 	}
 
 	public void assign(String key, String value) {
-		zuweisen(key + "=" + value);
+		this.zuweisen(key + "=" + value);
 	}
 
 	/**
@@ -341,7 +356,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void bringe() {
-		bringe("");
+		this.bringe("");
 	}
 
 	public void bringe(String cmd) {
@@ -396,11 +411,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void delete(String cmd) {
-		loesche(cmd);
+		this.loesche(cmd);
 	}
 
 	public void down(String cmd) {
-		unten(cmd);
+		this.unten(cmd);
 	}
 
 	public void drucke(String cmd) {
@@ -432,7 +447,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void error(String cmd) {
-		fehler(cmd);
+		this.fehler(cmd);
 	}
 
 	public Object expr(String expr) throws GroovyFOException, ParseException {
@@ -500,7 +515,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void file(String cmd) {
-		datei(cmd);
+		this.datei(cmd);
 	}
 
 	public void flattersatz() {
@@ -640,11 +655,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean getMehr() {
-		return mehr();
+		return this.mehr();
 	}
 
 	public boolean getMore() {
-		return mehr();
+		return this.mehr();
 	}
 
 	/**
@@ -746,7 +761,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void help(String cmd) {
-		hilfe(cmd);
+		this.hilfe(cmd);
 	}
 
 	/**
@@ -846,11 +861,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void in(String fopName) {
-		eingabe(fopName);
+		this.eingabe(fopName);
 	}
 
 	public void input(String fopName) {
-		eingabe(fopName);
+		this.eingabe(fopName);
 	}
 
 	public boolean isTrue(String value) {
@@ -860,15 +875,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void justified() {
-		blocksatz("");
+		this.blocksatz("");
 	}
 
 	public void justified(String cmd) {
-		blocksatz(cmd);
+		this.blocksatz(cmd);
 	}
 
 	public void kom(String kommando) {
-		kommando(kommando);
+		this.kommando(kommando);
 	}
 
 	public void kommando(String kommando) {
@@ -876,11 +891,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void kommandoWarten(String kommando) {
-		kom("-WARTEN " + kommando);
+		this.kom("-WARTEN " + kommando);
 	}
 
 	public void komWarten(String kommando) {
-		kom("-WARTEN " + kommando);
+		this.kom("-WARTEN " + kommando);
 	}
 
 	public void kopieren(String cmd) {
@@ -948,11 +963,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void left(String cmd) {
-		links(cmd);
+		this.links(cmd);
 	}
 
 	public void length(String cmd) {
-		laenge(cmd);
+		this.laenge(cmd);
 	}
 
 	public void lesen(String cmd) {
@@ -960,7 +975,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void line(String cmd) {
-		zeile(cmd);
+		this.zeile(cmd);
 	}
 
 	public void links(String cmd) {
@@ -968,7 +983,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean load(int puffer, String cmd) {
-		return lade(puffer + " " + cmd);
+		return this.lade(puffer + " " + cmd);
 	}
 
 	public boolean load(int puffer, String db, SelectionBuilder builder) {
@@ -976,11 +991,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean load(int puffer, String db, String selection) {
-		return lade(puffer, db, selection);
+		return this.lade(puffer, db, selection);
 	}
 
 	public boolean load(String cmd) {
-		return lade(cmd);
+		return this.lade(cmd);
 	}
 
 	public void loesche(String cmd) {
@@ -992,12 +1007,18 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void make(String cmd) {
-		mache(cmd);
+		this.mache(cmd);
 	}
 
 	public boolean mehr() {
-		String mehr = FO.Gvar("mehr");
-		// FIXME SprachunterstÃ¼tzung
+		String mehr = "ja";
+		// ist mehr definiert?
+		// auf ruf ist F|defined(G|mehr)
+		if((Boolean) F.get("defined").call("G|mehr")){
+			mehr = FO.Gvar("mehr");
+		}else{
+			mehr = FO.Gvar("success");
+		}
 		return isTrue(mehr);
 	}
 
@@ -1054,24 +1075,28 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		if (ex instanceof Exception) {
 			Exception e = (Exception) ex;
 			e.printStackTrace();
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			println("Unbehandelte Ausnahme: \n" + sw.toString());
+			println("Unbehandelte Ausnahme: \n" + getStacktrace(e));
 		}
 		return null;
 	}
+	
+	private String getStacktrace(Exception e){
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return sw.toString();
+	}
 
 	public void output(String cmd) {
-		ausgabe(cmd);
+		this.ausgabe(cmd);
 	}
 
 	public void page(String cmd) {
-		seite(cmd);
+		this.seite(cmd);
 	}
 
 	public void para(String cmd) {
-		absatz(cmd);
+		this.absatz(cmd);
 	}
 
 	public void plusZeile() {
@@ -1079,23 +1104,23 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void print(String cmd) {
-		drucke(cmd);
+		this.drucke(cmd);
 	}
 
 	public void printed(String cmd) {
-		gedruckt(cmd);
+		this.gedruckt(cmd);
 	}
 
 	public void println(boolean cmd) {
-		println(Boolean.toString(cmd));
+		this.println(Boolean.toString(cmd));
 	}
 
 	public void println(double cmd) {
-		println(Double.toString(cmd));
+		this.println(Double.toString(cmd));
 	}
 
 	public void println(int cmd) {
-		println(Integer.toString(cmd));
+		this.println(Integer.toString(cmd));
 	}
 
 	public void println(Object cmd) {
@@ -1112,11 +1137,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void protection(String cmd) {
-		schutz(cmd);
+		this.schutz(cmd);
 	}
 
 	public void read(String cmd) {
-		lesen(cmd);
+		this.lesen(cmd);
 	}
 
 	public void rechts(String cmd) {
@@ -1144,7 +1169,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * wenn sich der Bezug eines Laden/Holen/dazu buffers ändert müssen alle
 	 * Felder aus der Map zum merken des Datentypes entfernt werden
 	 * 
-	 * @param buffer
+	 * @param buffer - Buchstabe des Puffers
 	 */
 	private void resetMap(String buffer) {
 		if (buffer != null && !buffer.isEmpty()) {

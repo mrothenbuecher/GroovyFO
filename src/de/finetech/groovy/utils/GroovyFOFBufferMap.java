@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
 import de.finetech.groovy.utils.datatypes.FOFunction;
 
@@ -47,7 +46,6 @@ public class GroovyFOFBufferMap extends GroovyObjectSupport implements
 		return this.get(name).call((Object[])args);
 	}
 	
-	// f.
 	public FOFunction get(Object key) {
 		FOFunction function = new FOFunction(key.toString(), script);
 		return function;

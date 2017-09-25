@@ -28,7 +28,7 @@ import de.abas.eks.jfop.remote.FOPSessionContext;
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  * 
  *         JFOP erwartet als zweiten Parameter das Groovyscript welches
- *         ausgefÃ¼hrt werden soll und Ã¼bergibt alle parameter an dieses weiter
+ *         ausgeführt werden soll und übergibt alle parameter an dieses weiter
  * 
  */
 public class ScriptExcecuter implements ContextRunnable {
@@ -38,6 +38,7 @@ public class ScriptExcecuter implements ContextRunnable {
 			throws FOPException {
 		GroovyShell shell = null;
 		boolean error = false;
+		FO.eingabe("DATEI.F");
 		// Genug Parameter übergben?
 		if (arg1.length > 1) {
 			File groovyScript = new File(arg1[1]);
@@ -87,14 +88,9 @@ public class ScriptExcecuter implements ContextRunnable {
 						return 0;
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
-						FO.eingabe("DATEI.F");
-						e.printStackTrace();
 						FO.box("Fehler", e.getMessage());
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw);
-						e.printStackTrace(pw);
 						FO.box("Unbehandelte Ausnahme in " + arg1[1],
-								sw.toString());
+								getStacktrace(e));
 						error = true;
 					} catch (AbortedException e) {
 						// FIXME Sprach unabhängigkeit
@@ -102,20 +98,14 @@ public class ScriptExcecuter implements ContextRunnable {
 								"FOP wurde durch Anwender abgebrochen");
 						error = true;
 					} catch (CompilationFailedException e) {
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw);
-						e.printStackTrace(pw);
 						FO.box("Übersetzung fehlgeschlagen",
 								"GroovyFO konnte das Script nicht übersetzen: "
-										+ e.getMessage() + "\n" + sw.toString());
+										+ e.getMessage() + "\n" + getStacktrace(e));
 						error = true;
 					} catch (Exception e) {
 						// FIXME Sprach unabhängigkeit
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw);
-						e.printStackTrace(pw);
 						FO.box("Unbehandelte Ausnahme in " + arg1[1],
-								sw.toString());
+								getStacktrace(e));
 						error = true;
 					} finally {
 						clearGroovyClassesCache();
@@ -138,9 +128,15 @@ public class ScriptExcecuter implements ContextRunnable {
 		return -1;
 	}
 	
+	private String getStacktrace(Exception e){
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return sw.toString();
+	}
+	
 	protected boolean clearGroovyClassesCache() {
 		try {
-			// Retrieve the fields we will manipulate
 			Class<MetaClassRegistryImpl> mcriClass = MetaClassRegistryImpl.class;
 
 			Field constantMetaClassesField = mcriClass
@@ -151,7 +147,6 @@ public class ScriptExcecuter implements ContextRunnable {
 					.getDeclaredField("constantMetaClassCount");
 			constantMetaClassCountField.setAccessible(true);
 
-			// Retrieve the object to be manipulate
 			Class<GroovySystem> gsClass = GroovySystem.class;
 			Field metaClassRegistryField = gsClass
 					.getDeclaredField("META_CLASS_REGISTRY");
@@ -161,13 +156,11 @@ public class ScriptExcecuter implements ContextRunnable {
 			ConcurrentReaderHashMap constantMetaClasses = (ConcurrentReaderHashMap) constantMetaClassesField
 					.get(mcri);
 
-			// Clears the map
 			constantMetaClasses.clear();
 			constantMetaClassCountField.set(mcri, 0);
 
 			return true;
 		} catch (Exception e) {
-			// Log this exception. It indicates that the code changed.
 			return false;
 		}
 	}
