@@ -1,5 +1,12 @@
 package de.finetech.utils;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ * @param <T>
+ * @param <A>
+ */
 public class Tuple <T,A> {
 
 	private T key;

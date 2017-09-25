@@ -14,6 +14,12 @@ import de.abas.jfop.base.buffer.BaseReadableBuffer;
 import de.abas.jfop.base.buffer.ReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ * @param <T>
+ */
 public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 		GroovyObjectSupport implements Map<String, Object>, Cloneable,
 		Serializable, GroovyObject {

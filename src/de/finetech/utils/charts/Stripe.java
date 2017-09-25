@@ -3,6 +3,11 @@ package de.finetech.utils.charts;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class Stripe {
 
 	private boolean vertical = true;

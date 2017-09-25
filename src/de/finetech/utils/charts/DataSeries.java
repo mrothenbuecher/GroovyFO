@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Vector;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class DataSeries {
 	
 	private HashMap<String, String> parameter = new HashMap<String,String>();

@@ -3,6 +3,11 @@ package de.finetech.utils.charts;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class Value {
 
 	private final static int TYPE_NORMAL = 0, TYPE_BUBBLE = 1, TYPE_HIGHLOW = 2, TYPE_GANTT = 3;

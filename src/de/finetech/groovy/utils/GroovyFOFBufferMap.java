@@ -12,6 +12,11 @@ import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
 import de.finetech.groovy.utils.datatypes.FOFunction;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class GroovyFOFBufferMap extends GroovyObjectSupport implements
 		Map<String, FOFunction>, Cloneable, Serializable, GroovyObject {
 

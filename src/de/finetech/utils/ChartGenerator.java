@@ -13,6 +13,11 @@ import de.finetech.utils.charts.Pointmarker;
 import de.finetech.utils.charts.Stripe;
 import de.finetech.utils.charts.Value;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class ChartGenerator {
 
 	private ChartType type;

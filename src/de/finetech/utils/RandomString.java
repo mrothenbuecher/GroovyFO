@@ -2,6 +2,11 @@ package de.finetech.utils;
 
 import java.util.Random;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class RandomString {
 
 	private static final char[] symbols;

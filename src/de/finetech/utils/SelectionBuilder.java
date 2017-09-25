@@ -1,5 +1,10 @@
 package de.finetech.utils;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ */
 public class SelectionBuilder {
 
 	private boolean isDe = false;

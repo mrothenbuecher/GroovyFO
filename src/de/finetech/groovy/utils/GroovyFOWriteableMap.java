@@ -6,6 +6,12 @@ import de.abas.eks.jfop.FOPException;
 import de.abas.jfop.base.buffer.WriteableBuffer;
 import de.finetech.groovy.AbasBaseScript;
 
+/**
+ * 
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
+ *
+ * @param <T>
+ */
 public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 		GroovyFOReadableMap<T> {
 

@@ -11,7 +11,7 @@ import de.abas.eks.jfop.remote.FO;
 /**
  * stellt das ergebnis eines Infosystem aufrufs dar.
  * 
- * @author MKürbis
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
  */
 public class InfosystemcallResult {

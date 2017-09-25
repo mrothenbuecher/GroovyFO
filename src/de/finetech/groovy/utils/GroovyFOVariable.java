@@ -7,14 +7,15 @@ import de.finetech.groovy.AbasBaseScript;
 
 /**
  * 
- * @author MKürbis
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
- *         bei der Implementierung von Comparable ist auf die Kompatiblitöt der
+ *         bei der Implementierung von Comparable ist auf die Kompatiblität der
  *         abas Typen unter einander zu achten!
  * @param <V>
  */
 
-public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements Comparable<Object> {
+public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
+		Comparable<Object> {
 
 	protected String varname, type;
 	protected AbasBaseScript script;
@@ -36,8 +37,8 @@ public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
 
 	public String getType() {
 		if (type == null) {
-			this.type = FO.getValue("F", "typeof(F|expr(" + this.getVariablename()
-					+ "))");
+			this.type = FO.getValue("F",
+					"typeof(F|expr(" + this.getVariablename() + "))");
 		}
 		return type;
 	}
@@ -49,17 +50,17 @@ public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
 	public String getVariablename() {
 		return this.varname;
 	}
-	
+
 	public String getVar() {
 		return this.varname;
 	}
-	
-	//TODO Metafunktionen
-	
+
+	// TODO Metafunktionen
+
 	public boolean isEmpty() {
-		String empty = FO.getValue("F", "empty(" + this.getVariablename()
-				+ ")");
-		//TODO lang
+		String empty = FO
+				.getValue("F", "empty(" + this.getVariablename() + ")");
+		// TODO lang
 		return empty.equals("ja") || empty.equals("yes");
 	}
 

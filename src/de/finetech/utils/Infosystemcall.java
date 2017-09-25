@@ -16,7 +16,7 @@ import java.util.Vector;
  * führt einen Infosystem aufruf mit edpinfosys.sh
  * aus
  * 
- * @author MKürbis
+ * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
  */
 public class Infosystemcall {

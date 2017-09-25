@@ -29,6 +29,8 @@ import de.finetech.utils.SelectionBuilder;
 
 /**
  * 
+ * Basisklasse von der jedes Script abgeleitet wird
+ * 
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  * 
  */
@@ -48,10 +50,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	// reguläre Ausdrücke zum erkennen von Variablen arten
 	private Pattern integerPattern = Pattern
 			.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
-	private Pattern realPattern = Pattern.compile("(R.*)|(M.*)");
-	private Pattern realdPattern = Pattern.compile("(R.*D.*)|(M.*D.*)");
-	private Pattern realtPattern = Pattern.compile("(R.*T.*)|(M.*T.*)");
-	private Pattern realdtPattern = Pattern.compile("(R.*DT.*)|(M.*DT.*)");
+	private Pattern doublePattern = Pattern.compile("(R.*)|(M.*)");
+	private Pattern doubledPattern = Pattern.compile("(R.*D.*)|(M.*D.*)");
+	private Pattern doubletPattern = Pattern.compile("(R.*T.*)|(M.*T.*)");
+	private Pattern doubledtPattern = Pattern.compile("(R.*DT.*)|(M.*DT.*)");
 
 	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private Pattern pointerPattern = Pattern
@@ -156,7 +158,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public boolean add(String cmd) {
 		return EKS.dazu(cmd);
 	}
-	
 
 	public void addRow() {
 		plusZeile();
@@ -389,7 +390,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void datei(String cmd) {
 		EKS.datei(cmd);
 	}
-	
+
 	public boolean dazu(String cmd) {
 		return EKS.dazu(cmd);
 	}
@@ -592,19 +593,19 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			return PossibleDatatypes.INTEGER;
 		}
 		// real tausender und dezimal
-		if (realdtPattern.matcher(abasType).matches()) {
+		if (doubledtPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLEDT;
 		}
 		// real tausender
-		if (realtPattern.matcher(abasType).matches()) {
+		if (doubletPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLET;
 		}
 		// real dezimal trennzeichen
-		if (realdPattern.matcher(abasType).matches()) {
+		if (doubledPattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLED;
 		}
 		// Real
-		if (realPattern.matcher(abasType).matches()) {
+		if (doublePattern.matcher(abasType).matches()) {
 			return PossibleDatatypes.DOUBLE;
 		}
 		// bool
@@ -1359,20 +1360,20 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			hselection = null;
 			lselection = null;
 			integerPattern = null;
-			realPattern = null;
+			doublePattern = null;
 			boolPattern = null;
 			pointerPattern = null;
 			varPattern = null;
-			 d = null;
-			 D = null;
+			d = null;
+			D = null;
 			a = null;
 			A = null;
 			e = null;
 			E = null;
-			
+
 			f = null;
 			F = null;
-			
+
 			g = null;
 			G = null;
 			h = null;

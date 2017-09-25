@@ -1,10 +1,6 @@
 package de.finetech.groovy.utils.datatypes;
 
-import groovy.lang.GroovyObject;
-import groovy.lang.GroovyObjectSupport;
-
 import java.text.ParseException;
-import java.util.Map;
 
 import de.finetech.groovy.AbasBaseScript;
 import de.finetech.groovy.utils.GroovyFOException;
@@ -16,6 +12,7 @@ import de.finetech.groovy.utils.GroovyFOException;
  *
  * Klasse repräsentiert einen Functions aufruf wie
  * F|defined(o)
+ * F|strreplace
  */
 public class FOFunction {
 
