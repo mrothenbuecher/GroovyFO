@@ -1052,10 +1052,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.merke(cmd);
 	}
 
-	public boolean more() {
-		return mehr();
-	}
-
 	public void note(String hinweis) {
 		hinweis(hinweis);
 	}
@@ -1162,7 +1158,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void reserve(String cmd) {
-		merke(cmd);
+		this.merke(cmd);
 	}
 
 	/**
@@ -1189,15 +1185,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void rewrite() {
-		bringe("");
+		this.bringe("");
 	}
 
 	public void rewrite(String cmd) {
-		bringe(cmd);
+		this.bringe(cmd);
 	}
 
 	public void right(String cmd) {
-		rechts(cmd);
+		this.rechts(cmd);
 	}
 
 	@Override
@@ -1206,9 +1202,9 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		try {
 			o = runCode();
 		} catch (Exception e) {
-			onerror(e);
+			this.onerror(e);
 		} finally {
-			always();
+			this.always();
 		}
 		return o;
 	}
@@ -1236,11 +1232,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void seperator(String cmd) {
-		trenner(cmd);
+		this.trenner(cmd);
 	}
 
 	public void set(String cmd) {
-		setze(cmd);
+		this.setze(cmd);
 	}
 
 	public void setze(String cmd) {
@@ -1248,7 +1244,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void sort(String cmd) {
-		sortiere(cmd);
+		this.sortiere(cmd);
 	}
 
 	public void sortiere(String cmd) {
@@ -1256,7 +1252,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean success() {
-		return mehr();
+		return this.mehr();
 	}
 
 	public void tabellensatz(String cmd) {
@@ -1264,7 +1260,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void tablerecord(String cmd) {
-		tabellensatz(cmd);
+		this.tabellensatz(cmd);
 	}
 
 	public void translate(String cmd) {
@@ -1304,7 +1300,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void up(String cmd) {
-		oben(cmd);
+		this.oben(cmd);
 	}
 
 	public void vfarbe(Color c, int row) {
@@ -1341,11 +1337,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void view(String cmd) {
-		zeige(cmd);
+		this.zeige(cmd);
 	}
 
 	public void window(String cmd) {
-		fenster(cmd);
+		this.fenster(cmd);
 	}
 
 	public void zeige(String cmd) {

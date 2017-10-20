@@ -10,7 +10,7 @@ GroovyFO vereinfacht den Umgang mit JFOP durch das bereitstellen eines einfachen
 Es können nun ohne zusätzliches kompilieren und redeployen JFOP's in Form von Groovyscripten ausgeführt werden. Außerdem sind Konstrukte wie while, for, if ..., Funktionen sowie Klassen möglich.
 
 einige Vorteile:<br>
-* [automatische Typkonvertierung](https://github.com/mkuerbis/GroovyFO/wiki/automatische-Typkonvertierung),beim Zugriff auf abas Variablen (bsp.: I3 -> Integer)
+* [automatische Typkonvertierung](https://github.com/mrothenbuecher/GroovyFO/wiki/automatische-Typkonvertierung),beim Zugriff auf abas Variablen (bsp.: I3 -> Integer)
     * Auch Umgang mit abas Datum möglich
         *  `M|datum = M|datum +1`, einen Tag weiter
         *  `M|datum = M|datum -1`, einen Tag zurück
@@ -30,13 +30,13 @@ Kontakt via Slack:
 
 [![Fragen? Anregungen?](https://powerful-waters-31137.herokuapp.com/badge.svg)](https://powerful-waters-31137.herokuapp.com/)
 
-[Übersicht zur API](https://github.com/mkuerbis/GroovyFO/wiki/API)
+[Übersicht zur API](https://github.com/mrothenbuecher/GroovyFO/wiki/API)
 
-[Benchmark](https://github.com/mkuerbis/GroovyFO/wiki/Benchmark)
+[Benchmark](https://github.com/mrothenbuecher/GroovyFO/wiki/Benchmark)
 
 ## Funktionsweise
 
-Die Klasse de.finetech.groovy.ScriptExcecuter ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. Diese Klasse kapselt JFOP-Funktionen um so Schreibarbeit sparen zu können. Weiterhin besteht durch die Verwendung von Groovy die Möglichkeit Kontrollstrukturen wie if-Anweisungen, Schleifen oder eben auch Klassen im Kontext eines FOP zu verwenden. Dadurch das bei jeden Aufruf des ScriptExecuters die Groovy Datei neu interpretiert wird, können Änderungen an dieser Datei ohne erneutes redeployen des JFOP-Server wirksam werden. Dieses Verhalten ist ähnlich dem Verhalten von FOP's.
+Die Klasse de.finetech.groovy.ScriptExecutor ist ein JFOP welches als ersten Parameter eine Textdatei (Groovyscript) erwartet. Dieses wird dann auf Basis der Script-Klasse de.finetech.groovy.AbasBaseScript initialisiert. Diese Klasse kapselt JFOP-Funktionen um so Schreibarbeit sparen zu können. Weiterhin besteht durch die Verwendung von Groovy die Möglichkeit Kontrollstrukturen wie if-Anweisungen, Schleifen oder eben auch Klassen im Kontext eines FOP zu verwenden. Dadurch das bei jeden Aufruf des ScriptExecuters die Groovy Datei neu interpretiert wird, können Änderungen an dieser Datei ohne erneutes redeployen des JFOP-Server wirksam werden. Dieses Verhalten ist ähnlich dem Verhalten von FOP's.
 
 
 ## Installation
@@ -53,11 +53,11 @@ JFOP Server redeployen und wie in der Beispiel Sektion beschrieben testen.
 ## Verwendung
 Aufruf eines GroovyFO aus der Kommandoübersicht
 ```
-<Text>de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL<zeigen>
+<Text>GroovyFO.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL<zeigen>
 ```
 oder in einem Infosystemen hinterlegen
 ```
-de.finetech.groovy.ScriptExcecuter.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL
+GroovyFO.java GROOVYSCRIPT_WELCHES_AUSGEFÜHRT_WERDEN_SOLL
 ```
 
 ## Beispiel GroovyFO
@@ -77,7 +77,7 @@ for(def i=0; i<100 && hole("Teil"); i++){
 ```
 Zum testen Kommando aufrufen mit
 ```
-<Text>de.finetech.groovy.ScriptExcecuter.java ow1/GROOVYFO.TEST<zeigen>
+<Text>GroovyFO.java ow1/GROOVYFO.TEST<zeigen>
 ```
 
 #### Kurzübersicht
@@ -124,7 +124,7 @@ def always(){
 ### Helferlein
 
 #### SelectionBuilder
-Der [SelectionBuilder](https://github.com/mkuerbis/GroovyFO/wiki/SelectionBuilder) ist eine Hilfsklasse um einfach Selektion definieren zu können.
+Der [SelectionBuilder](https://github.com/mrothenbuecher/GroovyFO/wiki/SelectionBuilder) ist eine Hilfsklasse um einfach Selektion definieren zu können.
 ```groovy
 // Artikel von a bis b
 def selection1 = new SelectionBuilder().normal("such2","A","B").database(2).group(1)
@@ -201,4 +201,4 @@ gen.generate("ychart");
 ```
 Ergebnis:
 
-![Chart](https://raw.githubusercontent.com/mkuerbis/GroovyFO/master/img/chart.jpg)
+![Chart](https://raw.githubusercontent.com/mrothenbuecher/GroovyFO/master/img/chart.jpg)

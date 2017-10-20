@@ -45,10 +45,8 @@ public class FOFunction {
 		try {
 			return script.getComputedValue("F|"+functionName+"("+parameter+")");
 		} catch (GroovyFOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
