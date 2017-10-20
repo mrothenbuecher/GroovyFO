@@ -825,13 +825,20 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean hole(String cmd) {
-		this.resetMap("h");
+		if(cmd.contains(" ")){
+			String[] cmds = cmd.split(" ");
+			return this.hole(cmds[0], cmds[1]);
+			//this.resetMap("h");
+		}
 		return FO.hole(cmd);
 	}
 
 	/**
 	 * sollte der Selektionstring Identisch mit einer vorher gehenden Abfragen
 	 * sein so wird nur der nächste Datensatz geholt
+	 * 
+	 * Ist beim Selektionsstring weder % noch $ angegeben wird die Maskenloseselektion gewählt
+	 * $,,
 	 * 
 	 * @param db
 	 *            - Datenbank von der Selektiert werden soll
@@ -840,6 +847,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
 	public boolean hole(String db, Object selection) {
+		if(selection instanceof String){
+			String sel = selection.toString();
+			if(!sel.startsWith("%") && !sel.startsWith("$")){
+				sel = "$,,"+sel;
+			}
+			selection = sel;
+		}
 		if (this.hselection != null && this.hselection.equals(selection)) {
 			return FO.hole(db);
 		} else {
@@ -912,7 +926,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return
 	 */
 	public boolean lade(int puffer, String cmd) {
-		this.resetMap(Integer.toString(puffer));
+		if(cmd.contains(" ")){
+			String[] cmds = cmd.split(" ");
+			return lade(puffer,cmds[0],cmds[1]);
+		}
 		return FO.lade(puffer + " " + cmd);
 	}
 
@@ -930,6 +947,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return liefert wahr falls die Selektion einen Datensatz holen konnte
 	 */
 	public boolean lade(int puffer, String db, Object selection) {
+		if(selection instanceof String){
+			String sel = selection.toString();
+			if(!sel.startsWith("%") && !sel.startsWith("$")){
+				sel = "$,,"+sel;
+			}
+			selection = sel;
+		}
 		if (this.lselection[puffer] != null
 				&& this.lselection[puffer].equals(selection)) {
 			return FO.lade(puffer + " " + db);
