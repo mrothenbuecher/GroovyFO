@@ -1,11 +1,17 @@
 /*
 * Beispiel GroovyFO holt die ersten 100 Teile aus der DB
 * und gibt deren Suchwort aus
-* ow1/GROOVYTEST
+* ow1/GROOVY.TEST
 */
 
-for(def i=0; i<100 && hole("Teil"); i++){
+for(def i=0; i<100 && hole("Teil","@Gruppe=1;"); i++){
         // Ausgabe auf Konsole
-        println ( h.such )
-        //alternativ auch println ( h("such") )
+        println h.such
+        //alternativ auch println h("such") oder println h|such
+        
+        // Test Dachoperator
+        println h.abplatz^such
+        
+        // Test typcast
+        println "Mindestbestand: "+h.mindest+" Mindestbestand+1:"+(h.mindest+1)
 }
