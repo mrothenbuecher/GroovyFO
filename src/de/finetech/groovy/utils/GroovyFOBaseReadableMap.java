@@ -1,8 +1,5 @@
 package de.finetech.groovy.utils;
 
-import groovy.lang.GroovyObject;
-import groovy.lang.GroovyObjectSupport;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
@@ -11,8 +8,9 @@ import java.util.Set;
 
 import de.abas.eks.jfop.FOPException;
 import de.abas.jfop.base.buffer.BaseReadableBuffer;
-import de.abas.jfop.base.buffer.ReadableBuffer;
 import de.finetech.groovy.AbasBaseScript;
+import groovy.lang.GroovyObject;
+import groovy.lang.GroovyObjectSupport;
 
 /**
  * 
@@ -49,12 +47,10 @@ public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 		return null;
 	}
 
-	// h.
 	public Object get(Object key){
 		try {
 			// buffer.
-			String skey = key.toString();
-			
+			String skey = key.toString();			
 			return script.getValue(buffer.getQualifiedFieldName(skey),
 					buffer.getStringValue(skey));
 		} catch (FOPException e) {
