@@ -46,9 +46,6 @@ Das Projekt von github herunterladen und entpacken. Den Inhalt src Ordners bei d
 
 JFOP Server redeployen und wie in der Beispiel Sektion beschrieben testen.
 
-### via Release
-*.jar Datei des gewünschten Releases herunterladen und nach `~s3/java/lib` kopieren. Anschließend `~s3/java/thirdparty_homedir.classpath` ergänzen und JFOP Server neustarten.
-
 
 ## Verwendung
 Aufruf eines GroovyFO aus der Kommandoübersicht
