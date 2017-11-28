@@ -27,8 +27,8 @@ import de.abas.eks.jfop.remote.FOPSessionContext;
 /**
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  * 
- *         JFOP erwartet als zweiten Parameter das Groovyscript welches
- *         ausgeführt werden soll und übergibt alle parameter an dieses weiter
+ *         JFOP erwartet als ersten Parameter das Groovyscript welches
+ *         ausgeführt werden soll und übergibt alle Parameter an dieses weiter
  * 
  */
 public class ScriptExecutor implements ContextRunnable {

@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -1018,6 +1019,19 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return isTrue(mehr);
 	}
 
+	
+	public int menu(String title, List<String> options) {
+		return this.menue(title, options.toArray(new String[options.size()]));
+	}
+
+	public int menu(String title, List<String> options, int highlight) {
+		return this.menue(title, options.toArray(new String[options.size()]), highlight);
+	}
+
+	public int menu(String title, List<String> options, int highlight, boolean noReplace) {
+		return this.menue(title, options.toArray(new String[options.size()]), highlight, noReplace);
+	}
+	
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
 	}
@@ -1030,6 +1044,18 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return this.menue(title, options, highlight, noReplace);
 	}
 
+	public int menue(String title, List<String> options) {
+		return this.menue(title, options.toArray(new String[options.size()]));
+	}
+
+	public int menue(String title, List<String> options, int highlight) {
+		return this.menue(title, options.toArray(new String[options.size()]), highlight);
+	}
+
+	public int menue(String title, List<String> options, int highlight, boolean noReplace) {
+		return this.menue(title, options.toArray(new String[options.size()]), highlight, noReplace);
+	}
+	
 	public int menue(String title, String[] options) {
 		return FO.menue(title, options);
 	}
