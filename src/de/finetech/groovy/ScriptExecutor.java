@@ -35,6 +35,7 @@ public class ScriptExecutor implements ContextRunnable {
 
 	
 	public static int executeScript(FOPSessionContext arg0, String[] arg1){
+		
 		GroovyShell shell = null;
 		boolean error = false;
 		FO.eingabe("DATEI.F");
@@ -97,6 +98,7 @@ public class ScriptExecutor implements ContextRunnable {
 								"FOP wurde durch Anwender abgebrochen");
 						error = true;
 					} catch (CompilationFailedException e) {
+						// FIXME Sprach unabhängigkeit
 						FO.box("Übersetzung fehlgeschlagen",
 								"GroovyFO konnte das Script nicht übersetzen: "
 										+ e.getMessage() + "\n" + getStacktrace(e));
@@ -114,14 +116,17 @@ public class ScriptExecutor implements ContextRunnable {
 						}
 					}
 				} else {
+					// FIXME Sprach unabhängigkeit
 					FO.box("Unzureichende Argumente",
 							"Groovy Script ist keine Datei!");
 				}
 			} else {
+				// FIXME Sprach unabhängigkeit
 				FO.box("Unzureichende Argumente",
 						"Groovy Script existiert nicht!");
 			}
 		} else {
+			// FIXME Sprach unabhängigkeit
 			FO.box("Unzureichende Argumente", "keine Groovy Script angegeben!");
 		}
 		return -1;

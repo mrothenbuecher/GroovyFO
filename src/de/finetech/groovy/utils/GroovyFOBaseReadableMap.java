@@ -54,13 +54,10 @@ public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 			return script.getValue(buffer.getQualifiedFieldName(skey),
 					buffer.getStringValue(skey));
 		} catch (FOPException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (GroovyFOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

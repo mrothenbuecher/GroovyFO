@@ -64,7 +64,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	protected BufferFactory bfactory = BufferFactory.newInstance();
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
-	// FIXME dazu puffer
 	protected GroovyFODBufferMap d = new GroovyFODBufferMap(this);;
 	protected GroovyFODBufferMap D = d;
 	protected GroovyFOWriteableMap a = new GroovyFOWriteableMap(bfactory.getParentScreenBuffer(), this);
@@ -1275,6 +1274,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public boolean success() {
 		return this.mehr();
+	}
+	
+	public boolean system(String cmd){
+		return EKS.system(cmd);
 	}
 
 	public void tabellensatz(String cmd) {

@@ -30,6 +30,11 @@ public class AbasPointer extends GroovyFOVariable<String> {
 		return FO.getValue("F", "expr(" + this.varname + ")");
 	}
 
+	@Override
+	public String toString(){
+		return this.getValue();
+	}
+	
 	/**
 	 * Zugriff auf Variablen eines Verweises
 	 * 
