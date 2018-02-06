@@ -27,6 +27,8 @@ import de.finetech.groovy.utils.GroovyFOFBufferMap;
 import de.finetech.groovy.utils.GroovyFOWriteableMap;
 import de.finetech.groovy.utils.datatypes.AbasDate;
 import de.finetech.groovy.utils.datatypes.AbasPointer;
+import de.finetech.groovy.utils.datatypes.TypGuesser;
+import de.finetech.groovy.utils.datatypes.TypGuesser.PossibleDatatypes;
 import de.finetech.utils.SelectionBuilder;
 
 /**
@@ -39,10 +41,6 @@ import de.finetech.utils.SelectionBuilder;
 @CompileStatic
 public abstract class AbasBaseScript extends Script implements GroovyObject {
 
-	protected static enum PossibleDatatypes {
-		INTEGER, DOUBLE, DOUBLED, DOUBLET, DOUBLEDT, BOOLEAN, ABASDATE, ABASPOINTER, STRING
-	}
-
 	protected static DecimalFormat df = new DecimalFormat("0.0000");
 
 	// Temp Variablen um sich die letzten Selektion zu speichern
@@ -50,17 +48,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	private String dselection;
 	private String[] lselection = new String[11];
 
-	// reguläre Ausdrücke zum erkennen von Variablen arten
-	private Pattern integerPattern = Pattern.compile("(I[0-9])|(IP.*)|(IN.*)|(K.*)");
-	private Pattern doublePattern = Pattern.compile("(R.*)|(M.*)");
-	private Pattern doubledPattern = Pattern.compile("(R.*D.*)|(M.*D.*)");
-	private Pattern doubletPattern = Pattern.compile("(R.*T.*)|(M.*T.*)");
-	private Pattern doubledtPattern = Pattern.compile("(R.*DT.*)|(M.*DT.*)");
-
-	private Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
-	private Pattern pointerPattern = Pattern.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|(C.*)");
 	private Pattern varPattern = Pattern.compile("([a-zA-Z]\\|[a-zA-Z0-9]*)");
-
 	protected BufferFactory bfactory = BufferFactory.newInstance();
 
 	// maps für den einfachen zugriff auf die Felder bsp. m.von
@@ -202,7 +190,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public String art(String type, String def) throws GroovyFOException {
 		if (!u.containsKey(def)) {
 			FO.art(type + " " + def);
-			this.variableTypes.put("U|" + def, this.getClassOfType(type));
+			this.variableTypes.put("U|" + def, TypGuesser.getClassOfType(type));
 		} else {
 			// TODO prüfen ob die Typen übereinstimmen
 			// if (!this.variableTypes.get("U|" + def).equals(type)) {
@@ -578,40 +566,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.gedruckt(cmd);
 	}
 
-	protected PossibleDatatypes getClassOfType(String abasType) {
-		if (integerPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.INTEGER;
-		}
-		// real tausender und dezimal
-		if (doubledtPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.DOUBLEDT;
-		}
-		// real tausender
-		if (doubletPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.DOUBLET;
-		}
-		// real dezimal trennzeichen
-		if (doubledPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.DOUBLED;
-		}
-		// Real
-		if (doublePattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.DOUBLE;
-		}
-		// bool
-		if (boolPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.BOOLEAN;
-		}
-		if (AbasDate.isDate(abasType)) {
-			return PossibleDatatypes.ABASDATE;
-		}
-		if (pointerPattern.matcher(abasType).matches()) {
-			return PossibleDatatypes.ABASPOINTER;
-		}
-		// Strings
-		return PossibleDatatypes.STRING;
-	}
-
 	/**
 	 * lässt abas den Werberechnen
 	 * 
@@ -623,7 +577,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException, ParseException {
 		String result = FO.getValue("F", "expr(" + expr + ")");
-		PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof(F|expr(" + expr + "))"));
+		PossibleDatatypes type = TypGuesser.getClassOfType(FO.getValue("F", "typeof(F|expr(" + expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
 
@@ -642,13 +596,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 *            mit vorangestellten Puffer buchstaben bsp.: H|id
 	 * @return
 	 */
-	protected PossibleDatatypes getType(String variable) {
+	public PossibleDatatypes getType(String variable) {
 		variable = variable.toLowerCase();
 		if (this.variableTypes.containsKey(variable)) {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			PossibleDatatypes type = this.getClassOfType(FO.getValue("F", "typeof(" + variable + ")"));
+			PossibleDatatypes type = TypGuesser.getClassOfType(FO.getValue("F", "typeof(" + variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
@@ -1405,11 +1359,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		try {
 			hselection = null;
 			lselection = null;
-			integerPattern = null;
-			doublePattern = null;
-			boolPattern = null;
-			pointerPattern = null;
-			varPattern = null;
 			d = null;
 			D = null;
 			a = null;

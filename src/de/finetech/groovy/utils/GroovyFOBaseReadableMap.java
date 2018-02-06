@@ -50,7 +50,7 @@ public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 	public Object get(Object key){
 		try {
 			// buffer.
-			String skey = key.toString();			
+			String skey = key.toString();
 			return script.getValue(buffer.getQualifiedFieldName(skey),
 					buffer.getStringValue(skey));
 		} catch (FOPException e) {

@@ -1,8 +1,5 @@
 package de.finetech.groovy.utils;
 
-import groovy.lang.GroovyObject;
-import groovy.lang.GroovyObjectSupport;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
@@ -11,7 +8,8 @@ import java.util.Set;
 
 import de.abas.eks.jfop.FOPException;
 import de.finetech.groovy.AbasBaseScript;
-import de.finetech.groovy.utils.datatypes.FOFunction;
+import groovy.lang.GroovyObject;
+import groovy.lang.GroovyObjectSupport;
 
 /**
  * D-Buffer

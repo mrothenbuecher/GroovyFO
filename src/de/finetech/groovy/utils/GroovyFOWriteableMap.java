@@ -37,18 +37,24 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 			} else if (valueClass == Boolean.class) {
 				Boolean b = (Boolean) value;
 				return script.fo(key, b.booleanValue() ? "G|TRUE":"G|FALSE"  );
-			} else if (value instanceof GroovyFOVariable) {
-				return script.fo(key, value.toString());
-			} else {
+			} else if(valueClass == String.class) {
 				// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
 				// wert so übergeben das abas ihn interpretiert
-				String val = value.toString();
+				String val = value != null ? value.toString(): "";
 				if (val.startsWith("'")) {
 					val = val.substring(1);
 					script.formula(buffer + "|" + key, val);
 				} else {
-					return script.fo(key, val);
+					if (val.startsWith("\"") && val.endsWith("\""))
+						return script.fo(key, val);
+					else{
+						//TODO ggf. abfangen wenn Anführungstriche enthalten sind "
+						//val = val.replaceAll("", "+'DBLQUOTE'+");
+						return script.fo(key, "\""+val+"\"");
+					}
 				}
+			} else if (value instanceof GroovyFOVariable) {
+				return script.fo(key, value.toString());
 			}
 		} catch (FOPException e) {
 			e.printStackTrace();
