@@ -189,7 +189,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 */
 	public String art(String type, String def) throws GroovyFOException {
 		if (!u.containsKey(def)) {
-			FO.art(type + " " + def);
+			EKS.art(type + " " + def);
 			this.variableTypes.put("U|" + def, TypGuesser.getClassOfType(type));
 		} else {
 			// TODO prüfen ob die Typen übereinstimmen
@@ -248,7 +248,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 */
 	@Deprecated
 	public void atext(String cmd) {
-		FO.atext(cmd);
+		EKS.atext(cmd);
 	}
 
 	public void ausgabe(String cmd) {
@@ -308,15 +308,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void blocksatz() {
-		FO.blocksatz("");
+		EKS.blocksatz("");
 	}
 
 	public void blocksatz(String cmd) {
-		FO.blocksatz(cmd);
+		EKS.blocksatz(cmd);
 	}
 
 	public void box(String cmd) {
-		FO.box(cmd);
+		EKS.box(cmd);
 	}
 
 	public void box(String title, String content) {
@@ -332,7 +332,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void browser(String cmd) {
-		FO.browser(cmd);
+		EKS.browser(cmd);
 	}
 
 	public void color(String cmd) {
@@ -382,6 +382,42 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return EKS.dazu(cmd);
 	}
 
+	public boolean dde_advise(String cmd){
+		return EKS.dde_advise(cmd);
+	}
+
+	public boolean dde_exec(String cmd){
+		return EKS.dde_exec(cmd);
+	}
+
+	public boolean dde_exit(String cmd){
+		return EKS.dde_exit(cmd);
+	}
+
+	public boolean dde_info(String cmd){
+		return EKS.dde_info(cmd);
+	}
+
+	public boolean dde_init(String cmd){
+		return EKS.dde_init(cmd);
+	}
+
+	public boolean dde_request(String cmd){
+		return EKS.dde_request(cmd);
+	}
+
+	public boolean dde_send(String cmd){
+		return EKS.dde_send(cmd);
+	}
+
+	public boolean dde_unadvise(String cmd){
+		return EKS.dde_unadvise(cmd);
+	}
+
+	public boolean dde_wait(String cmd){
+		return EKS.dde_wait(cmd);
+	}
+
 	public void delete(String cmd) {
 		this.loesche(cmd);
 	}
@@ -411,11 +447,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void entfAlleZeilen() {
-		FO.mache("maske zeile --");
+		EKS.mache("maske zeile --");
 	}
 
 	public void entfZeile() {
-		FO.mache("maske zeile -O");
+		EKS.mache("maske zeile -O");
 	}
 
 	public void error(String cmd) {
@@ -490,36 +526,95 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.datei(cmd);
 	}
 
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			hselection = null;
+			lselection = null;
+			d = null;
+			D = null;
+			a = null;
+			A = null;
+			e = null;
+			E = null;
+
+			f = null;
+			F = null;
+
+			g = null;
+			G = null;
+			h = null;
+			H = null;
+			l = null;
+			L = null;
+			l0 = null;
+			L0 = null;
+			l1 = null;
+			L1 = null;
+			l2 = null;
+			L2 = null;
+			l3 = null;
+			L3 = null;
+			l4 = null;
+			L4 = null;
+			l5 = null;
+			L5 = null;
+			l6 = null;
+			L6 = null;
+			l7 = null;
+			L7 = null;
+			l8 = null;
+			L8 = null;
+			l9 = null;
+			L9 = null;
+			m = null;
+			M = null;
+			p = null;
+			P = null;
+			s = null;
+			S = null;
+			u = null;
+			U = null;
+			variableTypes = null;
+			variables = null;
+			arg0 = null;
+			args = null;
+			dbContext = null;
+		} finally {
+			super.finalize();
+		}
+	}
+
 	public void flattersatz() {
-		FO.flattersatz("");
+		EKS.flattersatz("");
 	}
 
 	public Object fo(String var, AbasDate value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=\"" + value.toString() + "\"");
+		EKS.formel(var + "=\"" + value.toString() + "\"");
 		return value;
 		// return this.getValue(var, value);
 	}
 
 	public Object fo(String var, AbasPointer value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=\"" + value.toString() + "\"");
+		EKS.formel(var + "=\"" + value.toString() + "\"");
 		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, boolean value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
+		EKS.formel(var + "=" + (value ? "G|TRUE" : "G|FALSE"));
 		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, double value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=" + df.format(value));
+		EKS.formel(var + "=" + df.format(value));
 		// return this.getValue(var);
 		return value;
 	}
 
 	public Object fo(String var, int value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=" + Integer.toString(value));
+		EKS.formel(var + "=" + Integer.toString(value));
 		// return this.getValue(var);
 		return value;
 	}
@@ -536,7 +631,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @throws FOPException
 	 */
 	public Object fo(String var, String value) throws FOPException, GroovyFOException {
-		FO.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") + "\"");
+		EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") + "\"");
 		// return this.getValue(var);
 		return value;
 	}
@@ -554,7 +649,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @throws ParseException
 	 */
 	public Object formel(String var, String value) throws FOPException, GroovyFOException, ParseException {
-		FO.formel(var + "=" + value);
+		EKS.formel(var + "=" + value);
 		return this.getComputedValue(var);
 	}
 
@@ -576,8 +671,8 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @throws ParseException
 	 */
 	public Object getComputedValue(String expr) throws GroovyFOException, ParseException {
-		String result = FO.getValue("F", "expr(" + expr + ")");
-		PossibleDatatypes type = TypGuesser.getClassOfType(FO.getValue("F", "typeof(F|expr(" + expr + "))"));
+		String result = EKS.getValue("F", "expr(" + expr + ")");
+		PossibleDatatypes type = TypGuesser.getClassOfType(EKS.getValue("F", "typeof(F|expr(" + expr + "))"));
 		return this.getValueByType(type, expr, result);
 	}
 
@@ -587,6 +682,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public boolean getMore() {
 		return this.mehr();
+	}
+
+	private String getStacktrace(Exception e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return sw.toString();
 	}
 
 	/**
@@ -602,7 +704,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			return this.variableTypes.get(variable);
 		} else {
 			// FIXME vorher prüfen ob die Variable existiert!
-			PossibleDatatypes type = TypGuesser.getClassOfType(FO.getValue("F", "typeof(" + variable + ")"));
+			PossibleDatatypes type = TypGuesser.getClassOfType(EKS.getValue("F", "typeof(" + variable + ")"));
 			this.variableTypes.put(variable, type);
 			return type;
 		}
@@ -681,6 +783,27 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 	}
 
+	private String handleSelectionString(String selection){
+		// identnummer
+		/*
+		if(selection.matches("\\d+")){
+			return "\""+selection+"\"";
+		}
+		// Datenbank Id (123,123,123)
+		if(selection.matches("\\((\\d+){1}(,\\d+){2,3}\\)")){
+			
+		}
+		*/
+		// mit hoher Wahrscheinlichkeit selektion
+		if(selection.contains("=") || selection.contains(";")){
+			// maskenlose
+			if(!selection.startsWith("$") && selection.startsWith("%")){
+				selection = "$"+selection;
+			}
+		}
+		return "\""+selection+"\"";
+	}
+	
 	public void help(String cmd) {
 		this.hilfe(cmd);
 	}
@@ -720,21 +843,21 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-HINTERGRUND " + color + " " + row);
+		EKS.farbe("-HINTERGRUND " + color + " " + row);
 	}
 
 	public void hfarbe(String color, String field) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-HINTERGRUND " + color + " " + field);
+		EKS.farbe("-HINTERGRUND " + color + " " + field);
 	}
 
 	public void hfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-HINTERGRUND " + color + " " + field + " " + row);
+		EKS.farbe("-HINTERGRUND " + color + " " + field + " " + row);
 	}
 
 	public void hilfe(String cmd) {
@@ -750,7 +873,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			this.resetMap("h");
 			this.hselection = cmd;
 		}
-		return FO.hole(cmd);
+		return EKS.hole(cmd);
 	}
 
 	/**
@@ -768,35 +891,14 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 */
 	public boolean hole(String db, Object selection) {
 		if (this.hselection != null && this.hselection.equals(selection)) {
-			return FO.hole(db);
+			return EKS.hole(db);
 		} else {
 			this.hselection = selection.toString();
 			this.resetMap("h");
-			return FO.hole(db + " "+handleSelectionString(hselection));
+			return EKS.hole(db + " "+handleSelectionString(hselection));
 		}
 	}
 
-	private String handleSelectionString(String selection){
-		// identnummer
-		/*
-		if(selection.matches("\\d+")){
-			return "\""+selection+"\"";
-		}
-		// Datenbank Id (123,123,123)
-		if(selection.matches("\\((\\d+){1}(,\\d+){2,3}\\)")){
-			
-		}
-		*/
-		// mit hoher Wahrscheinlichkeit selektion
-		if(selection.contains("=") || selection.contains(";")){
-			// maskenlose
-			if(!selection.startsWith("$") && selection.startsWith("%")){
-				selection = "$"+selection;
-			}
-		}
-		return "\""+selection+"\"";
-	}
-	
 	/**
 	 * Nutzt die Methode {@link #hole(String, String)}
 	 * 
@@ -864,7 +966,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 			this.resetMap(Integer.toString(puffer));
 			this.lselection[puffer] = cmd;
 		}
-		return FO.lade(puffer + " " + cmd);
+		return EKS.lade(puffer + " " + cmd);
 	}
 
 	/**
@@ -882,11 +984,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 */
 	public boolean lade(int puffer, String db, Object selection) {
 		if (this.lselection[puffer] != null && this.lselection[puffer].equals(selection)) {
-			return FO.lade(puffer + " " + db);
+			return EKS.lade(puffer + " " + db);
 		} else {
 			this.resetMap(Integer.toString(puffer));
 			this.lselection[puffer] = selection.toString();
-			return FO.lade(puffer + " " + db + " "+this.handleSelectionString(this.lselection[puffer]));
+			return EKS.lade(puffer + " " + db + " "+this.handleSelectionString(this.lselection[puffer]));
 		}
 	}
 
@@ -905,7 +1007,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public boolean lade(String cmd) {
 		// .lade X ....
 		this.resetMap(cmd.split(" ")[0]);
-		return FO.lade(cmd);
+		return EKS.lade(cmd);
 	}
 
 	public void laenge(String cmd) {
@@ -920,6 +1022,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.laenge(cmd);
 	}
 
+	
 	public void lesen(String cmd) {
 		EKS.lesen(cmd);
 	}
@@ -931,7 +1034,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void links(String cmd) {
 		EKS.links(cmd);
 	}
-
+	
 	public boolean load(int puffer, String cmd) {
 		return this.lade(puffer + " " + cmd);
 	}
@@ -955,7 +1058,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void mache(String cmd) {
 		EKS.mache(cmd);
 	}
-
+	
 	public void make(String cmd) {
 		this.mache(cmd);
 	}
@@ -965,14 +1068,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		// ist mehr definiert?
 		// auf ruf ist F|defined(G|mehr)
 		if ((Boolean) F.get("defined").call("G|mehr")) {
-			mehr = FO.Gvar("mehr");
+			mehr = EKS.Gvar("mehr");
 		} else {
-			mehr = FO.Gvar("success");
+			mehr = EKS.Gvar("success");
 		}
 		return isTrue(mehr);
 	}
 
-	
 	public int menu(String title, List<String> options) {
 		return this.menue(title, options.toArray(new String[options.size()]));
 	}
@@ -984,7 +1086,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public int menu(String title, List<String> options, int highlight, boolean noReplace) {
 		return this.menue(title, options.toArray(new String[options.size()]), highlight, noReplace);
 	}
-	
+
 	public int menu(String title, String[] options) {
 		return this.menue(title, options);
 	}
@@ -1008,7 +1110,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public int menue(String title, List<String> options, int highlight, boolean noReplace) {
 		return this.menue(title, options.toArray(new String[options.size()]), highlight, noReplace);
 	}
-	
+
 	public int menue(String title, String[] options) {
 		return FO.menue(title, options);
 	}
@@ -1049,13 +1151,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return null;
 	}
 
-	private String getStacktrace(Exception e) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		return sw.toString();
-	}
-
 	public void output(String cmd) {
 		this.ausgabe(cmd);
 	}
@@ -1069,7 +1164,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void plusZeile() {
-		FO.mache("maske zeile +O");
+		EKS.mache("maske zeile +O");
 	}
 
 	public void print(String cmd) {
@@ -1092,17 +1187,22 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.println(Integer.toString(cmd));
 	}
 
+	@Override
 	public void println(Object cmd) {
-		FO.println(cmd.toString());
+		EKS.println(cmd.toString());
 	}
 
 	public void println(String cmd) {
 		cmd = cmd.replaceAll("\"", "'DBLQUOTE'");
 		// String kürzen
 		if (cmd.length() > 2999)
-			FO.println(cmd.substring(0, 2999));
+			EKS.println(cmd.substring(0, 2999));
 		else
-			FO.println(cmd);
+			EKS.println(cmd);
+	}
+
+	public Object propertyMissing(String name) {
+		return name;
 	}
 
 	public void protection(String cmd) {
@@ -1185,7 +1285,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public abstract Object runCode();
-
+	
 	public void schutz(String cmd) {
 		EKS.schutz(cmd);
 	}
@@ -1229,7 +1329,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public boolean success() {
 		return this.mehr();
 	}
-	
+
 	public boolean system(String cmd){
 		return EKS.system(cmd);
 	}
@@ -1267,11 +1367,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public void unjustified() {
-		FO.flattersatz("");
+		EKS.flattersatz("");
 	}
 
 	public void unjustified(String cmd) {
-		FO.flattersatz(cmd);
+		EKS.flattersatz(cmd);
 	}
 
 	public void unten(String cmd) {
@@ -1298,119 +1398,58 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-VORDERGRUND " + color + " " + row);
+		EKS.farbe("-VORDERGRUND " + color + " " + row);
 	}
 
+	
 	public void vfarbe(String color, String field) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-VORDERGRUND " + color + " " + field);
+		EKS.farbe("-VORDERGRUND " + color + " " + field);
 	}
-
+	
 	public void vfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
-		FO.farbe("-VORDERGRUND " + color + " " + field + " " + row);
+		EKS.farbe("-VORDERGRUND " + color + " " + field + " " + row);
 	}
-
+	
 	public void view(String cmd) {
 		this.zeige(cmd);
 	}
-
+	
 	public void window(String cmd) {
 		this.fenster(cmd);
 	}
-
+	
 	public void zeige(String cmd) {
 		EKS.zeige(cmd);
 	}
-
+	
 	public void zeile(String cmd) {
 		EKS.zeile(cmd);
 	}
-
+	
 	public void zuweisen(String cmd) {
 		EKS.zuweisen(cmd);
 	}
-
+	
 	public void zuweisen(String key, boolean value) {
 		EKS.zuweisen(key = (value ? "G|TRUE" : "G|false"));
 	}
-
+	
 	public void zuweisen(String key, double value) {
 		EKS.zuweisen(key + "=" + Double.toString(value));
 	}
-
+	
 	public void zuweisen(String key, int value) {
 		EKS.zuweisen(key + "=" + Integer.toString(value));
 	}
 
 	public void zuweisen(String key, String value) {
 		EKS.zuweisen(key + "=" + value);
-	}
-
-	public Object propertyMissing(String name) {
-		return name;
-	}
-
-	protected void finalize() throws Throwable {
-		try {
-			hselection = null;
-			lselection = null;
-			d = null;
-			D = null;
-			a = null;
-			A = null;
-			e = null;
-			E = null;
-
-			f = null;
-			F = null;
-
-			g = null;
-			G = null;
-			h = null;
-			H = null;
-			l = null;
-			L = null;
-			l0 = null;
-			L0 = null;
-			l1 = null;
-			L1 = null;
-			l2 = null;
-			L2 = null;
-			l3 = null;
-			L3 = null;
-			l4 = null;
-			L4 = null;
-			l5 = null;
-			L5 = null;
-			l6 = null;
-			L6 = null;
-			l7 = null;
-			L7 = null;
-			l8 = null;
-			L8 = null;
-			l9 = null;
-			L9 = null;
-			m = null;
-			M = null;
-			p = null;
-			P = null;
-			s = null;
-			S = null;
-			u = null;
-			U = null;
-			variableTypes = null;
-			variables = null;
-			arg0 = null;
-			args = null;
-			dbContext = null;
-		} finally {
-			super.finalize();
-		}
 	}
 
 }
