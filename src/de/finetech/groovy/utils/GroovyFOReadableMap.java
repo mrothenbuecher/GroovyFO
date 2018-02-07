@@ -39,7 +39,8 @@ public class GroovyFOReadableMap<T extends ReadableBuffer> extends GroovyFOBaseR
 			case BOOLEAN:
 				return buffer.getBooleanValue(skey);
 			default:
-				return script.getValue(buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
+				return script.getValueByType(abasType, buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
+				//return script.getValue(buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
 			}
 		} catch (FOPException e) {
 			e.printStackTrace();
