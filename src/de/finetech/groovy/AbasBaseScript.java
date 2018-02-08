@@ -254,39 +254,39 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void ausgabe(String cmd) {
 		EKS.ausgabe(cmd);
 	}
-
+	
 	public void bcolor(Color c, int row) {
 		this.hfarbe(this.colorToString(c), row);
 	}
-
+	
 	public void bcolor(Color c, String field) {
 		this.hfarbe(this.colorToString(c), field);
 	}
-
+	
 	public void bcolor(Color c, String field, int row) {
 		this.hfarbe(this.colorToString(c), field, row);
 	}
-
+	
 	public void bcolor(String color, int row) {
 		this.hfarbe(color, row);
 	}
-
+	
 	public void bcolor(String color, String field) {
 		this.hfarbe(color, field);
 	}
-
+	
 	public void bcolor(String color, String field, int row) {
 		this.hfarbe(color, field, row);
 	}
-
+	
 	public void bcolour(Color c, int row) {
 		this.hfarbe(this.colorToString(c), row);
 	}
-
+	
 	public void bcolour(Color c, String field) {
 		this.hfarbe(this.colorToString(c), field);
 	}
-
+	
 	public void bcolour(Color c, String field, int row) {
 		this.hfarbe(this.colorToString(c), field, row);
 	}
@@ -335,6 +335,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.browser(cmd);
 	}
 
+	public void budget(String cmd) {
+		EKS.budget(cmd);
+	}
+
 	public void color(String cmd) {
 		this.farbe(cmd);
 	}
@@ -368,6 +372,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public void copy(String cmd) {
 		this.kopieren(cmd);
+	}
+
+	public void cursor(String cmd){
+		EKS.cursor(cmd);
 	}
 
 	public void datei(String cmd) {
@@ -449,7 +457,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void entfAlleZeilen() {
 		EKS.mache("maske zeile --");
 	}
-
+	
 	public void entfZeile() {
 		EKS.mache("maske zeile -O");
 	}
@@ -636,6 +644,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return value;
 	}
 
+	public void format(String cmd){
+		EKS.format(cmd);
+	}
+
 	/**
 	 * 
 	 * @param var
@@ -803,7 +815,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 		return "\""+selection+"\"";
 	}
-	
+
 	public void help(String cmd) {
 		this.hilfe(cmd);
 	}
@@ -859,7 +871,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 		EKS.farbe("-HINTERGRUND " + color + " " + field + " " + row);
 	}
-
+	
 	public void hilfe(String cmd) {
 		EKS.hilfe(cmd);
 	}
@@ -1022,7 +1034,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.laenge(cmd);
 	}
 
-	
 	public void lesen(String cmd) {
 		EKS.lesen(cmd);
 	}
@@ -1034,7 +1045,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void links(String cmd) {
 		EKS.links(cmd);
 	}
-	
+
 	public boolean load(int puffer, String cmd) {
 		return this.lade(puffer + " " + cmd);
 	}
@@ -1051,6 +1062,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return this.lade(cmd);
 	}
 
+	
 	public void loesche(String cmd) {
 		EKS.loesche(cmd);
 	}
@@ -1058,11 +1070,11 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void mache(String cmd) {
 		EKS.mache(cmd);
 	}
-	
+
 	public void make(String cmd) {
 		this.mache(cmd);
 	}
-
+	
 	public boolean mehr() {
 		String mehr = "ja";
 		// ist mehr definiert?
@@ -1094,7 +1106,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public int menu(String title, String[] options, int highlight) {
 		return this.menue(title, options, highlight);
 	}
-
+	
 	public int menu(String title, String[] options, int highlight, boolean noReplace) {
 		return this.menue(title, options, highlight, noReplace);
 	}
@@ -1163,6 +1175,26 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.absatz(cmd);
 	}
 
+	public boolean pc_clip(String cmd) {
+		return EKS.pc_clip(cmd);
+	}
+
+	public boolean pc_copy(String cmd) {
+		return EKS.pc_copy(cmd);
+	}
+
+	public boolean pc_exec(String cmd) {
+		return EKS.pc_exec(cmd);
+	}
+
+	public boolean pc_graph(String cmd) {
+		return EKS.pc_graph(cmd);
+	}
+
+	public void pc_open(String cmd) {
+		EKS.pc_open(cmd);
+	}
+
 	public void plusZeile() {
 		EKS.mache("maske zeile +O");
 	}
@@ -1178,6 +1210,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void println(boolean cmd) {
 		this.println(Boolean.toString(cmd));
 	}
+	
 
 	public void println(double cmd) {
 		this.println(Double.toString(cmd));
@@ -1285,7 +1318,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public abstract Object runCode();
-	
+
 	public void schutz(String cmd) {
 		EKS.schutz(cmd);
 	}
@@ -1293,7 +1326,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void seite(String cmd) {
 		EKS.seite(cmd);
 	}
-
+	
 	public boolean select(String cmd) {
 		return this.hole(cmd);
 	}
@@ -1340,6 +1373,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public void tablerecord(String cmd) {
 		this.tabellensatz(cmd);
+	}
+
+	public void text(String cmd) {
+		EKS.text(cmd);
 	}
 
 	public void translate(String cmd) {
@@ -1401,13 +1438,13 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.farbe("-VORDERGRUND " + color + " " + row);
 	}
 
-	
 	public void vfarbe(String color, String field) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
 		EKS.farbe("-VORDERGRUND " + color + " " + field);
 	}
+
 	
 	public void vfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
@@ -1418,6 +1455,10 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	
 	public void view(String cmd) {
 		this.zeige(cmd);
+	}
+	
+	public void vtab(String cmd) {
+		EKS.vtab(cmd);
 	}
 	
 	public void window(String cmd) {
