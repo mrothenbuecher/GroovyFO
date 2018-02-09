@@ -80,8 +80,8 @@ Zum testen Kommando aufrufen mit
 #### Kurzübersicht
 | JFOP            | dt | engl |
 | --------------- | ------------- | --------|
-| EKS.Hvar(...)   | h.von oder h("von") oder h\|von| |
-| EKS.Mvar(...)   | m.von oder m("von") oder m\|von| |
+| EKS.Hvar(...)   | h.von oder h("von") | |
+| EKS.Mvar(...)   | m.von oder m("von") | |
 | EKS.hole(...)   | hole(...) <br/> hole(String db, SelectBuilder builder) <br/> hole(String db, String selektion)| select(...) <br/> select(String db, SelectBuilder builder) <br/> select(String db, String selektion)|
 | EKS.lade(...)   | lade(...) <br/> lade(int puffer, String db, SelectBuilder builder) <br/> lade(int puffer, String db, String selektion)| load(...) <br/> load(int puffer, String db, SelectBuilder builder) <br/> load(int puffer, String db, String selektion)|
 | EKS.formel(...) | fo(String variable, wert)| |
