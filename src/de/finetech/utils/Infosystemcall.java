@@ -12,9 +12,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Vector;
+
 /**
- * führt einen Infosystem aufruf mit edpinfosys.sh
- * aus
+ * führt einen Infosystem aufruf mit edpinfosys.sh aus
  * 
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
@@ -33,9 +33,8 @@ public class Infosystemcall {
 	protected boolean showAllHeadFields = false;
 
 	protected final static String fieldSeperator = "[";
-	
-	public static Infosystemcall build(String infosystem,
-			String outputFile) {
+
+	public static Infosystemcall build(String infosystem, String outputFile) {
 		return new Infosystemcall(infosystem, outputFile);
 	}
 
@@ -54,14 +53,12 @@ public class Infosystemcall {
 	}
 
 	public Infosystemcall setHeadParameter(String name, Object value) {
-		this.headParameter.put(name,
-				value == null ? "" : value.toString());
+		this.headParameter.put(name, value == null ? "" : value.toString());
 		return this;
 	}
-	
+
 	public Infosystemcall setTableParameter(String name, int row, Object value) {
-		this.headParameter.put(row+":"+name,
-				value == null ? "" : value.toString());
+		this.headParameter.put(row + ":" + name, value == null ? "" : value.toString());
 		return this;
 	}
 
@@ -75,8 +72,7 @@ public class Infosystemcall {
 		return this;
 	}
 
-	public Infosystemcall setShowAllTableFields(
-			boolean showAllTableFields) {
+	public Infosystemcall setShowAllTableFields(boolean showAllTableFields) {
 		this.showAllTableFields = showAllTableFields;
 		return this;
 	}
@@ -91,10 +87,10 @@ public class Infosystemcall {
 		return this;
 	}
 
-	//FIXME umgang mit umlauten und sonderzeichen ....
-	//FIXME umgang mit ( usw
+	// FIXME umgang mit umlauten und sonderzeichen ....
+	// FIXME umgang mit ( usw
 	private String buildCommand() {
-		String cmd = "edpinfosys.sh -t "+fieldSeperator+" -P -F -N " + this.infosystem;
+		String cmd = "edpinfosys.sh -t " + fieldSeperator + " -P -F -N " + this.infosystem;
 		String foo = "";
 		if (this.headParameter.size() > 0) {
 			cmd += " -s ";
@@ -139,30 +135,27 @@ public class Infosystemcall {
 		cmd += " > " + this.outputFile;
 		return cmd;
 	}
-	
-	public String getCommand(){
+
+	public String getCommand() {
 		String foo = "";
 		for (String key : this.headParameter.keySet()) {
 			foo += (key + "=" + this.headParameter.get(key) + "|");
 		}
 		foo = foo.substring(0, foo.length() - 1);
-		//FIXME sprachunabhängigkeit
-		return "*<Infosystem>"+this.infosystem+"<hole>?"+foo;
+		// FIXME sprachunabhängigkeit
+		return "*<Infosystem>" + this.infosystem + "<hole>?" + foo;
 	}
 
 	public InfosystemcallResult execute() throws IOException {
 		hinweis("-SOFORT hole Daten von Infosystem " + this.infosystem);
 		if (system("\"" + this.buildCommand() + "\" PASSWORT hinter")) {
-			hinweis("-SOFORT Datenbeschaffung von Infosystem "
-					+ this.infosystem + " erfolgreich");
+			hinweis("-SOFORT Datenbeschaffung von Infosystem " + this.infosystem + " erfolgreich");
 			return new InfosystemcallResult(this);
 		}
-		hinweis("-SOFORT Datenbeschaffung von Infosystem " + this.infosystem
-				+ " fehlgeschlagen");
+		hinweis("-SOFORT Datenbeschaffung von Infosystem " + this.infosystem + " fehlgeschlagen");
 		println(this.buildCommand());
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(
-					this.outputFile));
+			BufferedReader br = new BufferedReader(new FileReader(this.outputFile));
 			for (String line; (line = br.readLine()) != null;) {
 				println(line);
 			}

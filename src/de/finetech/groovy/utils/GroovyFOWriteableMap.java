@@ -12,8 +12,7 @@ import de.finetech.groovy.AbasBaseScript;
  *
  * @param <T>
  */
-public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
-		GroovyFOReadableMap<T> {
+public class GroovyFOWriteableMap<T extends WriteableBuffer> extends GroovyFOReadableMap<T> {
 
 	/**
 	 * 
@@ -23,11 +22,11 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 	public GroovyFOWriteableMap(T buffer, AbasBaseScript script) {
 		super(buffer, script);
 	}
-	
+
 	@Override
 	public Object put(String key, Object value) {
 		try {
-			//FO.println("key: "+key+" -> "+value.toString());
+			// FO.println("key: "+key+" -> "+value.toString());
 			Class<?> valueClass = value.getClass();
 			// FIXME muss besser gehen
 			if (valueClass == Integer.class) {
@@ -36,21 +35,23 @@ public class GroovyFOWriteableMap<T extends WriteableBuffer> extends
 				return script.fo(key, (Double) value);
 			} else if (valueClass == Boolean.class) {
 				Boolean b = (Boolean) value;
-				return script.fo(key, b.booleanValue() ? "G|TRUE":"G|FALSE"  );
-			} else if(valueClass == String.class) {
-				// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird der
+				return script.fo(key, b.booleanValue() ? "G|TRUE" : "G|FALSE");
+			} else if (valueClass == String.class) {
+				// wenn der übergebene Wert mit einem Hochkomma "'" beginnt wird
+				// der
 				// wert so übergeben das abas ihn interpretiert
-				String val = value != null ? value.toString(): "";
+				String val = value != null ? value.toString() : "";
 				if (val.startsWith("'")) {
 					val = val.substring(1);
 					script.formula(buffer + "|" + key, val);
 				} else {
 					if (val.startsWith("\"") && val.endsWith("\""))
 						return script.fo(key, val);
-					else{
-						//TODO ggf. abfangen wenn Anführungstriche enthalten sind "
-						//val = val.replaceAll("", "+'DBLQUOTE'+");
-						return script.fo(key, "\""+val+"\"");
+					else {
+						// TODO ggf. abfangen wenn Anführungstriche enthalten
+						// sind "
+						// val = val.replaceAll("", "+'DBLQUOTE'+");
+						return script.fo(key, "\"" + val + "\"");
 					}
 				}
 			} else if (value instanceof GroovyFOVariable) {

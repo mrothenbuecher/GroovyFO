@@ -18,9 +18,8 @@ import groovy.lang.GroovyObjectSupport;
  *
  * @param <T>
  */
-public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
-		GroovyObjectSupport implements Map<String, Object>, Cloneable,
-		Serializable, GroovyObject {
+public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends GroovyObjectSupport
+		implements Map<String, Object>, Cloneable, Serializable, GroovyObject {
 
 	private static final long serialVersionUID = 4146145334512673667L;
 	// private String buffer = null;
@@ -47,12 +46,11 @@ public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 		return null;
 	}
 
-	public Object get(Object key){
+	public Object get(Object key) {
 		try {
 			// buffer.
 			String skey = key.toString();
-			return script.getValue(buffer.getQualifiedFieldName(skey),
-					buffer.getStringValue(skey));
+			return script.getValue(buffer.getQualifiedFieldName(skey), buffer.getStringValue(skey));
 		} catch (FOPException e) {
 			e.printStackTrace();
 		} catch (GroovyFOException e) {
@@ -103,8 +101,9 @@ public class GroovyFOBaseReadableMap<T extends BaseReadableBuffer> extends
 	}
 
 	/**
-	 * erlaubt zugriff mittels Pipe, wie von FO gewohnt
-	 * h|fooo anstelle von h.fooo
+	 * erlaubt zugriff mittels Pipe, wie von FO gewohnt h|fooo anstelle von
+	 * h.fooo
+	 * 
 	 * @param key
 	 * @return
 	 */

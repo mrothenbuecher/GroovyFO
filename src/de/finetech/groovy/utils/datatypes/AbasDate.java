@@ -8,6 +8,7 @@ import de.abas.eks.jfop.remote.FO;
 import de.finetech.groovy.AbasBaseScript;
 import de.finetech.groovy.utils.GroovyFOException;
 import de.finetech.groovy.utils.GroovyFOVariable;
+
 /**
  * 
  * @author Michael Rothenbücher, Finetech GmbH & Co.KG
@@ -17,9 +18,8 @@ public class AbasDate extends GroovyFOVariable<String> {
 
 	private AbasBaseScript script;
 
-	private static Pattern pattern = Pattern.compile("(GD.*)|" + "(GW.*)|"
-			+ "(Z)|" + "(J2)|(GJ)|" + "(GP.*)|"
-			+ "(DATUM)|(WOCHE)|(TERMIN)|(ZEIT)");
+	private static Pattern pattern = Pattern
+			.compile("(GD.*)|" + "(GW.*)|" + "(Z)|" + "(J2)|(GJ)|" + "(GP.*)|" + "(DATUM)|(WOCHE)|(TERMIN)|(ZEIT)");
 
 	/**
 	 * @param type
@@ -40,15 +40,13 @@ public class AbasDate extends GroovyFOVariable<String> {
 	 * @throws GroovyFOException
 	 * @throws ParseException
 	 */
-	public AbasDate(String expr, String value,
-			AbasBaseScript script) throws GroovyFOException, ParseException {
+	public AbasDate(String expr, String value, AbasBaseScript script) throws GroovyFOException, ParseException {
 		super(expr, script);
 		this.script = script;
-		this.type = FO.getValue("F", "typeof(F|expr("+expr+"))");
+		this.type = FO.getValue("F", "typeof(F|expr(" + expr + "))");
 
 		if (!AbasDate.isDate(type))
-			throw new GroovyFOException(type
-					+ " is not a abas datetype for date/time/duration");
+			throw new GroovyFOException(type + " is not a abas datetype for date/time/duration");
 	}
 
 	public Object plus(int i) throws FOPException, GroovyFOException, ParseException {
@@ -98,8 +96,8 @@ public class AbasDate extends GroovyFOVariable<String> {
 			String expr = this.getVariablename() + "//" + i;
 			return script.getComputedValue(expr);
 		}
-		throw new GroovyFOException("operation // " + i + " not supported on "
-				+ this.getVariablename() + " of type " + this.type);
+		throw new GroovyFOException(
+				"operation // " + i + " not supported on " + this.getVariablename() + " of type " + this.type);
 	}
 
 	public String getSortable() throws FOPException, GroovyFOException, ParseException {
@@ -117,41 +115,37 @@ public class AbasDate extends GroovyFOVariable<String> {
 		return FO.getValue("F", "expr(" + this.varname + ")");
 	}
 
-	public boolean equals(AbasDate o) throws GroovyFOException, ParseException{
-		return ((Boolean) script.getComputedValue(this.varname + " = "
-							+ o.getVariablename()));
+	public boolean equals(AbasDate o) throws GroovyFOException, ParseException {
+		return ((Boolean) script.getComputedValue(this.varname + " = " + o.getVariablename()));
 	}
-	
+
 	@Override
-	public boolean equals(Object o){
+	public boolean equals(Object o) {
 		if (o instanceof AbasDate) {
-				AbasDate date = (AbasDate) o;
-				try {
-					return ((Boolean) script.getComputedValue(this.varname + " = "
-							+ date.getVariablename()));
-				} catch (GroovyFOException e) {
-					e.printStackTrace();
-					return false;
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return false;
-				}
-		}else{
+			AbasDate date = (AbasDate) o;
+			try {
+				return ((Boolean) script.getComputedValue(this.varname + " = " + date.getVariablename()));
+			} catch (GroovyFOException e) {
+				e.printStackTrace();
+				return false;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		} else {
 			return super.equals(o);
 		}
 	}
-	
+
 	@Override
 	public int compareTo(Object arg0) {
 		if (arg0 instanceof AbasDate) {
 			try {
 				AbasDate date = (AbasDate) arg0;
-				if ((Boolean) script.getComputedValue(this.varname + " > "
-						+ date.getVariablename()))
+				if ((Boolean) script.getComputedValue(this.varname + " > " + date.getVariablename()))
 					return 1;
-				else if ((Boolean) script.getComputedValue(this.varname + " < "
-						+ date.getVariablename()))
+				else if ((Boolean) script.getComputedValue(this.varname + " < " + date.getVariablename()))
 					return -1;
 				else
 					return 0;

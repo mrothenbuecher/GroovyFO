@@ -40,8 +40,7 @@ public class InfosystemcallResult {
 		this.head = new TreeMap<String, String>();
 		this.table = new Vector<TreeMap<String, String>>();
 		this.lines = this.getLinesOfFile(call.outputFile);
-		boolean headFields = call.showAllHeadFields
-				|| call.headOutputFields.size() > 0;
+		boolean headFields = call.showAllHeadFields || call.headOutputFields.size() > 0;
 		if (headFields) {
 			for (int i = 0; i < lines.get(0).length; i++) {
 				String key = lines.get(0)[i];

@@ -33,9 +33,8 @@ import de.abas.eks.jfop.remote.FOPSessionContext;
  */
 public class ScriptExecutor implements ContextRunnable {
 
-	
-	public static int executeScript(FOPSessionContext arg0, String[] arg1){
-		
+	public static int executeScript(FOPSessionContext arg0, String[] arg1) {
+
 		GroovyShell shell = null;
 		boolean error = false;
 		FO.eingabe("DATEI.F");
@@ -58,15 +57,14 @@ public class ScriptExecutor implements ContextRunnable {
 						ImportCustomizer ic = new ImportCustomizer();
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
-						//ic.addStaticStars("de.abas.eks.jfop.remote.EKS");
+						// ic.addStaticStars("de.abas.eks.jfop.remote.EKS");
 						// Helferklassen für GroovyFO
 						ic.addStarImports("de.finetech.groovy");
 						ic.addStarImports("de.finetech.groovy.utils");
 						ic.addStarImports("de.finetech.groovy.utils.datatypes");
-						ic.addStarImports("de.finetech.utils","de.finetech.utils.charts");
+						ic.addStarImports("de.finetech.utils", "de.finetech.utils.charts");
 						//
-						ic.addImports("java.awt.Color", "java.util.Calendar",
-								"java.text.SimpleDateFormat",
+						ic.addImports("java.awt.Color", "java.util.Calendar", "java.text.SimpleDateFormat",
 								"java.text.DateFormat", "java.util.Date");
 
 						cc.addCompilationCustomizers(ic);
@@ -77,9 +75,9 @@ public class ScriptExecutor implements ContextRunnable {
 						GroovyClassLoader loader = new GroovyClassLoader();
 						shell = new GroovyShell(loader, binding, cc);
 						Script gscript = shell.parse(groovyScript);
-						//gscript.run();
+						// gscript.run();
 						Object o = gscript.run();
-						if(o != null){
+						if (o != null) {
 							GroovySystem.getMetaClassRegistry().removeMetaClass(o.getClass());
 							GroovySystem.getMetaClassRegistry().removeMetaClass(gscript.getClass());
 						}
@@ -90,41 +88,35 @@ public class ScriptExecutor implements ContextRunnable {
 					} catch (CommandException e) {
 						// FIXME Sprach unabhängigkeit
 						FO.box("Fehler", e.getMessage());
-						FO.box("Unbehandelte Ausnahme in " + arg1[1],
-								getStacktrace(e));
+						FO.box("Unbehandelte Ausnahme in " + arg1[1], getStacktrace(e));
 						error = true;
 					} catch (AbortedException e) {
 						// FIXME Sprach unabhängigkeit
-						FO.box("FOP abgebrochen",
-								"FOP wurde durch Anwender abgebrochen");
+						FO.box("FOP abgebrochen", "FOP wurde durch Anwender abgebrochen");
 						error = true;
 					} catch (CompilationFailedException e) {
 						// FIXME Sprach unabhängigkeit
-						FO.box("Übersetzung fehlgeschlagen",
-								"GroovyFO konnte das Script nicht übersetzen: "
-										+ e.getMessage() + "\n" + getStacktrace(e));
+						FO.box("Übersetzung fehlgeschlagen", "GroovyFO konnte das Script nicht übersetzen: "
+								+ e.getMessage() + "\n" + getStacktrace(e));
 						error = true;
 					} catch (Exception e) {
 						// FIXME Sprach unabhängigkeit
-						FO.box("Unbehandelte Ausnahme in " + arg1[1],
-								getStacktrace(e));
+						FO.box("Unbehandelte Ausnahme in " + arg1[1], getStacktrace(e));
 						error = true;
 					} finally {
 						clearGroovyClassesCache();
-						if(error){
-							//FIXME möglichkeit für bösen Fehler
+						if (error) {
+							// FIXME möglichkeit für bösen Fehler
 							return -2;
 						}
 					}
 				} else {
 					// FIXME Sprach unabhängigkeit
-					FO.box("Unzureichende Argumente",
-							"Groovy Script ist keine Datei!");
+					FO.box("Unzureichende Argumente", "Groovy Script ist keine Datei!");
 				}
 			} else {
 				// FIXME Sprach unabhängigkeit
-				FO.box("Unzureichende Argumente",
-						"Groovy Script existiert nicht!");
+				FO.box("Unzureichende Argumente", "Groovy Script existiert nicht!");
 			}
 		} else {
 			// FIXME Sprach unabhängigkeit
@@ -132,40 +124,34 @@ public class ScriptExecutor implements ContextRunnable {
 		}
 		return -1;
 	}
-	
+
 	@Override
-	public int runFop(FOPSessionContext arg0, String[] arg1)
-			throws FOPException {
+	public int runFop(FOPSessionContext arg0, String[] arg1) throws FOPException {
 		return ScriptExecutor.executeScript(arg0, arg1);
 	}
-	
-	private static String getStacktrace(Exception e){
+
+	private static String getStacktrace(Exception e) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
 		return sw.toString();
 	}
-	
+
 	protected static boolean clearGroovyClassesCache() {
 		try {
 			Class<MetaClassRegistryImpl> mcriClass = MetaClassRegistryImpl.class;
 
-			Field constantMetaClassesField = mcriClass
-					.getDeclaredField("constantMetaClasses");
+			Field constantMetaClassesField = mcriClass.getDeclaredField("constantMetaClasses");
 			constantMetaClassesField.setAccessible(true);
 
-			Field constantMetaClassCountField = mcriClass
-					.getDeclaredField("constantMetaClassCount");
+			Field constantMetaClassCountField = mcriClass.getDeclaredField("constantMetaClassCount");
 			constantMetaClassCountField.setAccessible(true);
 
 			Class<GroovySystem> gsClass = GroovySystem.class;
-			Field metaClassRegistryField = gsClass
-					.getDeclaredField("META_CLASS_REGISTRY");
+			Field metaClassRegistryField = gsClass.getDeclaredField("META_CLASS_REGISTRY");
 			metaClassRegistryField.setAccessible(true);
-			MetaClassRegistryImpl mcri = (MetaClassRegistryImpl) metaClassRegistryField
-					.get(null);
-			ConcurrentReaderHashMap constantMetaClasses = (ConcurrentReaderHashMap) constantMetaClassesField
-					.get(mcri);
+			MetaClassRegistryImpl mcri = (MetaClassRegistryImpl) metaClassRegistryField.get(null);
+			ConcurrentReaderHashMap constantMetaClasses = (ConcurrentReaderHashMap) constantMetaClassesField.get(mcri);
 
 			constantMetaClasses.clear();
 			constantMetaClassCountField.set(mcri, 0);

@@ -13,15 +13,12 @@ public class SelectionBuilder {
 	private String variables = "";
 	private String selectionOption = "";
 
-	
-	public static SelectionBuilder build(){
+	public static SelectionBuilder build() {
 		return new SelectionBuilder();
 	}
-	
-	
+
 	/**
-	 * Standard ist die dialoglose Selektion
-	 * Standard Variablen sind deutsch
+	 * Standard ist die dialoglose Selektion Standard Variablen sind deutsch
 	 */
 	public SelectionBuilder() {
 		this.selectionType = "$,";
@@ -82,36 +79,40 @@ public class SelectionBuilder {
 
 	/**
 	 * dialoglose Selektion
+	 * 
 	 * @return
 	 */
-	public static SelectionBuilder hidden(){
+	public static SelectionBuilder hidden() {
 		return new SelectionBuilder();
 	}
-	
+
 	/**
 	 * Selektion mit dialog
+	 * 
 	 * @return
 	 */
-	public static SelectionBuilder visible(){
+	public static SelectionBuilder visible() {
 		return new SelectionBuilder(false);
 	}
-	
+
 	/**
 	 * Selektion mit dialog
+	 * 
 	 * @return
 	 */
-	public static SelectionBuilder visible(String selection){
+	public static SelectionBuilder visible(String selection) {
 		return new SelectionBuilder(false, selection);
 	}
-	
+
 	/**
 	 * Selektion mit dialog
+	 * 
 	 * @return
 	 */
-	public static SelectionBuilder visible(int selection){
+	public static SelectionBuilder visible(int selection) {
 		return new SelectionBuilder(false, selection);
 	}
-	
+
 	public SelectionBuilder setLanguage(String lang) {
 		isDe = lang.toLowerCase().equals("de");
 		return this;
@@ -122,11 +123,9 @@ public class SelectionBuilder {
 		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!" + to + ";";
-		} else if ((to == null || to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to == null || to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "=" + from + "!;";
-		} else if ((to != null && !to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to != null && !to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "=" + from + "!" + to + ";";
 		} else {
 			// beide null, keine Aktion
@@ -139,11 +138,9 @@ public class SelectionBuilder {
 		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "=!!" + to + ";";
-		} else if ((to == null || to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to == null || to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "=" + from + "!!;";
-		} else if ((to != null && !to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to != null && !to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "=" + from + "!!" + to + ";";
 		} else {
 			// beide null, keine Aktion
@@ -156,11 +153,9 @@ public class SelectionBuilder {
 		String to = oto.toString();
 		if ((from == null || from.isEmpty()) && (to != null && !to.isEmpty())) {
 			this.variables += var + "~=!!" + to + ";";
-		} else if ((to == null || to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to == null || to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "~=" + from + "!!;";
-		} else if ((to != null && !to.isEmpty())
-				&& (from != null && !from.isEmpty())) {
+		} else if ((to != null && !to.isEmpty()) && (from != null && !from.isEmpty())) {
 			this.variables += var + "~=" + from + "!!" + to + ";";
 		} else {
 			// beide null, keine Aktion
@@ -310,44 +305,36 @@ public class SelectionBuilder {
 	public SelectionBuilder optimalkey(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@optschl="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@optschl=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@optimalkey="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@optimalkey=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder link(boolean AND) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@verknuepfung="
-					+ (AND == true ? "und" : "oder") + ";";
+			this.selectionOption += "@verknuepfung=" + (AND == true ? "und" : "oder") + ";";
 		else
-			this.selectionOption += "@link=" + (AND == true ? "and" : "or")
-					+ ";";
+			this.selectionOption += "@link=" + (AND == true ? "and" : "or") + ";";
 		return this;
 	}
 
 	public SelectionBuilder range(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@bereich="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@bereich=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@range=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@range=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder direction(boolean forward) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@richtung="
-					+ (forward == true ? "vorwärts" : "rückwärts") + ";";
+			this.selectionOption += "@richtung=" + (forward == true ? "vorwärts" : "rückwärts") + ";";
 		else
-			this.selectionOption += "@direction="
-					+ (forward == true ? "forward" : "backward") + ";";
+			this.selectionOption += "@direction=" + (forward == true ? "forward" : "backward") + ";";
 		return this;
 	}
 
@@ -363,22 +350,18 @@ public class SelectionBuilder {
 	public SelectionBuilder read(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@lesen=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@lesen=" + (value == true ? "yes" : "no") + ";";
 		else
-			this.selectionOption += "@read=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@read=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder autostart(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@autostart="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@autostart=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@autostart="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@autostart=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
@@ -394,55 +377,45 @@ public class SelectionBuilder {
 	public SelectionBuilder rows(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@zeilen="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@zeilen=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@rows=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@rows=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder fprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@fschutz="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@fschutz=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@fprotection="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@fprotection=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder gprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@gschutz="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@gschutz=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@gprotection="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@gprotection=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder bprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@bschutz="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@bschutz=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@bprotection="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@bprotection=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder note(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@merken="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@merken=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@note=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@note=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
@@ -497,55 +470,45 @@ public class SelectionBuilder {
 	public SelectionBuilder dynprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@dynschutz="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@dynschutz=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@dynprotection="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@dynprotection=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder stdsel(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@stdsel="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@stdsel=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@stdsel=" + (value == true ? "yes" : "no")
-					+ ";";
+			this.selectionOption += "@stdsel=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder templsel(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@rohlsel="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@rohlsel=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@templsel="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@templsel=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder initialvalues(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@initialwerte="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@initialwerte=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@initialvalues="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@initialvalues=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
 	public SelectionBuilder lastname(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@letztername="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@letztername=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@lastname="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@lastname=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
@@ -560,11 +523,9 @@ public class SelectionBuilder {
 	public SelectionBuilder opprotection(boolean value) {
 		// FIXME Sprachunabhänigkeit
 		if (isDe)
-			this.selectionOption += "@opschutz="
-					+ (value == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@opschutz=" + (value == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@opprotection="
-					+ (value == true ? "yes" : "no") + ";";
+			this.selectionOption += "@opprotection=" + (value == true ? "yes" : "no") + ";";
 		return this;
 	}
 
@@ -593,11 +554,9 @@ public class SelectionBuilder {
 		// FIXME Sprachunabhänigkeit
 		isDe = value;
 		if (isDe)
-			this.selectionOption += "@englvar="
-					+ (isDe == true ? "ja" : "nein") + ";";
+			this.selectionOption += "@englvar=" + (isDe == true ? "ja" : "nein") + ";";
 		else
-			this.selectionOption += "@englvar="
-					+ (isDe == true ? "yes" : "no") + ";";
+			this.selectionOption += "@englvar=" + (isDe == true ? "yes" : "no") + ";";
 		return this;
 	}
 

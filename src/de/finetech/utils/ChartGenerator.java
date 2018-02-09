@@ -42,7 +42,7 @@ public class ChartGenerator {
 	public ChartGenerator setChartTitle(String title) {
 		// TODO prüfen ob vorhanden usw.
 		// TODO entfernen wenn null oder leer
-		this.parameter.put("-titlechart", "\""+title+"\"");
+		this.parameter.put("-titlechart", "\"" + title + "\"");
 		return this;
 	}
 
@@ -56,7 +56,7 @@ public class ChartGenerator {
 	public ChartGenerator setRGBBackcolor(String color) {
 		// TODO prüfen ob vorhanden usw.
 		// TODO entfernen wenn null oder leer
-		this.parameter.put("-rgbbackcolor", "\""+color+"\"");
+		this.parameter.put("-rgbbackcolor", "\"" + color + "\"");
 		return this;
 	}
 
@@ -127,14 +127,14 @@ public class ChartGenerator {
 	public ChartGenerator setTitlex(String value) {
 		// TODO prüfen ob vorhanden usw.
 		// TODO entfernen wenn null oder leer
-		this.parameter.put("-titlex", "\""+value+"\"");
+		this.parameter.put("-titlex", "\"" + value + "\"");
 		return this;
 	}
 
 	public ChartGenerator setTitley(String value) {
 		// TODO prüfen ob vorhanden usw.
 		// TODO entfernen wenn null oder leer
-		this.parameter.put("-titley", "\""+value+"\"");
+		this.parameter.put("-titley", "\"" + value + "\"");
 		return this;
 	}
 
@@ -143,9 +143,9 @@ public class ChartGenerator {
 		// TODO entfernen wenn null oder leer
 		String value = "";
 		for (String foo : values) {
-			value += foo +"; ";
+			value += foo + "; ";
 		}
-		this.parameter.put("-markerx", "\""+value+"\"");
+		this.parameter.put("-markerx", "\"" + value + "\"");
 		return this;
 	}
 
@@ -154,9 +154,9 @@ public class ChartGenerator {
 		// TODO entfernen wenn null oder leer
 		String value = "";
 		for (String foo : values) {
-			value += foo +"; ";
+			value += foo + "; ";
 		}
-		this.parameter.put("-markery", "\""+value+"\"");
+		this.parameter.put("-markery", "\"" + value + "\"");
 		return this;
 	}
 
@@ -294,7 +294,7 @@ public class ChartGenerator {
 		this.constants.remove(c);
 		return this;
 	}
-	
+
 	public ChartGenerator addStripe(Stripe c) {
 		this.stripes.add(c);
 		return this;
@@ -304,7 +304,7 @@ public class ChartGenerator {
 		this.stripes.remove(c);
 		return this;
 	}
-	
+
 	public ChartGenerator addDataseries(DataSeries c) {
 		this.dataseries.add(c);
 		return this;
@@ -349,8 +349,7 @@ public class ChartGenerator {
 				EKS.chart(value.toString());
 			}
 		}
-		return EKS.chart("-SHOW " + fieldName + " "
-				+ ((isHeadField) ? "0" : "1"));
+		return EKS.chart("-SHOW " + fieldName + " " + ((isHeadField) ? "0" : "1"));
 	}
 
 }

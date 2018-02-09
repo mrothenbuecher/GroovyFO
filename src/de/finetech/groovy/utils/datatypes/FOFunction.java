@@ -33,17 +33,15 @@ public class FOFunction {
 			for (int i = 0; i < objs.length; i++) {
 				Object o = objs[i];
 				if (o != null) {
-					//FIXME
-					/* 
-					wenn ein Parameter ein String ist mit Anführungszeichen umschließen
-					if(o instanceof String){
-						parameter += "\""+o.toString()+"\"";
-					}else{
-						parameter += o.toString();
-					}
-					*/
+					// FIXME
+					/*
+					 * wenn ein Parameter ein String ist mit Anführungszeichen
+					 * umschließen if(o instanceof String){ parameter +=
+					 * "\""+o.toString()+"\""; }else{ parameter += o.toString();
+					 * }
+					 */
 					parameter += o.toString();
-					
+
 					// einzelnen Parameter mit komma trennen
 					if (i < (objs.length - 1)) {
 						parameter += ",";

@@ -12,7 +12,7 @@ public class TypGuesser {
 	public static enum PossibleDatatypes {
 		INTEGER, DOUBLE, DOUBLED, DOUBLET, DOUBLEDT, BOOLEAN, ABASDATE, ABASPOINTER, STRING
 	}
-	
+
 	// reguläre Ausdrücke zum erkennen von Variablen arten
 	private static Pattern integerPattern = Pattern.compile("(I[0-9]*)|(IP.*)|(IN.*)|(K.*)|(AN.*)");
 	private static Pattern doublePattern = Pattern.compile("(R.*)|(M.*)");
@@ -22,10 +22,11 @@ public class TypGuesser {
 
 	private static Pattern boolPattern = Pattern.compile("(B)|(BOOL)");
 	private static Pattern pointerPattern = Pattern.compile("(P.*)|(ID.*)|(VP.*)|(VID.*)|(C.*)");
-	
+
 	/**
 	 * 
-	 * @param abasType - abas Variablenart Bspw: I3, GD2, GL30, T60 usw...
+	 * @param abasType
+	 *            - abas Variablenart Bspw: I3, GD2, GL30, T60 usw...
 	 * @return
 	 */
 	public static PossibleDatatypes getClassOfType(String abasType) {
@@ -62,5 +63,5 @@ public class TypGuesser {
 		// Strings
 		return PossibleDatatypes.STRING;
 	}
-	
+
 }

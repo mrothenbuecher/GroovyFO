@@ -31,10 +31,10 @@ public class AbasPointer extends GroovyFOVariable<String> {
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.getValue();
 	}
-	
+
 	/**
 	 * Zugriff auf Variablen eines Verweises
 	 * 
@@ -48,8 +48,7 @@ public class AbasPointer extends GroovyFOVariable<String> {
 	 * @throws GroovyFOException
 	 */
 	public Object xor(String var) throws FOPException, GroovyFOException, ParseException {
-		Object o = this.script.getComputedValue(this.getVariablename() + "^"
-				+ var);
+		Object o = this.script.getComputedValue(this.getVariablename() + "^" + var);
 		return o;
-	}	
+	}
 }

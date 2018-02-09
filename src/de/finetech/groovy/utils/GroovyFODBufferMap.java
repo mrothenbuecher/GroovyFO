@@ -17,22 +17,22 @@ import groovy.lang.GroovyObjectSupport;
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
  */
-public class GroovyFODBufferMap extends GroovyObjectSupport implements
-		Map<String, Object>, Cloneable, Serializable, GroovyObject {
+public class GroovyFODBufferMap extends GroovyObjectSupport
+		implements Map<String, Object>, Cloneable, Serializable, GroovyObject {
 
 	private static final long serialVersionUID = 4338579360691818296L;
-	
+
 	protected AbasBaseScript script;
 
 	public GroovyFODBufferMap(AbasBaseScript script) {
 		this.script = script;
 	}
-	
+
 	public Object get(Object key) {
-		//FOFunction function = new FOFunction(key.toString(), script);
+		// FOFunction function = new FOFunction(key.toString(), script);
 		try {
 			// buffer.
-			return script.getValue("d|"+key);
+			return script.getValue("d|" + key);
 		} catch (FOPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,7 +49,7 @@ public class GroovyFODBufferMap extends GroovyObjectSupport implements
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class GroovyFODBufferMap extends GroovyObjectSupport implements
 	@Override
 	public void putAll(Map<? extends String, ? extends Object> m) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

@@ -16,11 +16,11 @@ import de.finetech.groovy.utils.datatypes.FOFunction;
  * @author Michael Rothenbücher, Finetech GmbH & Co. KG
  *
  */
-public class GroovyFOFBufferMap extends GroovyObjectSupport implements
-		Map<String, FOFunction>, Cloneable, Serializable, GroovyObject {
+public class GroovyFOFBufferMap extends GroovyObjectSupport
+		implements Map<String, FOFunction>, Cloneable, Serializable, GroovyObject {
 
 	private static final long serialVersionUID = 4338579360691818296L;
-	
+
 	protected AbasBaseScript script;
 
 	public void clear() {
@@ -41,11 +41,11 @@ public class GroovyFOFBufferMap extends GroovyObjectSupport implements
 	public Set<java.util.Map.Entry<String, FOFunction>> entrySet() {
 		return null;
 	}
-	
-	public Object invokeMethod(String name, Object args){
-		return this.get(name).call((Object[])args);
+
+	public Object invokeMethod(String name, Object args) {
+		return this.get(name).call((Object[]) args);
 	}
-	
+
 	public FOFunction get(Object key) {
 		FOFunction function = new FOFunction(key.toString(), script);
 		return function;

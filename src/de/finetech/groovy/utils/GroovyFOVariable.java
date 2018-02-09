@@ -14,8 +14,7 @@ import de.finetech.groovy.AbasBaseScript;
  * @param <V>
  */
 
-public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
-		Comparable<Object> {
+public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements Comparable<Object> {
 
 	protected String varname, type;
 	protected AbasBaseScript script;
@@ -37,8 +36,7 @@ public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
 
 	public String getType() {
 		if (type == null) {
-			this.type = FO.getValue("F",
-					"typeof(F|expr(" + this.getVariablename() + "))");
+			this.type = FO.getValue("F", "typeof(F|expr(" + this.getVariablename() + "))");
 		}
 		return type;
 	}
@@ -58,8 +56,7 @@ public abstract class GroovyFOVariable<V> extends GroovyObjectSupport implements
 	// TODO Metafunktionen
 
 	public boolean isEmpty() {
-		String empty = FO
-				.getValue("F", "empty(" + this.getVariablename() + ")");
+		String empty = FO.getValue("F", "empty(" + this.getVariablename() + ")");
 		// TODO lang
 		return empty.equals("ja") || empty.equals("yes");
 	}

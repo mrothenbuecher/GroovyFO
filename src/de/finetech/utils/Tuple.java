@@ -7,12 +7,12 @@ package de.finetech.utils;
  * @param <T>
  * @param <A>
  */
-public class Tuple <T,A> {
+public class Tuple<T, A> {
 
 	private T key;
 	private A value;
-	
-	public Tuple(T val1, A val2){
+
+	public Tuple(T val1, A val2) {
 		this.key = val1;
 		this.value = val2;
 	}
@@ -32,5 +32,5 @@ public class Tuple <T,A> {
 	public void setValue(A value) {
 		this.value = value;
 	}
-	
+
 }

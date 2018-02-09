@@ -254,39 +254,39 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void ausgabe(String cmd) {
 		EKS.ausgabe(cmd);
 	}
-	
+
 	public void bcolor(Color c, int row) {
 		this.hfarbe(this.colorToString(c), row);
 	}
-	
+
 	public void bcolor(Color c, String field) {
 		this.hfarbe(this.colorToString(c), field);
 	}
-	
+
 	public void bcolor(Color c, String field, int row) {
 		this.hfarbe(this.colorToString(c), field, row);
 	}
-	
+
 	public void bcolor(String color, int row) {
 		this.hfarbe(color, row);
 	}
-	
+
 	public void bcolor(String color, String field) {
 		this.hfarbe(color, field);
 	}
-	
+
 	public void bcolor(String color, String field, int row) {
 		this.hfarbe(color, field, row);
 	}
-	
+
 	public void bcolour(Color c, int row) {
 		this.hfarbe(this.colorToString(c), row);
 	}
-	
+
 	public void bcolour(Color c, String field) {
 		this.hfarbe(this.colorToString(c), field);
 	}
-	
+
 	public void bcolour(Color c, String field, int row) {
 		this.hfarbe(this.colorToString(c), field, row);
 	}
@@ -374,7 +374,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		this.kopieren(cmd);
 	}
 
-	public void cursor(String cmd){
+	public void cursor(String cmd) {
 		EKS.cursor(cmd);
 	}
 
@@ -383,46 +383,46 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean dazu(String cmd) {
-		if(this.dselection == null || !this.dselection.equals(cmd)){
+		if (this.dselection == null || !this.dselection.equals(cmd)) {
 			this.resetMap("d");
 			this.dselection = cmd;
 		}
 		return EKS.dazu(cmd);
 	}
 
-	public boolean dde_advise(String cmd){
+	public boolean dde_advise(String cmd) {
 		return EKS.dde_advise(cmd);
 	}
 
-	public boolean dde_exec(String cmd){
+	public boolean dde_exec(String cmd) {
 		return EKS.dde_exec(cmd);
 	}
 
-	public boolean dde_exit(String cmd){
+	public boolean dde_exit(String cmd) {
 		return EKS.dde_exit(cmd);
 	}
 
-	public boolean dde_info(String cmd){
+	public boolean dde_info(String cmd) {
 		return EKS.dde_info(cmd);
 	}
 
-	public boolean dde_init(String cmd){
+	public boolean dde_init(String cmd) {
 		return EKS.dde_init(cmd);
 	}
 
-	public boolean dde_request(String cmd){
+	public boolean dde_request(String cmd) {
 		return EKS.dde_request(cmd);
 	}
 
-	public boolean dde_send(String cmd){
+	public boolean dde_send(String cmd) {
 		return EKS.dde_send(cmd);
 	}
 
-	public boolean dde_unadvise(String cmd){
+	public boolean dde_unadvise(String cmd) {
 		return EKS.dde_unadvise(cmd);
 	}
 
-	public boolean dde_wait(String cmd){
+	public boolean dde_wait(String cmd) {
 		return EKS.dde_wait(cmd);
 	}
 
@@ -457,7 +457,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void entfAlleZeilen() {
 		EKS.mache("maske zeile --");
 	}
-	
+
 	public void entfZeile() {
 		EKS.mache("maske zeile -O");
 	}
@@ -639,13 +639,14 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @throws FOPException
 	 */
 	public Object fo(String var, String value) throws FOPException, GroovyFOException {
-		//EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") + "\"");
+		// EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") +
+		// "\"");
 		EKS.formel(var + "=\"" + value.replaceAll("\"", "") + "\"");
 		// return this.getValue(var);
 		return value;
 	}
 
-	public void format(String cmd){
+	public void format(String cmd) {
 		EKS.format(cmd);
 	}
 
@@ -796,25 +797,23 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 	}
 
-	private String handleSelectionString(String selection){
+	private String handleSelectionString(String selection) {
 		// identnummer
 		/*
-		if(selection.matches("\\d+")){
-			return "\""+selection+"\"";
-		}
-		// Datenbank Id (123,123,123)
-		if(selection.matches("\\((\\d+){1}(,\\d+){2,3}\\)")){
-			
-		}
-		*/
+		 * if(selection.matches("\\d+")){ return "\""+selection+"\""; } //
+		 * Datenbank Id (123,123,123)
+		 * if(selection.matches("\\((\\d+){1}(,\\d+){2,3}\\)")){
+		 * 
+		 * }
+		 */
 		// mit hoher Wahrscheinlichkeit selektion
-		if(selection.contains("=") || selection.contains(";")){
+		if (selection.contains("=") || selection.contains(";")) {
 			// maskenlose
-			if(!selection.startsWith("$") && selection.startsWith("%")){
-				selection = "$"+selection;
+			if (!selection.startsWith("$") && selection.startsWith("%")) {
+				selection = "$" + selection;
 			}
 		}
-		return "\""+selection+"\"";
+		return "\"" + selection + "\"";
 	}
 
 	public void help(String cmd) {
@@ -872,7 +871,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		}
 		EKS.farbe("-HINTERGRUND " + color + " " + field + " " + row);
 	}
-	
+
 	public void hilfe(String cmd) {
 		EKS.hilfe(cmd);
 	}
@@ -882,7 +881,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 
 	public boolean hole(String cmd) {
-		if (this.hselection == null || !this.hselection.equals(cmd)){
+		if (this.hselection == null || !this.hselection.equals(cmd)) {
 			this.resetMap("h");
 			this.hselection = cmd;
 		}
@@ -908,7 +907,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		} else {
 			this.hselection = selection.toString();
 			this.resetMap("h");
-			return EKS.hole(db + " "+handleSelectionString(hselection));
+			return EKS.hole(db + " " + handleSelectionString(hselection));
 		}
 	}
 
@@ -933,8 +932,8 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public boolean isTrue(String value) {
 		value = value.toLowerCase();
-		return value != null && !value.isEmpty() && (value.matches("ja") || value.matches("yes")
-				|| value.matches("true"));
+		return value != null && !value.isEmpty()
+				&& (value.matches("ja") || value.matches("yes") || value.matches("true"));
 	}
 
 	public void justified() {
@@ -975,7 +974,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @return
 	 */
 	public boolean lade(int puffer, String cmd) {
-		if(this.lselection[puffer] == null || !this.lselection[puffer].equals(cmd)){
+		if (this.lselection[puffer] == null || !this.lselection[puffer].equals(cmd)) {
 			this.resetMap(Integer.toString(puffer));
 			this.lselection[puffer] = cmd;
 		}
@@ -1001,7 +1000,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		} else {
 			this.resetMap(Integer.toString(puffer));
 			this.lselection[puffer] = selection.toString();
-			return EKS.lade(puffer + " " + db + " "+this.handleSelectionString(this.lselection[puffer]));
+			return EKS.lade(puffer + " " + db + " " + this.handleSelectionString(this.lselection[puffer]));
 		}
 	}
 
@@ -1063,7 +1062,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return this.lade(cmd);
 	}
 
-	
 	public void loesche(String cmd) {
 		EKS.loesche(cmd);
 	}
@@ -1075,15 +1073,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void make(String cmd) {
 		this.mache(cmd);
 	}
-	
+
 	public boolean mehr() {
 		boolean mehr = false;
 		// ist mehr definiert?
 		// auf ruf ist F|defined(G|mehr)
 		if ((Boolean) F.get("defined").call("G|mehr")) {
-			mehr = (Boolean)G.get("mehr");
+			mehr = (Boolean) G.get("mehr");
 		} else {
-			mehr = (Boolean)G.get("success");
+			mehr = (Boolean) G.get("success");
 		}
 		return mehr;
 	}
@@ -1107,7 +1105,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public int menu(String title, String[] options, int highlight) {
 		return this.menue(title, options, highlight);
 	}
-	
+
 	public int menu(String title, String[] options, int highlight, boolean noReplace) {
 		return this.menue(title, options, highlight, noReplace);
 	}
@@ -1211,7 +1209,6 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void println(boolean cmd) {
 		this.println(Boolean.toString(cmd));
 	}
-	
 
 	public void println(double cmd) {
 		this.println(Double.toString(cmd));
@@ -1327,7 +1324,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	public void seite(String cmd) {
 		EKS.seite(cmd);
 	}
-	
+
 	public boolean select(String cmd) {
 		return this.hole(cmd);
 	}
@@ -1364,7 +1361,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		return this.mehr();
 	}
 
-	public boolean system(String cmd){
+	public boolean system(String cmd) {
 		return EKS.system(cmd);
 	}
 
@@ -1446,46 +1443,45 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.farbe("-VORDERGRUND " + color + " " + field);
 	}
 
-	
 	public void vfarbe(String color, String field, int row) {
 		if (color == null || color.isEmpty()) {
 			color = "-1 -1 -1";
 		}
 		EKS.farbe("-VORDERGRUND " + color + " " + field + " " + row);
 	}
-	
+
 	public void view(String cmd) {
 		this.zeige(cmd);
 	}
-	
+
 	public void vtab(String cmd) {
 		EKS.vtab(cmd);
 	}
-	
+
 	public void window(String cmd) {
 		this.fenster(cmd);
 	}
-	
+
 	public void zeige(String cmd) {
 		EKS.zeige(cmd);
 	}
-	
+
 	public void zeile(String cmd) {
 		EKS.zeile(cmd);
 	}
-	
+
 	public void zuweisen(String cmd) {
 		EKS.zuweisen(cmd);
 	}
-	
+
 	public void zuweisen(String key, boolean value) {
 		EKS.zuweisen(key = (value ? "G|TRUE" : "G|false"));
 	}
-	
+
 	public void zuweisen(String key, double value) {
 		EKS.zuweisen(key + "=" + Double.toString(value));
 	}
-	
+
 	public void zuweisen(String key, int value) {
 		EKS.zuweisen(key + "=" + Integer.toString(value));
 	}
