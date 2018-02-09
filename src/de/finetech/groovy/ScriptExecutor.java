@@ -58,6 +58,7 @@ public class ScriptExecutor implements ContextRunnable {
 						ImportCustomizer ic = new ImportCustomizer();
 						// abas Standard
 						ic.addStarImports("de.abas.eks.jfop.remote");
+						//ic.addStaticStars("de.abas.eks.jfop.remote.EKS");
 						// Helferklassen für GroovyFO
 						ic.addStarImports("de.finetech.groovy");
 						ic.addStarImports("de.finetech.groovy.utils");

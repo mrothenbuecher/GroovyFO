@@ -639,7 +639,8 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	 * @throws FOPException
 	 */
 	public Object fo(String var, String value) throws FOPException, GroovyFOException {
-		EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") + "\"");
+		//EKS.formel(var + "=\"" + value.replaceAll("\"", "\"+'DBLQUOTE'+\"") + "\"");
+		EKS.formel(var + "=\"" + value.replaceAll("\"", "") + "\"");
 		// return this.getValue(var);
 		return value;
 	}
@@ -932,8 +933,8 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	public boolean isTrue(String value) {
 		value = value.toLowerCase();
-		return value != null && !value.isEmpty() && value.matches("ja") || value.matches("yes")
-				|| value.matches("true");
+		return value != null && !value.isEmpty() && (value.matches("ja") || value.matches("yes")
+				|| value.matches("true"));
 	}
 
 	public void justified() {
@@ -1076,15 +1077,15 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 	}
 	
 	public boolean mehr() {
-		String mehr = "ja";
+		boolean mehr = false;
 		// ist mehr definiert?
 		// auf ruf ist F|defined(G|mehr)
 		if ((Boolean) F.get("defined").call("G|mehr")) {
-			mehr = EKS.Gvar("mehr");
+			mehr = (Boolean)G.get("mehr");
 		} else {
-			mehr = EKS.Gvar("success");
+			mehr = (Boolean)G.get("success");
 		}
-		return isTrue(mehr);
+		return mehr;
 	}
 
 	public int menu(String title, List<String> options) {
