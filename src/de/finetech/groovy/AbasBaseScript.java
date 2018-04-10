@@ -1220,7 +1220,7 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 
 	@Override
 	public void println(Object cmd) {
-		EKS.println(cmd.toString());
+		EKS.println(cmd != null ? cmd.toString() :"null");
 	}
 
 	public void println(String cmd) {

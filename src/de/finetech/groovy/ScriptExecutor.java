@@ -96,8 +96,9 @@ public class ScriptExecutor implements ContextRunnable {
 						error = true;
 					} catch (CompilationFailedException e) {
 						// FIXME Sprach unabhängigkeit
-						FO.box("Übersetzung fehlgeschlagen", "GroovyFO konnte das Script nicht übersetzen: "
-								+ e.getMessage() + "\n" + getStacktrace(e));
+						//FO.box("Übersetzung fehlgeschlagen", "GroovyFO konnte das Script nicht übersetzen: "
+						//		+ e.getMessage() + "\n" + getStacktrace(e));
+						FO.box("Übersetzung fehlgeschlagen: ", getStacktrace(e));
 						error = true;
 					} catch (Exception e) {
 						// FIXME Sprach unabhängigkeit
