@@ -1223,6 +1223,18 @@ public abstract class AbasBaseScript extends Script implements GroovyObject {
 		EKS.println(cmd != null ? cmd.toString() :"null");
 	}
 
+	/**
+	 * js like output println(obj,obj2,obj3...)
+	 * @param cmd
+	 */
+	public void println(Object...cmd) {
+		for(Object o : cmd){
+			String s = o != null ? o.toString() :"null";
+			EKS.println("-lfsuppress "+s);
+		}
+		EKS.println("");
+	}
+	
 	public void println(String cmd) {
 		cmd = cmd.replaceAll("\"", "'DBLQUOTE'");
 		// String kürzen
